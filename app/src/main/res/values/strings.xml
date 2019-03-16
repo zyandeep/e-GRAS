@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">e-GRAS</string>
+    <string name="title_activity_main">e-GRAS</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="logout_menu_item">Logout</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="search_challan_menu_item">Search Challan</string>
+    <string name="make_payment_menu_item">Make Payment</string>
+    <string name="transaction_history_menu_item">Transaction History</string>
+    <string name="about_menu_item">About e-GRAS</string>
+    <string name="display_name">e-GRAS User</string>
+    <string name="user_profile_menu_item">User Profile</string>
+</resources>
