@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "make a new payment", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MakePaymentActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -105,7 +106,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.make_payment) {
-            // Handle the camera action
+            Intent intent = new Intent(getApplicationContext(), MakePaymentActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.transaction_history) {
 
@@ -153,5 +155,15 @@ public class MainActivity extends AppCompatActivity
         else {
             super.onBackPressed();
         }
+    }
+
+
+    public void goToEditProfile(View view) {
+        Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
+        startActivity(intent);
+
+        // close the drawer
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
     }
 }

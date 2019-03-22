@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
     </style>
 
 
@@ -15,6 +16,17 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
+
+
+    <!-- Spot dialog theme -->
+    <style name="mySpotDialogTheme" parent="android:Theme.DeviceDefault.Light.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogSpotCount">5</item>
+        <item name="DialogTitleText">@string/update_message</item>
+        <item name="DialogSpotColor">@color/colorAccent</item>
+    </style>
+
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

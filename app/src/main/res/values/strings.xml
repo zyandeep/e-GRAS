@@ -13,5 +13,14 @@
     <string name="transaction_history_menu_item">Transaction History</string>
     <string name="about_menu_item">About e-GRAS</string>
     <string name="display_name">e-GRAS User</string>
-    <string name="user_profile_menu_item">User Profile</string>
+    <string name="make_payment_activity">Make Payment</string>
+    <string name="my_profile_activity">Edit Profile</string>
+    <string name="display_name_label">Display Name</string>
+    <string name="phone_number_label">Phone Number</string>
+    <string name="email_label">Email</string>
+    <string name="new_password_label">New Password</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="save_changes_label">Save Changes</string>
+    <string name="update_password_button">Change Password</string>
+    <string name="update_message">Updating...</string>
 </resources>

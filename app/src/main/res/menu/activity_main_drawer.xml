@@ -4,7 +4,7 @@
     tools:showIn="navigation_view">
 
     <group android:id="@+id/group1"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/make_payment"
@@ -19,15 +19,10 @@
             android:icon="@drawable/ic_search"
             android:title="@string/search_challan_menu_item" />
 
-        <item
-            android:id="@+id/user_profile"
-            android:icon="@drawable/ic_user_profile"
-            android:title="@string/user_profile_menu_item" />
-
     </group>
 
     <group android:id="@+id/group2"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/settings"

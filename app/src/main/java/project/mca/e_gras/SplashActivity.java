@@ -1,10 +1,8 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -40,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
             // User is already signed in
             // verify token at the backend
 
-            verifyUserSignInAtBackend();
+            signInUser();
         }
         else {
             // No user is signed in
@@ -57,6 +55,7 @@ public class SplashActivity extends AppCompatActivity {
                             .setAvailableProviders(providers)
                             .setTheme(R.style.AppTheme)
                             .setLogo(R.drawable.image)
+                            .setIsSmartLockEnabled(false)
                             .build(),
                     RC_SIGN_IN);
         }
@@ -75,7 +74,7 @@ public class SplashActivity extends AppCompatActivity {
                 // Successfully signed in
                 // verify token at the backend
 
-                verifyUserSignInAtBackend();
+                signInUser();
             }
             else {
                 if (response != null) {
@@ -92,10 +91,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
-    private void verifyUserSignInAtBackend() {
-        // verify the token at the backend
-        // and then only let the user sign-in
-
+    private void signInUser() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
