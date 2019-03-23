@@ -22,5 +22,15 @@
     <string name="confirm_password_label">Confirm Password</string>
     <string name="save_changes_label">Save Changes</string>
     <string name="update_password_button">Change Password</string>
-    <string name="update_message">Updating...</string>
+    <string name="update_message">Updating…</string>
+    <string name="fab_tap_target_title">Make Payment Button</string>
+    <string name="fab_tap_target_desc">Tap this button for making a new payment…</string>
+    <string name="title_about_egras">About e-GRAS</string>
+    <string name="about_page_description">
+        e-GRAS is an electronic payment gateway to receive payments electronically. It\'s a medium for on-line payment of
+        Assam State\'s Taxes through the internet portals of various banks. To avail of this facility the taxpayer is required
+        to have a net-banking account with any of the banks listed by the government on e-GRAS site. This is a 24X7 facility and
+        citizen can make the payment any time of the day. To know more, please visit the official web site.
+</string>
+
 </resources>

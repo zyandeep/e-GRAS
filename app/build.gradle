@@ -46,6 +46,12 @@ dependencies {
 
     // BottomSheet dialog
     implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
+
+    // TapTarget View
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
+
+    // About page
+    implementation 'com.github.medyo:android-about-page:1.2.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

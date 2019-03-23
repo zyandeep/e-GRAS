@@ -1,6 +1,8 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +53,18 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        // Every time the app opens, show FAB TapTarget View
+        TapTargetView.showFor(this,
+                TapTarget.forView(fab, getString(R.string.fab_tap_target_title), getString(R.string.fab_tap_target_desc))
+                        .textColor(android.R.color.white)
+                        .dimColor(android.R.color.black)
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                        .icon(getDrawable(R.drawable.ic_payment))                    // Specify a custom drawable to draw as the target
+        );
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -66,7 +82,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -80,24 +95,20 @@ public class MainActivity extends AppCompatActivity
 
             if (name == null || name.isEmpty()) {
                 displayName.setText(getString(R.string.display_name));
-            }
-            else {
+            } else {
                 displayName.setText(name);
             }
 
             if (email == null || email.isEmpty()) {
                 emailOrPhone.setText(phone);
-            }
-            else {
+            } else {
                 emailOrPhone.setText(email);
             }
-        }
-        else {
+        } else {
             // No user is signed in
             finish();
         }
     }
-
 
 
     @Override
@@ -122,14 +133,14 @@ public class MainActivity extends AppCompatActivity
             signOutUser();
         }
         else if (id == R.id.about) {
-
+            Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
     private void signOutUser() {
@@ -151,8 +162,7 @@ public class MainActivity extends AppCompatActivity
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
