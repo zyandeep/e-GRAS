@@ -1,12 +1,14 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -35,11 +37,24 @@ public class MainActivity extends AppCompatActivity
     private TextView displayName;
     private TextView emailOrPhone;
 
+    private SharedPreferences sharedPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // to ensure that default setting values are set properly
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+
+        // reading the setting values from the default shared pref
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String langPrefValue = sharedPref.getString(getString(R.string.lang_pref_key), getString(R.string.lang_pref_default_value));
+        String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
+
+        // now apply the settings
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,7 +77,7 @@ public class MainActivity extends AppCompatActivity
                         .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
                         .tintTarget(true)                   // Whether to tint the target view's color
                         .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
-                        .icon(getDrawable(R.drawable.ic_payment))                    // Specify a custom drawable to draw as the target
+                        .icon(getDrawable(R.drawable.ic_payment))       // Specify a custom drawable to draw as the target
         );
 
 
@@ -127,7 +142,8 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if (id == R.id.settings) {
-
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.logout) {
             signOutUser();

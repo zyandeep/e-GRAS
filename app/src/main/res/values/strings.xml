@@ -24,7 +24,7 @@
     <string name="update_password_button">Change Password</string>
     <string name="update_message">Updating…</string>
     <string name="fab_tap_target_title">Make Payment Button</string>
-    <string name="fab_tap_target_desc">Tap this button for making a new payment…</string>
+    <string name="fab_tap_target_desc">Tap this button to make a new payment…</string>
     <string name="title_about_egras">About e-GRAS</string>
     <string name="about_page_description">
         e-GRAS is an electronic payment gateway to receive payments electronically. It\'s a medium for on-line payment of
@@ -32,5 +32,42 @@
         to have a net-banking account with any of the banks listed by the government on e-GRAS site. This is a 24X7 facility and
         citizen can make the payment any time of the day. To know more, please visit the official web site.
 </string>
+    <string name="connect_us_label">Connect with us</string>
+    <string name="egras_web_address">https://assamegras.gov.in/</string>
+    <string name="version_info">Version 1.0</string>
+    <string name="developer_info">Developed by NIC</string>
+
+    <!-- Language List preference -->
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Assamese</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>en</item>
+        <item>as</item>
+    </string-array>
+
+    <!-- Theme List preference -->
+    <string-array name="theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>lt</item>
+        <item>dk</item>
+    </string-array>
+
+
+    <string name="title_settings_activity">Settings</string>
+    <string name="lang_pref_title">Language</string>
+    <string name="lang_pref_summary">English</string>
+    <string name="lang_pref_key">lang</string>
+    <string name="lang_pref_default_value">en</string>
+    <string name="lang_pref_dialog_title">Choose a language</string>
+    <string name="theme_pref_title">Theme</string>
+    <string name="theme_pref_summary">Light</string>
+    <string name="theme_pref_key">theme</string>
+    <string name="theme_pref_default_value">lt</string>
+    <string name="theme_pref_dialog_title">Choose a theme</string>
 
 </resources>

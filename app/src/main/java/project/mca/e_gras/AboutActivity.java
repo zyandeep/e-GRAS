@@ -15,11 +15,11 @@ public class AboutActivity extends AppCompatActivity {
 
         // version info
         Element versionElement = new Element();
-        versionElement.setTitle("Version 1.0");
+        versionElement.setTitle(getResources().getString(R.string.version_info));
 
         // developer info
         Element developerElement = new Element();
-        developerElement.setTitle("Developed by NIC");
+        developerElement.setTitle(getString(R.string.developer_info));
         developerElement.setIconDrawable(R.drawable.ic_code);
 
 
@@ -30,8 +30,8 @@ public class AboutActivity extends AppCompatActivity {
                 .setDescription(getResources().getString(R.string.about_page_description))
                 .addItem(versionElement)
                 .addItem(developerElement)
-                .addGroup("Connect with us")
-                .addWebsite("https://assamegras.gov.in/")
+                .addGroup(getString(R.string.connect_us_label))
+                .addWebsite(getString(R.string.egras_web_address))
                 .create();
 
         setContentView(aboutPage);
