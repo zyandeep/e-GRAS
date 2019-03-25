@@ -20,7 +20,7 @@
 
 
     <!-- Spot dialog theme -->
-    <style name="mySpotDialogTheme" parent="android:Theme.DeviceDefault.Light.Dialog">
+    <style name="mySpotDialogTheme" parent="android:Theme.Holo.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogSpotCount">5</item>
         <item name="DialogTitleText">@string/update_message</item>
