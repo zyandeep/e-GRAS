@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
 
     // BottomSheet dialog
-    implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
+    implementation 'com.github.marcoscgdev:DialogSheet:2.0.3'
 
     // TapTarget View
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'

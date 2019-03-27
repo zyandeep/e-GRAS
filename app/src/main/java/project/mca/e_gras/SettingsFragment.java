@@ -3,6 +3,8 @@ package project.mca.e_gras;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
@@ -40,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 setThemeSummary((String) o);
+                changeTheme((String) o);
                 return true;
             }
         });
@@ -48,6 +51,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // set the summaries for language and theme pref
         setLanguageSummary(langPrefValue);
         setThemeSummary(themePrefValue);
+    }
+
+
+
+    private void changeTheme(String themeValue) {
+        switch (themeValue) {
+            case "lt":
+
+                ((AppCompatActivity)getContext())
+                        .getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+                break;
+
+            case "dk":
+
+                ((AppCompatActivity)getContext())
+                        .getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+                break;
+
+        }
     }
 
 

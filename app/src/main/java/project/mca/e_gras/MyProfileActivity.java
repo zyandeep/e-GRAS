@@ -3,13 +3,13 @@ package project.mca.e_gras;
 import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.marcoscg.dialogsheet.DialogSheet;
 
 import java.util.concurrent.TimeUnit;
 
@@ -130,20 +131,23 @@ public class MyProfileActivity extends AppCompatActivity {
             dialog.dismiss();
         }
 
+
         // show the bottomSheet dialog
-        new BottomDialog.Builder(this)
-                .setTitle("Error!")
-                .setContent(msg)
+        new DialogSheet(this)
+                .setTitle("Error")
+                .setMessage(msg)
+                .setColoredNavigationBar(true)
                 .setCancelable(false)
-                .setPositiveText("CLOSE")
-                .setPositiveBackgroundColorResource(R.color.colorAccent)
-                .setPositiveTextColorResource(android.R.color.background_light)
-                .onPositive(new BottomDialog.ButtonCallback() {
+                .setPositiveButton(android.R.string.ok, new DialogSheet.OnPositiveClickListener() {
                     @Override
-                    public void onClick(BottomDialog dialog) {
-                        // dialog closes automatically
+                    public void onClick(View v) {
+                        // Close the dialog
                     }
-                }).show();
+                })
+                .setRoundedCorners(false)
+                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBackground))
+                .show();
+
     }
 
 

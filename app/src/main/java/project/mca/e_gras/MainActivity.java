@@ -2,9 +2,6 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -54,7 +51,8 @@ public class MainActivity extends AppCompatActivity
         String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
 
         // now apply the settings
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        applySettings(langPrefValue, themePrefValue);
+
 
 
         setContentView(R.layout.activity_main);
@@ -97,6 +95,21 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         displayName = headerView.findViewById(R.id.username_textView);
         emailOrPhone = headerView.findViewById(R.id.user_email_phone_textView);
+    }
+
+
+
+    private void applySettings(String langPrefValue, String themePrefValue) {
+        switch (themePrefValue) {
+            case "lt":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+
+            case "dk":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+
+        }
     }
 
 
