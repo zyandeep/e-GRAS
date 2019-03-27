@@ -134,7 +134,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // show the bottomSheet dialog
         new DialogSheet(this)
-                .setTitle("Error")
+                .setTitle(R.string.error_label_bottom_dialog)
                 .setMessage(msg)
                 .setColoredNavigationBar(true)
                 .setCancelable(false)
@@ -144,10 +144,9 @@ public class MyProfileActivity extends AppCompatActivity {
                         // Close the dialog
                     }
                 })
-                .setRoundedCorners(false)
+                .setRoundedCorners(true)
                 .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBackground))
                 .show();
-
     }
 
 

@@ -1,11 +1,9 @@
 <resources>
-    <string name="app_name">e-GRAS</string>
-    <string name="title_activity_main">e-GRAS</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_name" translatable="false">e-GRAS</string>
+    <string name="title_activity_main" translatable="false">e-GRAS</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="logout_menu_item">Logout</string>
     <string name="settings_menu_item">Settings</string>
     <string name="search_challan_menu_item">Search Challan</string>
@@ -33,7 +31,7 @@
         citizen can make the payment any time of the day. To know more, please visit the official web site.
 </string>
     <string name="connect_us_label">Connect with us</string>
-    <string name="egras_web_address">https://assamegras.gov.in/</string>
+    <string name="egras_web_address" translatable="false">https://assamegras.gov.in/</string>
     <string name="version_info">Version 1.0</string>
     <string name="developer_info">Developed by NIC</string>
 
@@ -61,13 +59,14 @@
     <string name="title_settings_activity">Settings</string>
     <string name="lang_pref_title">Language</string>
     <string name="lang_pref_summary">English</string>
-    <string name="lang_pref_key">lang</string>
-    <string name="lang_pref_default_value">en</string>
+    <string name="lang_pref_key" translatable="false">lang</string>
+    <string name="lang_pref_default_value" translatable="false">en</string>
     <string name="lang_pref_dialog_title">Choose a language</string>
-    <string name="theme_pref_title">Theme</string>
-    <string name="theme_pref_summary">Light</string>
-    <string name="theme_pref_key">theme</string>
-    <string name="theme_pref_default_value">lt</string>
+    <string name="theme_pref_title" translatable="false">Theme</string>
+    <string name="theme_pref_summary" translatable="false">Light</string>
+    <string name="theme_pref_key" translatable="false">theme</string>
+    <string name="theme_pref_default_value" translatable="false">lt</string>
     <string name="theme_pref_dialog_title">Choose a theme</string>
+    <string name="error_label_bottom_dialog">Error</string>
 
 </resources>
