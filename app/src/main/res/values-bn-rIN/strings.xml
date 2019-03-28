@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="logout_menu_item">লগ আউত</string>
+    <string name="settings_menu_item">ছেটিংচ</string>
+    <string name="search_challan_menu_item">চালানৰ অনুসন্ধান</string>
+    <string name="make_payment_menu_item">চালান জমা</string>
+    <string name="transaction_history_menu_item">লেনদেনৰ ইতিহাস</string>
+    <string name="about_menu_item">e-GRAS ৰ বিষয়ে</string>
+    <string name="display_name">e-GRAS ব্যৱহাৰকাৰী</string>
+    <string name="make_payment_activity">চালান জমা দিয়ক</string>
+    <string name="my_profile_activity">প্রোফাইল সম্পাদন কৰক</string>
+    <string name="display_name_label">ব্যৱহাৰকাৰীৰ নাম</string>
+    <string name="phone_number_label">ফোন নম্বৰ</string>
+    <string name="email_label">ই-মেইল</string>
+    <string name="new_password_label">নতুন পাছৱৰ্দ</string>
+    <string name="confirm_password_label">পাছৱৰ্দ নিশ্চিত কৰক</string>
+    <string name="error_label_bottom_dialog">সমস্যা এটা হল…</string>
+    <string name="theme_pref_dialog_title">Theme পছন্দ কৰক</string>
+    <string name="lang_pref_dialog_title">ভাষা পছন্দ কৰক</string>
+    <string name="lang_pref_title">ভাষা</string>
+    <string name="title_settings_activity">ছেটিংচ</string>
+    <string name="developer_info">NIC দ্বাৰা নিৰ্মিত</string>
+    <string name="version_info">১ম সংস্কৰণ</string>
+    <string name="connect_us_label">যোগাযোগ কৰক আমাৰ সৈতে…</string>
+    <string name="about_page_description">e-GRAS ৰ বিষয়ে আমি আপোনাক জনাব বিচৰা নাই। Sorry :(</string>
+    <string name="title_about_egras">e-GRAS ৰ বিষয়ে</string>
+    <string name="fab_tap_target_desc">এই Button টিপি নতুন চালান জমা দিয়ক</string>
+    <string name="fab_tap_target_title">\"চালান জমা দিয়া\" Button</string>
+    <string name="update_message">Update হৈ আছে…</string>
+    <string name="update_password_button">পাছৱৰ্দ সলনি কৰক</string>
+    <string name="as_lang_label">অসমীয়া</string>
+    <string name="app_restart_msg">App টো restart কৰা হৈছে</string>
+</resources>

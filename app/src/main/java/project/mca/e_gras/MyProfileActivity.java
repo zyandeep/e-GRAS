@@ -176,11 +176,10 @@ public class MyProfileActivity extends AppCompatActivity {
     public void updateUserPhone(View view) {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        String phoneNumber = this.phone.getEditText().getText().toString();
+        String phoneNumber = this.phone.getEditText().getText().toString().trim();
         if (!phoneNumber.startsWith("+91")) {
-            phoneNumber += "+91";
+            phoneNumber = "+91" + phoneNumber;
         }
-
 
         // show the dialog
         dialog.show();

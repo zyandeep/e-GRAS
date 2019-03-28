@@ -3,7 +3,6 @@
     <string name="title_activity_main" translatable="false">e-GRAS</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="logout_menu_item">Logout</string>
     <string name="settings_menu_item">Settings</string>
     <string name="search_challan_menu_item">Search Challan</string>
@@ -18,7 +17,6 @@
     <string name="email_label">Email</string>
     <string name="new_password_label">New Password</string>
     <string name="confirm_password_label">Confirm Password</string>
-    <string name="save_changes_label">Save Changes</string>
     <string name="update_password_button">Change Password</string>
     <string name="update_message">Updating…</string>
     <string name="fab_tap_target_title">Make Payment Button</string>
@@ -35,14 +33,16 @@
     <string name="version_info">Version 1.0</string>
     <string name="developer_info">Developed by NIC</string>
 
+    <string name="as_lang_label">Assamese</string>
+
     <!-- Language List preference -->
     <string-array name="language_entries">
         <item>English</item>
-        <item>Assamese</item>
+        <item>@string/as_lang_label</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>as</item>
+        <item>bn</item>
     </string-array>
 
     <!-- Theme List preference -->
@@ -58,7 +58,7 @@
 
     <string name="title_settings_activity">Settings</string>
     <string name="lang_pref_title">Language</string>
-    <string name="lang_pref_summary">English</string>
+    <string name="lang_pref_summary" translatable="false">English</string>
     <string name="lang_pref_key" translatable="false">lang</string>
     <string name="lang_pref_default_value" translatable="false">en</string>
     <string name="lang_pref_dialog_title">Choose a language</string>
@@ -68,5 +68,6 @@
     <string name="theme_pref_default_value" translatable="false">lt</string>
     <string name="theme_pref_dialog_title">Choose a theme</string>
     <string name="error_label_bottom_dialog">Error</string>
+    <string name="app_restart_msg">Application has been restarted</string>
 
 </resources>

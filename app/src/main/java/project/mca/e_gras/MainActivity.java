@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.PreferenceManager;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.firebase.ui.auth.AuthUI;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "MY-APP";
+    private static final int REQUEST_CODE = 12;
 
     private TextView displayName;
     private TextView emailOrPhone;
@@ -47,12 +50,10 @@ public class MainActivity extends AppCompatActivity
 
         // reading the setting values from the default shared pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String langPrefValue = sharedPref.getString(getString(R.string.lang_pref_key), getString(R.string.lang_pref_default_value));
         String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
 
         // now apply the settings
-        applySettings(langPrefValue, themePrefValue);
-
+        applySettings(themePrefValue);
 
 
         setContentView(R.layout.activity_main);
@@ -98,8 +99,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-    private void applySettings(String langPrefValue, String themePrefValue) {
+    private void applySettings(String themePrefValue) {
         switch (themePrefValue) {
             case "lt":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -159,7 +159,9 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
+            //startActivity(intent);
+
+            startActivityForResult(intent, REQUEST_CODE);
         }
         else if (id == R.id.logout) {
             signOutUser();
@@ -207,5 +209,19 @@ public class MainActivity extends AppCompatActivity
         // close the drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data.getExtras().getBoolean("theme-changed")) {
+
+                // restart MainActivity
+                MainActivity.this.recreate();
+
+                Toast.makeText(this, getString(R.string.app_restart_msg), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
