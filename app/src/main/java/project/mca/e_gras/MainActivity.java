@@ -2,12 +2,15 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,6 +31,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,9 +56,10 @@ public class MainActivity extends AppCompatActivity
         // reading the setting values from the default shared pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
+        String langValue = sharedPref.getString(getString(R.string.lang_pref_key), getString(R.string.lang_pref_default_value));
 
-        // now apply the settings
-        applySettings(themePrefValue);
+        applyTheme(themePrefValue);
+        setLanguage(langValue);
 
 
         setContentView(R.layout.activity_main);
@@ -99,7 +105,23 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void applySettings(String themePrefValue) {
+    private void setLanguage(String langValue) {
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+
+        Locale locale = conf.locale;
+
+        if (!locale.getLanguage().equals(new Locale(langValue).getLanguage())) {
+            // change the language
+            Locale newLocal = new Locale(langValue);
+            conf.setLocale(newLocal);
+            res.updateConfiguration(conf, dm);
+        }
+    }
+
+
+    private void applyTheme(String themePrefValue) {
         switch (themePrefValue) {
             case "lt":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -217,10 +239,8 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             if (data.getExtras().getBoolean("theme-changed")) {
 
-                // restart MainActivity
-                MainActivity.this.recreate();
-
-                Toast.makeText(this, getString(R.string.app_restart_msg), Toast.LENGTH_LONG).show();
+                // restart the application
+                System.exit(0);
             }
         }
     }

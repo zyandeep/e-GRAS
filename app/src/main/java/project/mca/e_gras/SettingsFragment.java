@@ -37,13 +37,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final String themePrefValue = mPreferences.getString("theme", getString(R.string.theme_pref_default_value));
 
 
-
         langPref = findPreference(getString(R.string.lang_pref_key));
         langPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                setLanguageSummary((String) o);
-                changeLanguage((String) o);
+                String data = (String) o;
+
+                if (!data.equals(langPrefValue)) {
+                    setLanguageSummary((String) o);
+                    changeLanguage((String) o);
+                }
+
                 return true;
             }
         });
