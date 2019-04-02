@@ -1,22 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".MakePaymentActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="Make a New Payment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginBottom="16dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.kofigyan.stateprogressbar.StateProgressBar
+                android:id="@+id/state_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:spb_checkStateCompleted="true"
+                app:spb_currentStateNumber="one"
+                app:spb_maxStateNumber="five"
+                app:spb_stateBackgroundColor="#BDBDBD"
+                app:spb_stateForegroundColor="#2E7D32"
+                app:spb_stateNumberBackgroundColor="#808080"
+                app:spb_stateNumberForegroundColor="#ffffff"
+                app:spb_stateSize="40dp" />
+
+            <TextView
+                android:id="@+id/header_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorBackground"
+                android:text="Department Details"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/colorAccent" />
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/dept_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="8dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/dept_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Department *"
+                    app:ms_thickness="1dp" />
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/payment_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Payment Type *"
+                    app:ms_thickness="1dp" />
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/district_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select District *"
+                    app:ms_thickness="1dp" />
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/office_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Office Name *"
+                    app:ms_thickness="1dp" />
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/year_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Year *"
+                    app:ms_thickness="1dp" />
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/period_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data_period"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Period *"
+                    app:ms_thickness="1dp" />
+
+                <!-- This spinner changes according to period -->
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/super_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Month *"
+                    app:ms_thickness="1dp" />
+
+
+                <!-- From date -->
+                <TextSwitcher
+                    android:id="@+id/from_date_text_switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/colorAccent"
+                    android:padding="8dp" />
+
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/form_id_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/spinner_data"
+                    app:ms_alignLabels="true"
+                    app:ms_arrowColor="@color/colorAccent"
+                    app:ms_arrowSize="16dp"
+                    app:ms_enableErrorLabel="true"
+                    app:ms_floatingLabelColor="@color/colorAccent"
+                    app:ms_hint="Select Form ID *"
+                    app:ms_thickness="1dp" />
+
+                <Button
+                    android:id="@+id/next_button"
+                    style="@style/FirebaseUI.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:onClick="showNextForm"
+                    android:text="Next" />
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

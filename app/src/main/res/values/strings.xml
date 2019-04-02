@@ -68,6 +68,45 @@
     <string name="theme_pref_default_value" translatable="false">lt</string>
     <string name="theme_pref_dialog_title">Choose a theme</string>
     <string name="error_label_bottom_dialog">Error</string>
-    <string name="app_restart_msg">Application has been restarted</string>
+
+
+    <string-array name="spinner_data">
+        <item>English</item>
+        <item>Assamese</item>
+        <item>Hindi</item>
+        <item>Bengali</item>
+        <item>Marathi</item>
+        <item>Bhojpuri</item>
+    </string-array>
+
+    <string-array name="spinner_data_period">
+        <item>Annual</item>
+        <item>Half Yearly</item>
+        <item>Quarterly</item>
+        <item>Monthly</item>
+        <item>Specific Period</item>
+        <item>One Time/Adhoc</item>
+    </string-array>
+
+    <string-array name="spinner_data_half_yearly">
+        <item>April-Sept</item>
+        <item>Oct-March</item>
+    </string-array>
+
+    <string-array name="spinner_data_quaterly">
+        <item>April-June</item>
+        <item>July-Sept</item>
+        <item>Oct-Dec</item>
+        <item>Jan-March</item>
+    </string-array>
+
+    <string-array name="spinner_data_monthly">
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>...</item>
+    </string-array>
+
 
 </resources>
