@@ -58,6 +58,9 @@ dependencies {
 
     // bubble showcase
     implementation 'com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1'
+
+    // recycler view
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
