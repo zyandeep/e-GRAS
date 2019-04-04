@@ -58,7 +58,7 @@ public class Scheme {
         for (int i = 1; i <= noOfObjects; i++) {
             schemeList.add(new Scheme("6003-00-105-0000-000" + String.valueOf(i),
                     "Scheme " + i,
-                    100 * noOfObjects));
+                    0));
         }
 
         return schemeList;

@@ -22,6 +22,7 @@ import com.kofigyan.stateprogressbar.listeners.OnStateItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -35,6 +36,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
     TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
+    TextView totalAmountTextView;
 
     ViewGroup datePickerPanel;
 
@@ -53,10 +55,14 @@ public class MakePaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
 
+
+        totalAmountTextView = findViewById(R.id.total_amount_textView);
+
+
         schemeRecyclerView = findViewById(R.id.scheme_recycler_view);
 
         // specify an adapter
-        schemeAdapter = new SchemeAdapter(getApplicationContext(), new ArrayList<Scheme>());        // an empty list
+        schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<Scheme>());        // an empty list
         schemeRecyclerView.setAdapter(schemeAdapter);
 
         // use a linear layout manager
@@ -216,7 +222,8 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                 // get the list of schemes and add it to the adapter
                 // if input changes, then only
-                schemeAdapter.addNewItems(Scheme.getSchemes());
+                List<Scheme> dataSource = Scheme.getSchemes();
+                schemeAdapter.addNewItems(dataSource);
 
                 schemeDetailsForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
