@@ -23,76 +23,12 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // check for network connectivity first
-        // warn the user if no internet connection
-
-        routeToAppropriateScreen();
-    }
+        // do I show on-boarding acivity or the main activity?
+        // show the on-boarding acivity during installation
 
 
-
-    private void routeToAppropriateScreen() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            // User is already signed in
-            // verify token at the backend
-
-            signInUser();
-        }
-        else {
-            // No user is signed in
-            // Show the Firebase Auth UI
-
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.PhoneBuilder().build());
-
-            // Create and launch sign-in intent
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(providers)
-                            .setTheme(R.style.AppTheme)
-                            .setLogo(R.drawable.image)
-                            .setIsSmartLockEnabled(false)
-                            .build(),
-                    RC_SIGN_IN);
-        }
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                // verify token at the backend
-
-                signInUser();
-            }
-            else {
-                if (response != null) {
-                    showError(response.getError().getMessage());
-                }
-            }
-        }
-    }
-
-
-
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void signInUser() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        // go to the on-boarding activity
+        Intent intent = new Intent(getApplicationContext(), MyOnboardingActivity.class);
         startActivity(intent);
         finish();
     }

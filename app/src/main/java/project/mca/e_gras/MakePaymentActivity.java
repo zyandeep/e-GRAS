@@ -3,12 +3,15 @@ package project.mca.e_gras;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -67,7 +70,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         // use a linear layout manager
         schemeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
 
         fromDateTextView = findViewById(R.id.from_date_text_view);
@@ -219,15 +221,22 @@ public class MakePaymentActivity extends AppCompatActivity {
                 break;
 
             case 2:
+                schemeDetailsForm.setVisibility(View.VISIBLE);
 
                 // get the list of schemes and add it to the adapter
                 // if input changes, then only
                 List<Scheme> dataSource = Scheme.getSchemes();
-                schemeAdapter.addNewItems(dataSource);
 
-                schemeDetailsForm.setVisibility(View.VISIBLE);
+                // recycler view item animation
+                final LayoutAnimationController controller =
+                        AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_animation);
+                schemeRecyclerView.setLayoutAnimation(controller);
+                schemeAdapter.addNewItems(dataSource);
+                schemeRecyclerView.scheduleLayoutAnimation();
+
+
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                headerTextView.setText("Account and Scheme Details");
+                headerTextView.setText("Scheme Details");
 
                 break;
 

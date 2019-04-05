@@ -27,7 +27,7 @@
                 android:id="@+id/state_progress_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_margin="8dp"
                 app:spb_checkStateCompleted="true"
                 app:spb_currentStateNumber="one"
                 app:spb_maxStateNumber="five"
@@ -44,9 +44,8 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/colorBackground"
                 android:text="Department Details"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
             <View
                 android:id="@+id/divider"
@@ -609,6 +608,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layoutAnimation="@anim/layout_animation"
                 android:layout_weight="1" />
 
             <Button

@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".MyOnboardingActivity" />
+
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_settings_activity"
@@ -36,7 +39,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".MakePaymentActivity"
             android:label="@string/make_payment_activity"
@@ -45,12 +47,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
-
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
             android:label="@string/title_activity_main"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
