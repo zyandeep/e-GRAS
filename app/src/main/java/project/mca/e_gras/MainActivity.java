@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data.getExtras().getBoolean("theme-changed")) {
+            if (data.getExtras().getBoolean(SettingsActivity.KEY_LANG_CHANGED)) {
 
                 // restart the application
                 System.exit(0);

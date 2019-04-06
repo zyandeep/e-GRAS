@@ -9,6 +9,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private boolean languageChanged = false;
 
+    public static final String KEY_LANG_CHANGED = "lang-changed";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (languageChanged) {
             Intent data = new Intent();
-            data.putExtra("theme-changed", languageChanged);
+            data.putExtra(KEY_LANG_CHANGED, languageChanged);
             setResult(RESULT_OK, data);
 
             finish();

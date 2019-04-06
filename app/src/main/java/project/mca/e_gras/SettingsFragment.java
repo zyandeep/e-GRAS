@@ -20,6 +20,8 @@ import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    public static final String TAG = "MY-APP";
+
     private SharedPreferences mPreferences;
     private Preference langPref;
     private Preference themePref;
@@ -78,9 +80,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         res.updateConfiguration(conf, dm);
 
         // restart the application
-        getActivity().recreate();
-
         ((SettingsActivity) getActivity()).setLanguageChanged(true);
+        getActivity().recreate();
     }
 
 

@@ -41,7 +41,6 @@ public class MyOnboardingActivity extends AppIntro {
 
 
         //create slides and add them
-
         addSlide(AppIntro2Fragment.newInstance("Welcome to e-GRAS Mobile",
                 "Add description here...",
                 R.drawable.image,
@@ -55,7 +54,7 @@ public class MyOnboardingActivity extends AppIntro {
         addSlide(AppIntro2Fragment.newInstance("Search for Challans",
                 "Add description here...",
                 R.drawable.image,
-                Color.MAGENTA));
+                ContextCompat.getColor(this, R.color.colorAccent)));
 
         addSlide(AppIntro2Fragment.newInstance("Review Transaction History",
                 "Add description here...",
