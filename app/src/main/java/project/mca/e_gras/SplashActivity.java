@@ -32,7 +32,13 @@ public class SplashActivity extends AppCompatActivity {
         // do I show on-boarding activity or the main activity?
         // show the on-boarding activity during installation
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        Intent intent = new Intent(getApplicationContext(), MyOnboardingActivity.class);
+        startActivity(intent);
+        finish();
+
+
+       /* SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean appIntroShown = sharedPref.getBoolean(KEY_APP_INTO, false);
 
         if (!appIntroShown) {
@@ -50,7 +56,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             // route to either log-in or mainActivity
             routeToAppropriateScreen();
-        }
+        }*/
     }
 
 
@@ -62,7 +68,8 @@ public class SplashActivity extends AppCompatActivity {
             // verify token at the backend
 
             signInUser();
-        } else {
+        }
+        else {
             // No user is signed in
             // Show the Firebase Auth UI
 
