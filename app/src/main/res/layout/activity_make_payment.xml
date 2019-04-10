@@ -11,7 +11,7 @@
 
 
     <!-- Header Card View -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/header_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,11 +57,11 @@
         </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <!-- Department Details Card View -->
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/dept_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -259,10 +259,10 @@
 
             </LinearLayout>
         </ScrollView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <!-- Payer Details Card View -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/payer_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dept_text_id_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -295,9 +295,9 @@
                         android:inputType="number"
                         android:singleLine="true" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -312,9 +312,9 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pan_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -329,9 +329,9 @@
                         android:layout_height="wrap_content"
                         android:inputType="text" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/block_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -346,9 +346,9 @@
                         android:layout_height="wrap_content"
                         android:inputType="text" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/locality_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -363,10 +363,10 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPostalAddress" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/area_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -381,10 +381,10 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPostalAddress" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pin_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -399,10 +399,10 @@
                         android:layout_height="wrap_content"
                         android:inputType="number" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/mobile_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -417,9 +417,9 @@
                         android:layout_height="wrap_content"
                         android:inputType="number" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/remarks_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -434,7 +434,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <Button
@@ -449,10 +449,10 @@
 
             </LinearLayout>
         </ScrollView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <!-- Payment Details Card View -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/payment_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -526,11 +526,11 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
     <!-- Verify Submission and Submit Data -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/form_summary_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -563,11 +563,11 @@
         </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
     <!-- Scheme Details card view -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/scheme_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -602,7 +602,7 @@
             </LinearLayout>
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/scheme_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -619,6 +619,6 @@
                 android:onClick="showNextForm"
                 android:text="Next" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

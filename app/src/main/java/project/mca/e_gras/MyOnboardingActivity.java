@@ -2,22 +2,19 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 import android.view.View;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntro2Fragment;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-import com.github.paolorotolo.appintro.model.SliderPage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcoscg.dialogsheet.DialogSheet;

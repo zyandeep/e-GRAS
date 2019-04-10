@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/display_name_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                         android:inputType="textPersonName"
                         android:singleLine="true" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/save_name"
@@ -80,7 +80,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                         android:ems="10"
                         android:inputType="phone"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/save_phone"
@@ -118,7 +118,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                         android:ems="10"
                         android:inputType="textEmailAddress"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/save_email"
@@ -157,7 +157,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/password_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -177,9 +177,9 @@
                         android:ems="10"
                         android:inputType="textPassword"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/c_password_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -198,7 +198,7 @@
                         android:ems="10"
                         android:inputType="textPassword"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/update_password"
