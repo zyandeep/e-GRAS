@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="project.mca.e_gras">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,7 +17,6 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MyOnboardingActivity" />
-
 
         <activity
             android:name=".SettingsActivity"

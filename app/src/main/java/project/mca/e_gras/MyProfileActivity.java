@@ -134,22 +134,7 @@ public class MyProfileActivity extends AppCompatActivity {
             dialog.dismiss();
         }
 
-
-        // show the bottomSheet dialog
-        new DialogSheet(this)
-                .setTitle(R.string.error_label_bottom_dialog)
-                .setMessage(msg)
-                .setColoredNavigationBar(true)
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.ok, new DialogSheet.OnPositiveClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Close the dialog
-                    }
-                })
-                .setRoundedCorners(true)
-                .setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorBackground))
-                .show();
+        MyUtil.showBottomDialog(this, msg);
     }
 
 
