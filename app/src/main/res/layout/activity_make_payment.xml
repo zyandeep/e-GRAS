@@ -59,8 +59,8 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Department Details Card View -->
 
+    <!-- Department Details Card View -->
     <androidx.cardview.widget.CardView
         android:id="@+id/dept_card_view"
         android:layout_width="match_parent"
@@ -82,7 +82,6 @@
                     android:id="@+id/dept_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -95,7 +94,6 @@
                     android:id="@+id/payment_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -134,7 +132,7 @@
                     android:id="@+id/year_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
+                    android:entries="@array/spinner_data_year"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -239,7 +237,6 @@
                     android:id="@+id/form_id_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -566,7 +563,7 @@
     </androidx.cardview.widget.CardView>
 
 
-    <!-- Scheme Details card view -->
+    <!-- SchemeModel Details card view -->
     <androidx.cardview.widget.CardView
         android:id="@+id/scheme_card_view"
         android:layout_width="match_parent"

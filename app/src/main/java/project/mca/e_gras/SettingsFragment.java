@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import project.mca.e_gras.util.MyUtil;
+
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
@@ -78,28 +80,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         res.updateConfiguration(conf, dm);
 
         // restart the application
-        ((SettingsActivity) getActivity()).setLanguageChanged(true);
-        getActivity().recreate();
+        MyUtil.showBottomDialog(getActivity(), getString(R.string.app_restart_info),
+                true);
     }
 
 
     private void changeTheme(String themeValue) {
         switch (themeValue) {
             case "lt":
-
-                ((AppCompatActivity)getContext())
-                        .getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
 
             case "dk":
-
-                ((AppCompatActivity)getContext())
-                        .getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
 
         }
+
+        // recreate the activity
+        getActivity().recreate();
     }
 
 
@@ -129,7 +128,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 break;
 
             case "bn":
-                value = "Assamese";
+                value = getString(R.string.as_lang_label);
                 break;
         }
 

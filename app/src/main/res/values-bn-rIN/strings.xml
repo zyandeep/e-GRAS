@@ -31,4 +31,6 @@
     <string name="update_password_button">পাছৱৰ্দ সলনি কৰক</string>
     <string name="as_lang_label">অসমীয়া</string>
     <string name="app_restart_msg">App টো restart কৰা হৈছে</string>
+    <string name="theme_pref_title">থিম</string>
+    <string name="app_restart_info">Application টো  restart কৰাৰ প্ৰয়োযন</string>
 </resources>

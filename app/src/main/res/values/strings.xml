@@ -62,12 +62,13 @@
     <string name="lang_pref_key" translatable="false">lang</string>
     <string name="lang_pref_default_value" translatable="false">en</string>
     <string name="lang_pref_dialog_title">Choose a language</string>
-    <string name="theme_pref_title" translatable="false">Theme</string>
+    <string name="theme_pref_title">Theme</string>
     <string name="theme_pref_summary" translatable="false">Light</string>
     <string name="theme_pref_key" translatable="false">theme</string>
     <string name="theme_pref_default_value" translatable="false">lt</string>
     <string name="theme_pref_dialog_title">Choose a theme</string>
     <string name="error_label_bottom_dialog">Error</string>
+    <string name="app_restart_info">You need to restart the application for the changes to take effect</string>
 
 
     <string-array name="spinner_data">
@@ -81,12 +82,12 @@
 
     <string-array name="spinner_data_period">
         <item>Annual</item>
-        <item>Half Yearly</item>
-        <item>Quarterly</item>
-        <item>Monthly</item>
-        <item>Specific Period</item>
-        <item>One Time/Adhoc</item>
     </string-array>
+
+    <string-array name="spinner_data_year">
+        <item>2019-2020</item>
+    </string-array>
+
 
     <string-array name="spinner_data_half_yearly">
         <item>April-Sept</item>

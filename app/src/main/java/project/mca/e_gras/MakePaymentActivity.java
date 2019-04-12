@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,34 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.kofigyan.stateprogressbar.components.StateItem;
 import com.kofigyan.stateprogressbar.listeners.OnStateItemClickListener;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import project.mca.e_gras.model.DeptModel;
+import project.mca.e_gras.model.PaymentModel;
+import project.mca.e_gras.model.SchemeModel;
+import project.mca.e_gras.util.MyUtil;
 
 
 public class MakePaymentActivity extends AppCompatActivity {
@@ -34,7 +52,7 @@ public class MakePaymentActivity extends AppCompatActivity {
     private static final String TAG = "MY-APP";
 
     StateProgressBar stateProgressBar;
-    MaterialSpinner deptSpinner, periodSpinner, superSpinner;
+    MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner;
 
     TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
@@ -52,21 +70,37 @@ public class MakePaymentActivity extends AppCompatActivity {
     RecyclerView schemeRecyclerView;
     SchemeAdapter schemeAdapter;
 
+    //GSon reference
+    Gson gson;
+    // Department List
+    List<DeptModel> deptList;
+    // Payment Type List
+    List<PaymentModel> paymentList;
+    // This map will contain all input parameters
+    // and will get POSTed to backend finally
+    private Map<String, Object> parametersMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
 
 
+        parametersMap = new HashMap<String, Object>();
+
+
+        gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create();
+
+
         totalAmountTextView = findViewById(R.id.total_amount_textView);
 
-
         schemeRecyclerView = findViewById(R.id.scheme_recycler_view);
-
         // specify an adapter
-        schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<Scheme>());        // an empty list
+        schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<SchemeModel>());        // an empty list
         schemeRecyclerView.setAdapter(schemeAdapter);
-
         // use a linear layout manager
         schemeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -77,6 +111,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         // form header textView
         headerTextView = findViewById(R.id.header_textView);
 
+        // form viewGroups
         departmentDetailsForm = findViewById(R.id.dept_card_view);
         schemeDetailsForm = findViewById(R.id.scheme_card_view);
         payerDetailsForm = findViewById(R.id.payer_card_view);
@@ -96,12 +131,43 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
 
+
         deptSpinner = findViewById(R.id.dept_spinner);
+        getDeptNames();
         // hookup the adapter
         deptSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, parent.getItemAtPosition(position).toString());
+                if (position >= 0) {
+                    // get the 	selected department
+                    DeptModel dept = deptList.get(position);
+
+                    // and store it's DEPT_CODE in the Map
+                    parametersMap.put("DEPT_CODE", dept.getDeptCode());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+        paymentSpinner = findViewById(R.id.payment_spinner);
+        getPaymentTypes();
+        paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    // get the 	selected payment model
+                    PaymentModel model = paymentList.get(position);
+
+                    // and store it's PAYMENT_TYPE in the Map
+                    parametersMap.put("PAYMENT_TYPE", model.getType());
+
+
+                    Log.d(TAG, parametersMap.toString());
+                }
             }
 
             @Override
@@ -178,9 +244,123 @@ public class MakePaymentActivity extends AppCompatActivity {
     }
 
 
+    private void getPaymentTypes() {
+        String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+
+        AndroidNetworking.get(url)
+                .addQueryParameter("paymenttypes", "true")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                // if success is true
+                                // get the dept list
+
+                                // converting jsonArray of payments into ArrayList
+                                Type type = new TypeToken<ArrayList<PaymentModel>>() {
+                                }.getType();
+                                paymentList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                // now create the list of payment types to display
+                                List<String> paymentTypes = new ArrayList<>();
+
+                                for (PaymentModel m : paymentList) {
+                                    paymentTypes.add(m.getName());
+                                }
+
+                                // finally, set up the payment spinner
+                                setUpPaymentSpinner(paymentTypes);
+                            } else {
+                                // display error dialog
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // display error dialog
+                        MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                    }
+                });
+    }
+
+
+    private void setUpPaymentSpinner(List<String> paymentTypes) {
+        ArrayAdapter<String> paymentAdapter = new ArrayAdapter<String>(
+                getApplicationContext(), android.R.layout.simple_spinner_item, paymentTypes
+        );
+
+        paymentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        paymentSpinner.setAdapter(paymentAdapter);
+    }
+
+
+    private void getDeptNames() {
+        String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+
+        AndroidNetworking.get(url)
+                .addQueryParameter("deptnames", "true")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                // if success is true
+                                // get the dept list
+
+                                // converting jsonArray of depts into ArrayList<DeptModel>
+                                Type deptListType = new TypeToken<ArrayList<DeptModel>>() {
+                                }.getType();
+                                deptList = gson.fromJson(String.valueOf(response.getJSONArray("result")), deptListType);
+
+                                // now create the list of dept names to display
+                                List<String> deptNames = new ArrayList<>();
+
+                                for (DeptModel m : deptList) {
+                                    deptNames.add(m.getName());
+                                }
+
+                                // finally, set up the department spinner
+                                setUpDeptSpinner(deptNames);
+                            } else {
+                                // display error dialog
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // display error dialog
+                        MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                    }
+                });
+    }
+
+
+    private void setUpDeptSpinner(List<String> deptNames) {
+        ArrayAdapter<String> deptAdapter = new ArrayAdapter<String>(
+                getApplicationContext(), android.R.layout.simple_spinner_item, deptNames
+        );
+
+        deptAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        deptSpinner.setAdapter(deptAdapter);
+    }
+
+
     private void showFrom(int curState, int nextState) {
 
-        Log.d(TAG, "" + curState + " : " + nextState);
+        //Log.d(TAG, "" + curState + " : " + nextState);
 
 
         // hide the form associates with "curState"
@@ -224,7 +404,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                 // get the list of schemes and add it to the adapter
                 // if input changes, then only
-                List<Scheme> dataSource = Scheme.getSchemes();
+                List<SchemeModel> dataSource = SchemeModel.getSchemes();
 
                 // recycler view item animation
                 final LayoutAnimationController controller =
@@ -235,7 +415,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                headerTextView.setText("Scheme Details");
+                headerTextView.setText("SchemeModel Details");
 
                 break;
 

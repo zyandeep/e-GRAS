@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import project.mca.e_gras.model.SchemeModel;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,10 +25,10 @@ public class SchemeAdapter
 
 
     Context mContext;
-    List<Scheme> schemeList;
+    List<SchemeModel> schemeList;
 
 
-    public SchemeAdapter(Context mContext, List<Scheme> schemeList) {
+    public SchemeAdapter(Context mContext, List<SchemeModel> schemeList) {
         this.mContext = mContext;
         this.schemeList = schemeList;
     }
@@ -45,7 +47,7 @@ public class SchemeAdapter
     @Override
     public void onBindViewHolder(@NonNull final SchemeAdapter.MyViewHolder myViewHolder, int position) {
 
-        Scheme scheme = schemeList.get(position);
+        SchemeModel scheme = schemeList.get(position);
 
         myViewHolder.scheme_name.setText(scheme.getName());
         myViewHolder.ac_no.setText(scheme.getAcNo());
@@ -60,7 +62,7 @@ public class SchemeAdapter
 
 
     // Add new items to the list
-    public void addNewItems(List<Scheme> newList) {
+    public void addNewItems(List<SchemeModel> newList) {
         schemeList.clear();
         schemeList.addAll(newList);
 
@@ -77,7 +79,7 @@ public class SchemeAdapter
             totalAmount = 0.0;
 
             // calculate total amount
-            for (Scheme obj : schemeList) {
+            for (SchemeModel obj : schemeList) {
                 totalAmount += obj.getAmount();
             }
 
@@ -117,7 +119,7 @@ public class SchemeAdapter
                     int position = getAdapterPosition();
                     int value = 0;
 
-                    Scheme obj = schemeList.get(position);
+                    SchemeModel obj = schemeList.get(position);
 
                     try {
                         value = Integer.valueOf(s.toString());

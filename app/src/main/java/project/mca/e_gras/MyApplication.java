@@ -11,6 +11,8 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -34,6 +36,9 @@ public class MyApplication extends Application implements LifecycleObserver {
                 .get()
                 .getLifecycle()
                 .addObserver(this);
+
+        // Fast AN initialization
+        AndroidNetworking.initialize(getApplicationContext());
     }
 
 
