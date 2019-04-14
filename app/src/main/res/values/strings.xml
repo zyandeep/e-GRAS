@@ -69,6 +69,7 @@
     <string name="theme_pref_dialog_title">Choose a theme</string>
     <string name="error_label_bottom_dialog">Error</string>
     <string name="app_restart_info">You need to restart the application for the changes to take effect</string>
+    <string name="error_no_network">Hmm… Looks like there\'s no network connection available</string>
 
 
     <string-array name="spinner_data">

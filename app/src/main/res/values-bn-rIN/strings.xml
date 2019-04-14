@@ -33,4 +33,5 @@
     <string name="app_restart_msg">App টো restart কৰা হৈছে</string>
     <string name="theme_pref_title">থিম</string>
     <string name="app_restart_info">Application টো  restart কৰাৰ প্ৰয়োযন</string>
+    <string name="error_no_network">আপুনি Internet সংযোগৰ পৰা বিচ্ছিন্ন হৈ আছে</string>
 </resources>

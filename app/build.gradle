@@ -64,11 +64,6 @@ dependencies {
     // onboarding library
     implementation 'com.github.AppIntro:AppIntro:4.2.3'
 
-    // android lifecycle components
-    def lifecycle_version = "2.0.0"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-
     // fast networking library
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
 }

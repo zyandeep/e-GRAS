@@ -1,12 +1,12 @@
 package project.mca.e_gras;
 
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +29,6 @@ import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.kofigyan.stateprogressbar.components.StateItem;
 import com.kofigyan.stateprogressbar.listeners.OnStateItemClickListener;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import project.mca.e_gras.model.DeptModel;
 import project.mca.e_gras.model.PaymentModel;
@@ -50,6 +52,8 @@ import project.mca.e_gras.util.MyUtil;
 public class MakePaymentActivity extends AppCompatActivity {
 
     private static final String TAG = "MY-APP";
+    private static final String TAG_DEPT_NAMES = "dept_names";
+    private static final String TAG_PAYMENT_TYPES = "payment_types";
 
     StateProgressBar stateProgressBar;
     MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner;
@@ -72,22 +76,33 @@ public class MakePaymentActivity extends AppCompatActivity {
 
     //GSon reference
     Gson gson;
+
     // Department List
     List<DeptModel> deptList;
+
     // Payment Type List
     List<PaymentModel> paymentList;
+
     // This map will contain all input parameters
     // and will get POSTed to backend finally
     private Map<String, Object> parametersMap;
+
+    private BroadcastReceiver myReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
 
+        myReceiver = new MyNetworkReceiver();
+
+        // make sure the app is connected to the internet
+        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
+            MyUtil.showBottomDialog(MakePaymentActivity.this, getString(R.string.error_no_network));
+        }
 
         parametersMap = new HashMap<String, Object>();
-
 
         gson = new GsonBuilder()
                 .setPrettyPrinting()
@@ -231,7 +246,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         });
 
 
-
         // add the bubble showcase
         new BubbleShowCaseBuilder(this)
                 .title("Attention!")
@@ -245,10 +259,24 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
     private void getPaymentTypes() {
+        // check network connectivity first
+        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
+            return;
+        }
+
+        //  parameters in a query string are always in the form of :
+        //  url?<K><V>&<K><V>
+        /// where K: String, V: String
+
         String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
 
+        // send query parameters as a Map
+        Map<String, String> params = new HashMap<>();
+        params.put("paymenttypes", "true");
+
         AndroidNetworking.get(url)
-                .addQueryParameter("paymenttypes", "true")
+                .addQueryParameter(params)
+                .setTag(TAG_PAYMENT_TYPES)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -275,6 +303,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 // finally, set up the payment spinner
                                 setUpPaymentSpinner(paymentTypes);
                             } else {
+                                // server-side error
                                 // display error dialog
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
@@ -284,6 +313,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
+                        // client-side error
                         // display error dialog
                         MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
                     }
@@ -302,16 +332,25 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
     private void getDeptNames() {
+        // check network connectivity first
+        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
+            return;
+        }
+
         String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
 
+        // send query parameters as a Map
+        Map<String, String> params = new HashMap<>();
+        params.put("deptnames", "true");
+
         AndroidNetworking.get(url)
-                .addQueryParameter("deptnames", "true")
+                .addQueryParameter(params)
                 .setPriority(Priority.MEDIUM)
+                .setTag(TAG_DEPT_NAMES)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         try {
                             if (response.getBoolean("success")) {
                                 // if success is true
@@ -332,6 +371,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 // finally, set up the department spinner
                                 setUpDeptSpinner(deptNames);
                             } else {
+                                // Server-side error
                                 // display error dialog
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
@@ -341,7 +381,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // display error dialog
+                        // client-side network error
                         MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
                     }
                 });
@@ -451,7 +491,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             case R.id.from_date_img_button:
 
                 // show "from date" dialog
-               new DatePickerDialog(
+                new DatePickerDialog(
                         MakePaymentActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth,
                         new DatePickerDialog.OnDateSetListener() {
@@ -515,11 +555,59 @@ public class MakePaymentActivity extends AppCompatActivity {
         // get the current state number
         int curState = stateProgressBar.getCurrentStateNumber();
 
-        showFrom(curState, curState+1);
+        showFrom(curState, curState + 1);
     }
 
 
-
     public void submitData(View view) {
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // register the receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        // register the receiver dynamically
+        this.registerReceiver(myReceiver, filter);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        this.unregisterReceiver(myReceiver);
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Receiver to receive CONNECTIVITY_CHANGED broadcast intent
+    private class MyNetworkReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equalsIgnoreCase(ConnectivityManager.CONNECTIVITY_ACTION)) {
+
+                // if network is available then
+                if (MyUtil.isNetworkAvailable(getApplicationContext())) {
+
+                    // dept list needs to be empty
+                    if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptList == null) {
+                        // get the dept names
+                        getDeptNames();
+                    }
+
+                    // payment type list needs to be empty
+                    if (!AndroidNetworking.isRequestRunning(TAG_PAYMENT_TYPES) && paymentList == null) {
+                        // get the payment types
+                        getPaymentTypes();
+                    }
+                }
+            }
+        }
     }
 }
