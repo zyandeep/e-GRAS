@@ -36,4 +36,5 @@
     <string name="error_server_down">Server টো সংযোগ সীমাৰ বাহিৰত আছে</string>
     <string name="spot_dialog_message">Data download হৈ আছে...</string>
     <string name="scheme_enter_amount">পৰিমাণ লিখক...</string>
+    <string name="title_payment_gateway">পেমেন্ট গেটৱে</string>
 </resources>

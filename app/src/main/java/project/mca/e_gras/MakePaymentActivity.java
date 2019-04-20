@@ -52,6 +52,7 @@ import project.mca.e_gras.adapter.DeptSpinnerAdapter;
 import project.mca.e_gras.adapter.DistrictSpinnerAdapter;
 import project.mca.e_gras.adapter.OfficeSpinnerAdapter;
 import project.mca.e_gras.adapter.PaymentSpinnerAdapter;
+import project.mca.e_gras.adapter.SchemeAdapter;
 import project.mca.e_gras.model.DeptModel;
 import project.mca.e_gras.model.DistrictModel;
 import project.mca.e_gras.model.OfficeModel;
@@ -79,7 +80,8 @@ public class MakePaymentActivity extends AppCompatActivity {
 
     TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
-    TextView totalAmountTextView;
+
+    public TextView totalAmountTextView;            // so that it's visible in the package adapter
 
     ViewGroup datePickerPanel;
 
@@ -999,12 +1001,37 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        MyUtil.closeSpotDialog();
 
+                        try {
+                            if (response.getBoolean("success")) {
+                                // get the url and open it in the webView
+
+                                Intent intent = new Intent(getApplicationContext(), PaymentGatewayActivity.class);
+                                intent.putExtra("url", response.getString("url"));
+                                startActivity(intent);
+
+                                finish();
+                            } else {
+                                // server side error
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (Exception ex) {
+                            Log.d(TAG, ex.getMessage());
+                        }
                     }
 
                     @Override
                     public void onError(ANError error) {
+                        // client-side network error
+                        // error 0 => request cancelled error
+                        MyUtil.closeSpotDialog();
 
+                        if (error.getErrorCode() != 0) {
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, error.getMessage());
+                        }
+
+                        Log.d(TAG, error.getMessage());
                     }
                 });
     }

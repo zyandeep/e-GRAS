@@ -1,4 +1,4 @@
-package project.mca.e_gras;
+package project.mca.e_gras.adapter;
 
 import android.content.Context;
 import android.text.Editable;
@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import project.mca.e_gras.MakePaymentActivity;
+import project.mca.e_gras.R;
 import project.mca.e_gras.model.SchemeModel;
 
 public class SchemeAdapter

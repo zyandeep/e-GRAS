@@ -77,6 +77,7 @@
         \n\nYou can go back and forth between the froms by selecting the sage number above.
         \n\nOnce, everything is verified, hit \"Submit\".
     </string>
+    <string name="title_payment_gateway">Payment Gateway</string>
 
 
     <string-array name="spinner_data">
