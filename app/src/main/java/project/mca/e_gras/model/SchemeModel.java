@@ -1,26 +1,26 @@
 package project.mca.e_gras.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.google.gson.annotations.SerializedName;
 
 public class SchemeModel {
-    private String acNo;
+
+    @SerializedName("SCHEME_CODE")
+    private String hoa;
+
+    @SerializedName("SCHEME_NAME")
     private String name;
+
     private int amount;
 
-    public SchemeModel(String acNo, String name, int amount) {
-        this.acNo = acNo;
-        this.name = name;
-        this.amount = amount;
+    public SchemeModel() {
     }
 
-    public String getAcNo() {
-        return acNo;
+    public String getHoa() {
+        return hoa;
     }
 
-    public void setAcNo(String acNo) {
-        this.acNo = acNo;
+    public void setHoa(String hoa) {
+        this.hoa = hoa;
     }
 
     public String getName() {
@@ -39,25 +39,11 @@ public class SchemeModel {
         this.amount = amount;
     }
 
-    // generate list of schemes
-    public static List<SchemeModel> getSchemes() {
-        List<SchemeModel> schemeList = new ArrayList<>();
-
-        int noOfObjects = (new Random().nextInt(10)) + 1;
-
-        for (int i = 1; i <= noOfObjects; i++) {
-            schemeList.add(new SchemeModel("6003-00-105-0000-000" + String.valueOf(i),
-                    "SchemeModel " + i,
-                    0));
-        }
-
-        return schemeList;
-    }
 
     @Override
     public String toString() {
         return "SchemeModel{" +
-                "acNo='" + acNo + '\'' +
+                "hoa='" + hoa + '\'' +
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
                 '}';

@@ -69,7 +69,14 @@
     <string name="theme_pref_dialog_title">Choose a theme</string>
     <string name="error_label_bottom_dialog">Error</string>
     <string name="app_restart_info">You need to restart the application for the changes to take effect</string>
-    <string name="error_no_network">Hmm… Looks like there\'s no network connection available</string>
+    <string name="error_no_network">No network connection available. You are offline</string>
+    <string name="error_server_down">The Server is not reachable at the moment</string>
+    <string name="spot_dialog_message">Please wait…</string>
+    <string name="scheme_enter_amount">Enter Amount…</string>
+    <string name="msg_verify_form_data" translatable="false">Please, verify the data you have entered before submitting the from.
+        \n\nYou can go back and forth between the froms by selecting the sage number above.
+        \n\nOnce, everything is verified, hit \"Submit\".
+    </string>
 
 
     <string-array name="spinner_data">

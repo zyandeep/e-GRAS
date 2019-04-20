@@ -37,7 +37,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/display_name_text_input_layout"
@@ -71,7 +72,6 @@
                     android:paddingBottom="5dp"
                     android:src="@drawable/ic_done" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/phone_form"
@@ -109,7 +109,6 @@
                     android:paddingBottom="5dp"
                     android:src="@drawable/ic_done" />
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/email_form"
@@ -203,9 +202,8 @@
                 <Button
                     android:id="@+id/update_password"
                     style="@style/FirebaseUI.Button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
                     android:onClick="updatePassword"
                     android:text="@string/update_password_button" />
 

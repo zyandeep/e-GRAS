@@ -15,10 +15,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/acc_no_textView"
+            android:id="@+id/hoa_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
             android:textStyle="italic"
             tools:text="000-233-1717-199" />
 
@@ -26,6 +26,7 @@
             android:id="@+id/scheme_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/about_description_text_color"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Save India, Save Earth" />
@@ -34,7 +35,7 @@
             android:id="@+id/scheme_amount_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Amount..."
+            android:hint="@string/scheme_enter_amount"
             android:inputType="number"
             android:singleLine="true" />
 

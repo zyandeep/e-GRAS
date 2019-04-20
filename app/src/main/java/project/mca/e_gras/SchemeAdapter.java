@@ -1,11 +1,6 @@
 package project.mca.e_gras;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import project.mca.e_gras.model.SchemeModel;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,7 +9,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
+
+import project.mca.e_gras.model.SchemeModel;
 
 public class SchemeAdapter
         extends RecyclerView.Adapter<SchemeAdapter.MyViewHolder> {
@@ -22,8 +22,6 @@ public class SchemeAdapter
     public static final String TAG = "MY-APP";
 
     private double totalAmount = 0.0;
-
-
     Context mContext;
     List<SchemeModel> schemeList;
 
@@ -49,8 +47,8 @@ public class SchemeAdapter
 
         SchemeModel scheme = schemeList.get(position);
 
-        myViewHolder.scheme_name.setText(scheme.getName());
-        myViewHolder.ac_no.setText(scheme.getAcNo());
+        myViewHolder.schemeName.setText(scheme.getName());
+        myViewHolder.hoa.setText(scheme.getHoa());
         myViewHolder.amount.setText(String.valueOf(scheme.getAmount()));
     }
 
@@ -72,11 +70,19 @@ public class SchemeAdapter
     }
 
 
-    private void displayTotalAmount() {
-        if (schemeList.size() > 0) {
+    // Remove list items
+    public void removeAllItems() {
+        this.schemeList.clear();
 
-            // reset totalAmount
-            totalAmount = 0.0;
+        notifyDataSetChanged();
+    }
+
+
+    private void displayTotalAmount() {
+        // reset totalAmount
+        totalAmount = 0.0;
+
+        if (schemeList.size() > 0) {
 
             // calculate total amount
             for (SchemeModel obj : schemeList) {
@@ -92,17 +98,24 @@ public class SchemeAdapter
     }
 
 
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ac_no;
-        TextView scheme_name;
+        TextView hoa;
+        TextView schemeName;
         EditText amount;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ac_no = itemView.findViewById(R.id.acc_no_textView);
-            scheme_name = itemView.findViewById(R.id.scheme_textView);
+            hoa = itemView.findViewById(R.id.hoa_textView);
+            schemeName = itemView.findViewById(R.id.scheme_textView);
             amount = itemView.findViewById(R.id.scheme_amount_edit_text);
 
             amount.addTextChangedListener(new TextWatcher() {

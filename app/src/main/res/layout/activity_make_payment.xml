@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:visibility="visible"
         app:cardElevation="8dp">
 
         <LinearLayout
@@ -106,7 +107,6 @@
                     android:id="@+id/district_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -119,7 +119,6 @@
                     android:id="@+id/office_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data"
                     app:ms_alignLabels="true"
                     app:ms_arrowColor="@color/colorAccent"
                     app:ms_arrowSize="16dp"
@@ -289,7 +288,7 @@
                         android:id="@+id/dept_text_id_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -545,8 +544,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Verify form data before subimmsion..."
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                android:text="@string/msg_verify_form_data"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/about_item_text_color"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/submit_form_button"
@@ -554,8 +555,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
+                android:layout_marginTop="16dp"
                 android:onClick="submitData"
-                android:text="Submit Data" />
+                android:text="Submit" />
 
         </LinearLayout>
 
@@ -563,7 +565,7 @@
     </androidx.cardview.widget.CardView>
 
 
-    <!-- SchemeModel Details card view -->
+    <!-- Scheme Details card view -->
     <androidx.cardview.widget.CardView
         android:id="@+id/scheme_card_view"
         android:layout_width="match_parent"
@@ -576,37 +578,74 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!-- The recyclerView and the total amount -->
             <LinearLayout
+                android:id="@+id/scheme_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Amount:"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/total_amount_textView"
-                    android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Amount:"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+                    <TextView
+                        android:id="@+id/total_amount_textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        tools:text="200000.00" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/scheme_recycler_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:text="200000.00" />
-
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layoutAnimation="@anim/layout_animation" />
             </LinearLayout>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/scheme_recycler_view"
+            <LinearLayout
+                android:id="@+id/empty_scheme"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layoutAnimation="@anim/layout_animation"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/empty" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="No schemes found..."
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/about_item_text_color" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/next_button_scheme"
@@ -615,6 +654,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="showNextForm"
                 android:text="Next" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

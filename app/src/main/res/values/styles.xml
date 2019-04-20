@@ -9,6 +9,7 @@
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="dialogSheetAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
 
@@ -24,7 +25,7 @@
     <style name="mySpotDialogTheme" parent="android:Theme.DeviceDefault.Light.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogSpotCount">5</item>
-        <item name="DialogTitleText">@string/update_message</item>
+        <item name="DialogTitleText">@string/spot_dialog_message</item>
         <item name="DialogSpotColor">@color/colorAccent</item>
     </style>
 

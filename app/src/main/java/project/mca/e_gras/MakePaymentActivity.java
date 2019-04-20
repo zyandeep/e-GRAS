@@ -1,3 +1,6 @@
+// load spinner data like
+// dept -> payment -> district -> office
+
 package project.mca.e_gras;
 
 import android.app.DatePickerDialog;
@@ -17,11 +20,16 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -39,11 +47,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import fr.ganfra.materialspinner.MaterialSpinner;
+import project.mca.e_gras.adapter.DeptSpinnerAdapter;
+import project.mca.e_gras.adapter.DistrictSpinnerAdapter;
+import project.mca.e_gras.adapter.OfficeSpinnerAdapter;
+import project.mca.e_gras.adapter.PaymentSpinnerAdapter;
 import project.mca.e_gras.model.DeptModel;
+import project.mca.e_gras.model.DistrictModel;
+import project.mca.e_gras.model.OfficeModel;
 import project.mca.e_gras.model.PaymentModel;
 import project.mca.e_gras.model.SchemeModel;
 import project.mca.e_gras.util.MyUtil;
@@ -54,9 +65,17 @@ public class MakePaymentActivity extends AppCompatActivity {
     private static final String TAG = "MY-APP";
     private static final String TAG_DEPT_NAMES = "dept_names";
     private static final String TAG_PAYMENT_TYPES = "payment_types";
+    private static final String TAG_OFFICE_NAMES = "office_names";
+    private static final String TAG_DISTRICT_NAMES = "district_names";
+    private static final String TAG_SCHEME_NAMES = "scheme_names";
+    private static final String TAG_GENERATE_CHALLAN = "generate_challan";
+
+    private static final String URL = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
 
     StateProgressBar stateProgressBar;
-    MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner;
+    MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner, districtSpinner, officeSpinner, yearSpinner;
+
+    TextInputLayout deptTextID, payerName, panNo, blockNo, locality, area, pinNo, mobileNo, remarks;
 
     TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
@@ -70,6 +89,8 @@ public class MakePaymentActivity extends AppCompatActivity {
     ViewGroup payerDetailsForm;
     ViewGroup paymentDetailsForm;
     ViewGroup viewSummaryForm;
+    ViewGroup emptyState;
+    ViewGroup schemeListData;
 
     RecyclerView schemeRecyclerView;
     SchemeAdapter schemeAdapter;
@@ -77,14 +98,23 @@ public class MakePaymentActivity extends AppCompatActivity {
     //GSon reference
     Gson gson;
 
-    // Department List
-    List<DeptModel> deptList;
+    // Empty Department List
+    List<DeptModel> deptModelList = new ArrayList<>();
 
-    // Payment Type List
-    List<PaymentModel> paymentList;
+    // Empty Payment Type List
+    List<PaymentModel> paymentModelList = new ArrayList<>();
+
+    // Empty District List
+    List<DistrictModel> districtModelList = new ArrayList<>();
+
+    // Empty Office List
+    List<OfficeModel> officeModelList = new ArrayList<>();
+
+    // Empty Scheme List
+    List<SchemeModel> schemeModelList = new ArrayList<>();
 
     // This map will contain all input parameters
-    // and will get POSTed to backend finally
+    // and will get POSTed to PHP backend finally
     private Map<String, Object> parametersMap;
 
     private BroadcastReceiver myReceiver;
@@ -95,29 +125,41 @@ public class MakePaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
 
+        MyUtil.getJWTToken();
+
         myReceiver = new MyNetworkReceiver();
 
-        // make sure the app is connected to the internet
-        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
-            MyUtil.showBottomDialog(MakePaymentActivity.this, getString(R.string.error_no_network));
-        }
-
-        parametersMap = new HashMap<String, Object>();
+        parametersMap = new HashMap<>();
+        parametersMap.put("TREASURY_CODE", "BIL");
+        parametersMap.put("MAJOR_HEAD", "0029");
 
         gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
 
+        deptTextID = findViewById(R.id.dept_text_id_text_input);
+        payerName = findViewById(R.id.name_text_input);
+        panNo = findViewById(R.id.pan_text_input);
+        blockNo = findViewById(R.id.block_text_input);
+        locality = findViewById(R.id.locality_text_input);
+        area = findViewById(R.id.area_text_input);
+        pinNo = findViewById(R.id.pin_text_input);
+        mobileNo = findViewById(R.id.mobile_text_input);
+        remarks = findViewById(R.id.remarks_text_input);
 
         totalAmountTextView = findViewById(R.id.total_amount_textView);
 
+        // Set up the recycler view
         schemeRecyclerView = findViewById(R.id.scheme_recycler_view);
         // specify an adapter
-        schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<SchemeModel>());        // an empty list
+        schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<SchemeModel>());    // an empty list
         schemeRecyclerView.setAdapter(schemeAdapter);
         // use a linear layout manager
         schemeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        schemeListData = findViewById(R.id.scheme_list);
+        emptyState = findViewById(R.id.empty_scheme);
 
 
         fromDateTextView = findViewById(R.id.from_date_text_view);
@@ -155,10 +197,23 @@ public class MakePaymentActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= 0) {
                     // get the 	selected department
-                    DeptModel dept = deptList.get(position);
+                    DeptModel dept = deptModelList.get(position);
 
                     // and store it's DEPT_CODE in the Map
                     parametersMap.put("DEPT_CODE", dept.getDeptCode());
+
+                    // load the respective payment types
+                    getPaymentTypes();
+                } else {
+                    // remove the key
+                    parametersMap.remove("DEPT_CODE");
+
+                    // to refresh a spinner, create its adapter with an empty list
+
+                    setUpPaymentSpinner(true);
+                    setUpDistrictSpinner(true);
+                    setUpOfficeSpinner(true);
+                    clearSchemeList();
                 }
             }
 
@@ -167,21 +222,90 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
 
-
         paymentSpinner = findViewById(R.id.payment_spinner);
-        getPaymentTypes();
         paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= 0) {
                     // get the 	selected payment model
-                    PaymentModel model = paymentList.get(position);
+                    PaymentModel model = paymentModelList.get(position);
 
                     // and store it's PAYMENT_TYPE in the Map
                     parametersMap.put("PAYMENT_TYPE", model.getType());
 
+                    // load the districts corresponding to the department/DEPT_CODE
+                    getDistricts();
+                } else {
+                    //remove the key
+                    parametersMap.remove("PAYMENT_TYPE");
 
-                    Log.d(TAG, parametersMap.toString());
+                    setUpDistrictSpinner(true);
+                    setUpOfficeSpinner(true);
+                    clearSchemeList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        districtSpinner = findViewById(R.id.district_spinner);
+        districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    DistrictModel model = districtModelList.get(position);
+                    parametersMap.put("DISTRICT_CODE", model.getDistrictCode());
+                    getOfficeNames();
+                } else {
+                    parametersMap.remove("DISTRICT_CODE");
+                    setUpOfficeSpinner(true);
+                    clearSchemeList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        officeSpinner = findViewById(R.id.office_spinner);
+        officeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    OfficeModel model = officeModelList.get(position);
+
+                    if (!model.getOfficeCode().equals(parametersMap.get("OFFICE_CODE"))) {
+                        parametersMap.put("OFFICE_CODE", model.getOfficeCode());
+                        parametersMap.put("SRO_CODE", model.getSroCode());
+
+                        // load the schemes
+                        getSchemes();
+                    }
+                } else {
+                    parametersMap.remove("OFFICE_CODE");
+                    parametersMap.remove("SRO_CODE");
+
+                    // remove the scheme list too
+                    clearSchemeList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        yearSpinner = findViewById(R.id.year_spinner);
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    String year = (String) parent.getItemAtPosition(position);
+
+                    parametersMap.put("REC_FIN_YEAR", year);
                 }
             }
 
@@ -215,7 +339,19 @@ public class MakePaymentActivity extends AppCompatActivity {
                         break;
 
                     case "Select Period *":
+                        superSpinner.setVisibility(View.GONE);
+                        datePickerPanel.setVisibility(View.GONE);
+                        break;
+
                     case "Annual":
+                        superSpinner.setVisibility(View.GONE);
+                        datePickerPanel.setVisibility(View.GONE);
+
+                        parametersMap.put("PERIOD", "A");
+                        parametersMap.put("FROM_DATE", "01/04/2019");
+                        parametersMap.put("TO_DATE", "31/03/2020");
+                        break;
+
                     case "One Time/Adhoc":
                         // hide the supper spinner
                         superSpinner.setVisibility(View.GONE);
@@ -245,7 +381,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
 
-
+        // Now, highlight the * mark
         // add the bubble showcase
         new BubbleShowCaseBuilder(this)
                 .title("Attention!")
@@ -253,28 +389,258 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .backgroundColorResourceId(R.color.colorPrimary)
                 .textColorResourceId(R.color.white)
                 .imageResourceId(R.drawable.ic_about)
-                .targetView(deptSpinner)                                        //View to point out
                 .show();                                                        //Display the ShowCase
     }
 
 
-    private void getPaymentTypes() {
-        // check network connectivity first
-        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
+    private void clearSchemeList() {
+        if (schemeModelList != null) {
+            schemeModelList.clear();
+        }
+
+        schemeAdapter.removeAllItems();
+        parametersMap.remove("CHALLAN_AMOUNT");
+        parametersMap.remove("HOA");
+    }
+
+    private void getSchemes() {
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
             return;
         }
+
+        MyUtil.showSpotDialog(this);        // making network connection here...
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_SCHEME_NAMES);
+
+        // send query parameters as a Map
+        Map<String, String> params = new HashMap<>();
+        params.put("schemes", "true");
+        params.put("office_code", String.valueOf(parametersMap.get("OFFICE_CODE")));
+
+
+        AndroidNetworking.get(URL)
+                .addQueryParameter(params)
+                .setPriority(Priority.MEDIUM)
+                .setTag(TAG_SCHEME_NAMES)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                // if success is true
+                                // get the dept list
+
+                                // converting jsonArray of into ArrayList
+                                Type type = new TypeToken<ArrayList<SchemeModel>>() {
+                                }.getType();
+                                schemeModelList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                // add the scheme names into the scheme adapter
+                                schemeAdapter.addNewItems(schemeModelList);
+                                MyUtil.closeSpotDialog();
+                            } else {
+                                // server-side error
+                                // display error dialog
+                                MyUtil.closeSpotDialog();
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // client side networking error
+                        // error 0 => request cancelled error
+                        if (anError.getErrorCode() != 0) {
+                            MyUtil.closeSpotDialog();
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void getOfficeNames() {
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
+            return;
+        }
+
+        MyUtil.showSpotDialog(this);
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_OFFICE_NAMES);
+
+        // send query parameters as a Map
+        Map<String, String> params = new HashMap<>();
+        params.put("office_names", "true");
+        params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
+        params.put("district_code", String.valueOf(parametersMap.get("DISTRICT_CODE")));
+
+        AndroidNetworking.get(URL)
+                .addQueryParameter(params)
+                .setPriority(Priority.MEDIUM)
+                .setTag(TAG_OFFICE_NAMES)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                // if success is true
+                                // get the dept list
+
+                                // converting jsonArray of into ArrayList
+                                Type type = new TypeToken<ArrayList<OfficeModel>>() {
+                                }.getType();
+                                officeModelList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                // finally, set up the spinner
+                                setUpOfficeSpinner(false);
+                            } else {
+                                // server-side error
+                                // display error dialog
+                                MyUtil.closeSpotDialog();
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // client side networking error
+                        // error 0 => request cancelled error
+                        if (anError.getErrorCode() != 0) {
+                            MyUtil.closeSpotDialog();
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        }
+                    }
+                });
+    }
+
+
+    private void setUpOfficeSpinner(boolean reset) {
+        if (reset) {
+            parametersMap.remove("OFFICE_CODE");
+            parametersMap.remove("SRO_CODE");
+
+            officeModelList.clear();
+        }
+
+        if (officeModelList != null) {
+            OfficeSpinnerAdapter adapter = new OfficeSpinnerAdapter(this, officeModelList);
+            officeSpinner.setAdapter(adapter);
+        }
+
+        MyUtil.closeSpotDialog();
+    }
+
+    private void getDistricts() {
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
+            return;
+        }
+
+        MyUtil.showSpotDialog(this);
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_DISTRICT_NAMES);
+
+        // send query parameters as a Map
+        Map<String, String> params = new HashMap<>();
+        params.put("districts", "true");
+        params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
+
+        AndroidNetworking.get(URL)
+                .addQueryParameter(params)
+                .setPriority(Priority.MEDIUM)
+                .setTag(TAG_DISTRICT_NAMES)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                // if success is true
+                                // get the dept list
+
+                                // converting jsonArray of into ArrayList
+                                Type type = new TypeToken<ArrayList<DistrictModel>>() {
+                                }.getType();
+                                districtModelList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                // finally, set up the spinner
+                                setUpDistrictSpinner(false);
+                            } else {
+                                // server-side error
+                                // display error dialog
+                                MyUtil.closeSpotDialog();
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // client side networking error
+                        // error 0 => request cancelled error
+                        if (anError.getErrorCode() != 0) {
+                            MyUtil.closeSpotDialog();
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        }
+                    }
+                });
+    }
+
+
+    private void setUpDistrictSpinner(boolean reset) {
+
+        if (reset) {
+            parametersMap.remove("DISTRICT_CODE");
+            districtModelList.clear();
+        }
+
+        if (districtModelList != null) {
+            DistrictSpinnerAdapter adapter = new DistrictSpinnerAdapter(this, districtModelList);
+            districtSpinner.setAdapter(adapter);
+        }
+
+        MyUtil.closeSpotDialog();
+    }
+
+
+    private void getPaymentTypes() {
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
+            return;
+        }
+
+        MyUtil.showSpotDialog(this);
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_PAYMENT_TYPES);
 
         //  parameters in a query string are always in the form of :
         //  url?<K><V>&<K><V>
         /// where K: String, V: String
 
-        String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
-
         // send query parameters as a Map
         Map<String, String> params = new HashMap<>();
         params.put("paymenttypes", "true");
 
-        AndroidNetworking.get(url)
+        AndroidNetworking.get(URL)
                 .addQueryParameter(params)
                 .setTag(TAG_PAYMENT_TYPES)
                 .setPriority(Priority.MEDIUM)
@@ -291,20 +657,14 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 // converting jsonArray of payments into ArrayList
                                 Type type = new TypeToken<ArrayList<PaymentModel>>() {
                                 }.getType();
-                                paymentList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
-
-                                // now create the list of payment types to display
-                                List<String> paymentTypes = new ArrayList<>();
-
-                                for (PaymentModel m : paymentList) {
-                                    paymentTypes.add(m.getName());
-                                }
+                                paymentModelList = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
 
                                 // finally, set up the payment spinner
-                                setUpPaymentSpinner(paymentTypes);
+                                setUpPaymentSpinner(false);
                             } else {
                                 // server-side error
                                 // display error dialog
+                                MyUtil.closeSpotDialog();
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
@@ -313,37 +673,51 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client-side error
-                        // display error dialog
-                        MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        // client side networking error
+                        // error 0 => request cancelled error
+                        if (anError.getErrorCode() != 0) {
+                            MyUtil.closeSpotDialog();
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        }
                     }
                 });
     }
 
 
-    private void setUpPaymentSpinner(List<String> paymentTypes) {
-        ArrayAdapter<String> paymentAdapter = new ArrayAdapter<String>(
-                getApplicationContext(), android.R.layout.simple_spinner_item, paymentTypes
-        );
+    private void setUpPaymentSpinner(boolean reset) {
+        // if reset is TRUE then clear the spinner
 
-        paymentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        paymentSpinner.setAdapter(paymentAdapter);
+        if (reset) {
+            parametersMap.remove("PAYMENT_TYPE");
+            paymentModelList.clear();
+        }
+
+        if (paymentModelList != null) {
+            PaymentSpinnerAdapter adapter = new PaymentSpinnerAdapter(this, paymentModelList);
+            paymentSpinner.setAdapter(adapter);
+        }
+
+        MyUtil.closeSpotDialog();
     }
 
 
     private void getDeptNames() {
-        // check network connectivity first
-        if (!MyUtil.isNetworkAvailable(getApplicationContext())) {
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
             return;
         }
 
-        String url = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+        MyUtil.showSpotDialog(this);
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_DEPT_NAMES);
 
         // send query parameters as a Map
         Map<String, String> params = new HashMap<>();
         params.put("deptnames", "true");
 
-        AndroidNetworking.get(url)
+        AndroidNetworking.get(URL)
                 .addQueryParameter(params)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_DEPT_NAMES)
@@ -359,20 +733,16 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 // converting jsonArray of depts into ArrayList<DeptModel>
                                 Type deptListType = new TypeToken<ArrayList<DeptModel>>() {
                                 }.getType();
-                                deptList = gson.fromJson(String.valueOf(response.getJSONArray("result")), deptListType);
-
-                                // now create the list of dept names to display
-                                List<String> deptNames = new ArrayList<>();
-
-                                for (DeptModel m : deptList) {
-                                    deptNames.add(m.getName());
-                                }
+                                deptModelList = gson.fromJson(String.valueOf(response.getJSONArray("result")), deptListType);
 
                                 // finally, set up the department spinner
-                                setUpDeptSpinner(deptNames);
+                                setUpDeptSpinner();
                             } else {
                                 // Server-side error
                                 // display error dialog
+
+                                MyUtil.closeSpotDialog();
+
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
@@ -382,41 +752,58 @@ public class MakePaymentActivity extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         // client-side network error
-                        MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        // error 0 => request cancelled error
+
+                        if (anError.getErrorCode() != 0) {
+                            MyUtil.closeSpotDialog();
+                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
+                        }
                     }
                 });
     }
 
 
-    private void setUpDeptSpinner(List<String> deptNames) {
-        ArrayAdapter<String> deptAdapter = new ArrayAdapter<String>(
-                getApplicationContext(), android.R.layout.simple_spinner_item, deptNames
-        );
+    private void setUpDeptSpinner() {
+        if (deptModelList != null) {
+            DeptSpinnerAdapter adapter = new DeptSpinnerAdapter(this, deptModelList);
+            deptSpinner.setAdapter(adapter);
+        }
 
-        deptAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        deptSpinner.setAdapter(deptAdapter);
+        MyUtil.closeSpotDialog();
     }
 
 
     private void showFrom(int curState, int nextState) {
-
-        //Log.d(TAG, "" + curState + " : " + nextState);
-
 
         // hide the form associates with "curState"
         switch (curState) {
             case 1:
                 // validation required
                 departmentDetailsForm.setVisibility(View.GONE);
+
                 break;
 
             case 2:
                 schemeDetailsForm.setVisibility(View.GONE);
+
+                // if the user clicks "NEXT", then only
+                // store scheme details
+                if (schemeModelList != null && !schemeModelList.isEmpty()) {
+                    parametersMap.put("HOA", schemeModelList);
+                    parametersMap.put("CHALLAN_AMOUNT", schemeAdapter.getTotalAmount());
+                }
+
                 break;
 
             case 3:
                 // validation required
                 payerDetailsForm.setVisibility(View.GONE);
+
+                // if the user clicks "NEXT", OR when the user wants to go forward, then only
+                // validate the inputs and
+                // save the values
+                savePayerDetails();
+
                 break;
 
             case 4:
@@ -441,21 +828,25 @@ public class MakePaymentActivity extends AppCompatActivity {
 
             case 2:
                 schemeDetailsForm.setVisibility(View.VISIBLE);
-
-                // get the list of schemes and add it to the adapter
-                // if input changes, then only
-                List<SchemeModel> dataSource = SchemeModel.getSchemes();
-
-                // recycler view item animation
-                final LayoutAnimationController controller =
-                        AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_animation);
-                schemeRecyclerView.setLayoutAnimation(controller);
-                schemeAdapter.addNewItems(dataSource);
-                schemeRecyclerView.scheduleLayoutAnimation();
-
-
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                headerTextView.setText("SchemeModel Details");
+                headerTextView.setText("Scheme Details");
+
+                // show the empty state or the recycler view
+                if (schemeAdapter.getItemCount() == 0) {
+                    // show the empty state
+                    schemeListData.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                } else {
+                    // show the scheme list
+                    schemeListData.setVisibility(View.VISIBLE);
+                    emptyState.setVisibility(View.GONE);
+
+                    // recycler view item animation
+                    final LayoutAnimationController controller =
+                            AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_animation);
+                    schemeRecyclerView.setLayoutAnimation(controller);
+                    schemeRecyclerView.scheduleLayoutAnimation();
+                }
 
                 break;
 
@@ -474,9 +865,37 @@ public class MakePaymentActivity extends AppCompatActivity {
             case 5:
                 viewSummaryForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
-                headerTextView.setText("View Summary");
+                headerTextView.setText("Verify Input Data");
                 break;
         }
+
+        //
+        Log.d(TAG, parametersMap.toString());
+    }
+
+
+    private void savePayerDetails() {
+        ///Validation required
+
+        String text_id = deptTextID.getEditText().getText().toString();
+        String party_name = payerName.getEditText().getText().toString();
+        String pan_no = panNo.getEditText().getText().toString();
+        String address1 = blockNo.getEditText().getText().toString();
+        String address2 = locality.getEditText().getText().toString();
+        String address3 = area.getEditText().getText().toString();
+        String pin_no = pinNo.getEditText().getText().toString();
+        String mobile_no = mobileNo.getEditText().getText().toString();
+        String remarks = this.remarks.getEditText().getText().toString();
+
+        parametersMap.put("TAX_ID", text_id);
+        parametersMap.put("PARTY_NAME", party_name);
+        parametersMap.put("PAN_NO", pan_no);
+        parametersMap.put("ADDRESS1", address1);
+        parametersMap.put("ADDRESS2", address2);
+        parametersMap.put("ADDRESS3", address3);
+        parametersMap.put("PIN_NO", pin_no);
+        parametersMap.put("MOBILE_NO", mobile_no);
+        parametersMap.put("REMARKS", remarks);
     }
 
 
@@ -533,19 +952,14 @@ public class MakePaymentActivity extends AppCompatActivity {
         // refresh spinner data
 
         ArrayAdapter<String> s_adapter = new ArrayAdapter<>(
-                getApplicationContext(),
+                this,
                 android.R.layout.simple_spinner_item,
-                new ArrayList<String>()
+                data
         );
         s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         superSpinner.setAdapter(s_adapter);
 
-        s_adapter.clear();
-        s_adapter.addAll(data);
-        s_adapter.notifyDataSetChanged();
-
         superSpinner.setVisibility(View.VISIBLE);
-
         // hide date picker
         datePickerPanel.setVisibility(View.GONE);
     }
@@ -560,6 +974,39 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
     public void submitData(View view) {
+        // after validating all the data
+
+        // Check for network connection
+        if (!MyUtil.isNetworkAvailable(this)) {
+            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
+            return;
+        }
+
+        MyUtil.showSpotDialog(this);
+
+        // check for server reachability
+        MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_GENERATE_CHALLAN);
+
+        // convert the data to be posted as a json string
+        String json = gson.toJson(parametersMap);
+
+
+        AndroidNetworking.post("http://192.168.43.211/my-projects/eGRAS/submit-payment-data.php")
+                .setTag(TAG_GENERATE_CHALLAN)
+                .setPriority(Priority.MEDIUM)
+                .addBodyParameter("payment-data", json)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+
+                    }
+                });
     }
 
 
@@ -596,15 +1043,9 @@ public class MakePaymentActivity extends AppCompatActivity {
                 if (MyUtil.isNetworkAvailable(getApplicationContext())) {
 
                     // dept list needs to be empty
-                    if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptList == null) {
+                    if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList == null) {
                         // get the dept names
                         getDeptNames();
-                    }
-
-                    // payment type list needs to be empty
-                    if (!AndroidNetworking.isRequestRunning(TAG_PAYMENT_TYPES) && paymentList == null) {
-                        // get the payment types
-                        getPaymentTypes();
                     }
                 }
             }

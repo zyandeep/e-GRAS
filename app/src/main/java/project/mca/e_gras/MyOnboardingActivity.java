@@ -2,14 +2,11 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.graphics.Color;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.core.content.ContextCompat;
-import android.view.View;
+import androidx.fragment.app.Fragment;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -31,32 +28,26 @@ public class MyOnboardingActivity extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // hide the action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-
         //create slides and add them
         addSlide(AppIntro2Fragment.newInstance("Welcome to e-GRAS Mobile",
-                "Add description here...",
-                R.drawable.image,
-                ContextCompat.getColor(this, R.color.design_default_color_primary)));
+                "Add some description here...",
+                R.drawable.logo,
+                Color.parseColor("#9B59B6")));
 
         addSlide(AppIntro2Fragment.newInstance("Generate e-Challans",
-                "Add description here...",
-                R.drawable.image,
+                "Add some description here...",
+                R.drawable.invoice,
                 Color.DKGRAY));
 
         addSlide(AppIntro2Fragment.newInstance("Search for Challans",
-                "Add description here...",
-                R.drawable.image,
-                ContextCompat.getColor(this, R.color.colorAccent)));
+                "Add some description here...",
+                R.drawable.search,
+                Color.parseColor("#16A085")));
 
         addSlide(AppIntro2Fragment.newInstance("Review Transaction History",
-                "Add description here...",
-                R.drawable.image,
-                Color.RED));
+                "Add some description here...",
+                R.drawable.payment_history,
+                Color.parseColor("#CD5C5C")));
 
 
         // divider color
@@ -70,6 +61,22 @@ public class MyOnboardingActivity extends AppIntro {
 
         // Set silde animations
         setDepthAnimation();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // hide the status bar
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        // hide the action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
 
