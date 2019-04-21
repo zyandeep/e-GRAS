@@ -78,6 +78,7 @@
         \n\nOnce, everything is verified, hit \"Submit\".
     </string>
     <string name="title_payment_gateway">Payment Gateway</string>
+    <string name="message_online">You are now online</string>
 
 
     <string-array name="spinner_data">

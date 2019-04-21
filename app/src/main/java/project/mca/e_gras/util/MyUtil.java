@@ -5,18 +5,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.androidnetworking.AndroidNetworking;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.marcoscg.dialogsheet.DialogSheet;
 
 import java.io.IOException;
@@ -26,8 +19,6 @@ import java.net.SocketAddress;
 
 import dmax.dialog.SpotsDialog;
 import project.mca.e_gras.R;
-
-import static project.mca.e_gras.MainActivity.TAG;
 
 public class MyUtil {
     private static AlertDialog spotDialog;
@@ -113,7 +104,6 @@ public class MyUtil {
                     // server unreachable
                     // cancel network request
                     AndroidNetworking.cancel(tag);
-
                     closeSpotDialog();
                     showBottomDialog(context, context.getString(R.string.error_server_down));
                 }
@@ -144,24 +134,4 @@ public class MyUtil {
         }
     }
 
-
-    public static void getJWTToken() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        currentUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            // Send token to your backend via HTTPS
-
-                            Log.d(TAG, idToken);
-                        } else {
-                            // Handle error -> task.getException();
-                            Exception ex = task.getException();
-                            Log.d(TAG, ex.getMessage());
-                        }
-                    }
-                });
-    }
 }

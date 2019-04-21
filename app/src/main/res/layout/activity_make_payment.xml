@@ -69,192 +69,200 @@
         android:visibility="visible"
         app:cardElevation="8dp">
 
-        <ScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swip_to_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarThumbVertical="@null">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:scrollbarThumbVertical="@null">
 
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/dept_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Department *"
-                    app:ms_thickness="1dp" />
-
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/payment_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Payment Type *"
-                    app:ms_thickness="1dp" />
-
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/district_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select District *"
-                    app:ms_thickness="1dp" />
-
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/office_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Office Name *"
-                    app:ms_thickness="1dp" />
-
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/year_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data_year"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Year *"
-                    app:ms_thickness="1dp" />
-
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/period_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/spinner_data_period"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Period *"
-                    app:ms_thickness="1dp" />
-
-                <!-- This spinner changes according to period -->
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/super_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Month *"
-                    app:ms_thickness="1dp" />
-
-
-                <!-- The Date Picker Panel-->
                 <LinearLayout
-                    android:id="@+id/date_viewGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/dept_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Department *"
+                        app:ms_thickness="1dp" />
 
-                        <!-- From date -->
-                        <TextView
-                            android:id="@+id/from_date_text_view"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text="Select From Date *"
-                            android:textAlignment="textStart"
-                            android:textSize="18sp" />
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/payment_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Payment Type *"
+                        app:ms_thickness="1dp" />
 
-                        <ImageButton
-                            android:id="@+id/from_date_img_button"
-                            android:layout_width="wrap_content"
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/district_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select District *"
+                        app:ms_thickness="1dp" />
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/office_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Office Name *"
+                        app:ms_thickness="1dp" />
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/year_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/spinner_data_year"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Year *"
+                        app:ms_thickness="1dp" />
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/period_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/spinner_data_period"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Period *"
+                        app:ms_thickness="1dp" />
+
+                    <!-- This spinner changes according to period -->
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/super_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Month *"
+                        app:ms_thickness="1dp" />
+
+
+                    <!-- The Date Picker Panel-->
+                    <LinearLayout
+                        android:id="@+id/date_viewGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="showDatePicker"
-                            android:src="@drawable/ic_date" />
+                            android:orientation="horizontal">
+
+                            <!-- From date -->
+                            <TextView
+                                android:id="@+id/from_date_text_view"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="8dp"
+                                android:text="Select From Date *"
+                                android:textAlignment="textStart"
+                                android:textSize="18sp" />
+
+                            <ImageButton
+                                android:id="@+id/from_date_img_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:onClick="showDatePicker"
+                                android:src="@drawable/ic_date" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- To date -->
+                            <TextView
+                                android:id="@+id/to_date_text_view"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="8dp"
+                                android:text="Select To Date *"
+                                android:textAlignment="textStart"
+                                android:textSize="18sp" />
+
+                            <ImageButton
+                                android:id="@+id/to_date_img_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:onClick="showDatePicker"
+                                android:src="@drawable/ic_date" />
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
-                    <LinearLayout
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/form_id_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        app:ms_alignLabels="true"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_enableErrorLabel="true"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_hint="Select Form ID *"
+                        app:ms_thickness="1dp" />
 
-                        <!-- To date -->
-                        <TextView
-                            android:id="@+id/to_date_text_view"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="8dp"
-                            android:text="Select To Date *"
-                            android:textAlignment="textStart"
-                            android:textSize="18sp" />
-
-                        <ImageButton
-                            android:id="@+id/to_date_img_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="showDatePicker"
-                            android:src="@drawable/ic_date" />
-
-                    </LinearLayout>
-
+                    <Button
+                        android:id="@+id/next_button_dept"
+                        style="@style/FirebaseUI.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:onClick="showNextForm"
+                        android:text="Next" />
 
                 </LinearLayout>
+            </ScrollView>
 
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/form_id_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:ms_alignLabels="true"
-                    app:ms_arrowColor="@color/colorAccent"
-                    app:ms_arrowSize="16dp"
-                    app:ms_enableErrorLabel="true"
-                    app:ms_floatingLabelColor="@color/colorAccent"
-                    app:ms_hint="Select Form ID *"
-                    app:ms_thickness="1dp" />
-
-                <Button
-                    android:id="@+id/next_button_dept"
-                    style="@style/FirebaseUI.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:onClick="showNextForm"
-                    android:text="Next" />
-
-            </LinearLayout>
-        </ScrollView>
     </androidx.cardview.widget.CardView>
 
     <!-- Payer Details Card View -->
@@ -438,7 +446,7 @@
                     style="@style/FirebaseUI.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="bottom|center"
                     android:onClick="showNextForm"
                     android:text="Next" />
 
@@ -515,7 +523,7 @@
                 style="@style/FirebaseUI.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
+                android:layout_gravity="bottom|center"
                 android:onClick="showNextForm"
                 android:text="Next" />
 
@@ -543,6 +551,7 @@
                 android:id="@+id/form_summary_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginBottom="16dp"
                 android:layout_weight="1"
                 android:text="@string/msg_verify_form_data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -554,9 +563,8 @@
                 style="@style/FirebaseUI.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginTop="16dp"
-                android:onClick="submitData"
+                android:layout_gravity="bottom|center"
+                android:onClick="doSubmit"
                 android:text="Submit" />
 
         </LinearLayout>
@@ -652,6 +660,7 @@
                 style="@style/FirebaseUI.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
                 android:onClick="showNextForm"
                 android:text="Next" />
 

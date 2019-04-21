@@ -19,7 +19,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
 
         WebView webView = findViewById(R.id.my_web_view);
 
-        // configuration settings
+        // configure settings
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);

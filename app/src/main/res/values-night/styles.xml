@@ -9,7 +9,7 @@
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="dialogSheetAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
 

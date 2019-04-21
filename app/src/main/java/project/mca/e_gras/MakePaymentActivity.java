@@ -19,17 +19,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -63,15 +71,16 @@ import project.mca.e_gras.util.MyUtil;
 
 public class MakePaymentActivity extends AppCompatActivity {
 
-    private static final String TAG = "MY-APP";
-    private static final String TAG_DEPT_NAMES = "dept_names";
-    private static final String TAG_PAYMENT_TYPES = "payment_types";
-    private static final String TAG_OFFICE_NAMES = "office_names";
-    private static final String TAG_DISTRICT_NAMES = "district_names";
-    private static final String TAG_SCHEME_NAMES = "scheme_names";
-    private static final String TAG_GENERATE_CHALLAN = "generate_challan";
+    public static final String TAG = "MY-APP";
+    public static final String TAG_DEPT_NAMES = "dept_names";
+    public static final String TAG_PAYMENT_TYPES = "payment_types";
+    public static final String TAG_OFFICE_NAMES = "office_names";
+    public static final String TAG_DISTRICT_NAMES = "district_names";
+    public static final String TAG_SCHEME_NAMES = "scheme_names";
+    public static final String TAG_GENERATE_CHALLAN = "generate_challan";
 
-    private static final String URL = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+    public static final String BASE_URL = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+
 
     StateProgressBar stateProgressBar;
     MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner, districtSpinner, officeSpinner, yearSpinner;
@@ -121,13 +130,15 @@ public class MakePaymentActivity extends AppCompatActivity {
 
     private BroadcastReceiver myReceiver;
 
+    // SwipToRefresh layout
+    SwipeRefreshLayout refreshLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
-
-        MyUtil.getJWTToken();
 
         myReceiver = new MyNetworkReceiver();
 
@@ -139,6 +150,25 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
+
+
+        refreshLayout = findViewById(R.id.swip_to_refresh_layout);
+        refreshLayout.setColorSchemeResources(R.color.colorAccent);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // check if the network request is not running
+                // and dept list ti empty
+                if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList.isEmpty()) {
+                    getJWTToken(TAG_DEPT_NAMES);
+                } else {
+                    // refresh completed
+                    // stop the animation
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
 
         deptTextID = findViewById(R.id.dept_text_id_text_input);
         payerName = findViewById(R.id.name_text_input);
@@ -192,7 +222,10 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
         deptSpinner = findViewById(R.id.dept_spinner);
-        getDeptNames();
+
+        // need to talk to backend to get the dept names. So, for that, grab the jwt token first
+        getJWTToken(TAG_DEPT_NAMES);
+
         // hookup the adapter
         deptSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -205,7 +238,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                     parametersMap.put("DEPT_CODE", dept.getDeptCode());
 
                     // load the respective payment types
-                    getPaymentTypes();
+                    getJWTToken(TAG_PAYMENT_TYPES);
                 } else {
                     // remove the key
                     parametersMap.remove("DEPT_CODE");
@@ -236,7 +269,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                     parametersMap.put("PAYMENT_TYPE", model.getType());
 
                     // load the districts corresponding to the department/DEPT_CODE
-                    getDistricts();
+                    getJWTToken(TAG_DISTRICT_NAMES);
                 } else {
                     //remove the key
                     parametersMap.remove("PAYMENT_TYPE");
@@ -259,7 +292,9 @@ public class MakePaymentActivity extends AppCompatActivity {
                 if (position >= 0) {
                     DistrictModel model = districtModelList.get(position);
                     parametersMap.put("DISTRICT_CODE", model.getDistrictCode());
-                    getOfficeNames();
+
+                    getJWTToken(TAG_OFFICE_NAMES);
+
                 } else {
                     parametersMap.remove("DISTRICT_CODE");
                     setUpOfficeSpinner(true);
@@ -284,7 +319,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                         parametersMap.put("SRO_CODE", model.getSroCode());
 
                         // load the schemes
-                        getSchemes();
+                        getJWTToken(TAG_SCHEME_NAMES);
                     }
                 } else {
                     parametersMap.remove("OFFICE_CODE");
@@ -382,18 +417,53 @@ public class MakePaymentActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-        // Now, highlight the * mark
-        // add the bubble showcase
-        new BubbleShowCaseBuilder(this)
-                .title("Attention!")
-                .description("Fields marked with '*' are mandatory")
-                .backgroundColorResourceId(R.color.colorPrimary)
-                .textColorResourceId(R.color.white)
-                .imageResourceId(R.drawable.ic_about)
-                .show();                                                        //Display the ShowCase
     }
 
+
+    private void getJWTToken(final String tag) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+
+                                switch (tag) {
+                                    case TAG_DEPT_NAMES:
+                                        getDeptNames(idToken);
+                                        break;
+
+                                    case TAG_PAYMENT_TYPES:
+                                        getPaymentTypes(idToken);
+                                        break;
+
+                                    case TAG_DISTRICT_NAMES:
+                                        getDistricts(idToken);
+                                        break;
+
+                                    case TAG_OFFICE_NAMES:
+                                        getOfficeNames(idToken);
+                                        break;
+
+                                    case TAG_SCHEME_NAMES:
+                                        getSchemes(idToken);
+                                        break;
+
+                                    case TAG_GENERATE_CHALLAN:
+                                        submitData(idToken);
+                                        break;
+                                }
+                            } else {
+                                // Handle error -> task.getException();
+                                Exception ex = task.getException();
+                                MyUtil.showBottomDialog(MakePaymentActivity.this, ex.getMessage());
+                            }
+                        }
+                    });
+        }
+    }
 
     private void clearSchemeList() {
         if (schemeModelList != null) {
@@ -405,14 +475,9 @@ public class MakePaymentActivity extends AppCompatActivity {
         parametersMap.remove("HOA");
     }
 
-    private void getSchemes() {
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
+    private void getSchemes(String idToken) {
 
-        MyUtil.showSpotDialog(this);        // making network connection here...
+        MyUtil.showSpotDialog(this);                    // making network connection here...
 
         // check for server reachability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_SCHEME_NAMES);
@@ -423,14 +488,16 @@ public class MakePaymentActivity extends AppCompatActivity {
         params.put("office_code", String.valueOf(parametersMap.get("OFFICE_CODE")));
 
 
-        AndroidNetworking.get(URL)
+        AndroidNetworking.get(BASE_URL)
                 .addQueryParameter(params)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_SCHEME_NAMES)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        MyUtil.closeSpotDialog();
 
                         try {
                             if (response.getBoolean("success")) {
@@ -444,12 +511,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 // add the scheme names into the scheme adapter
                                 schemeAdapter.addNewItems(schemeModelList);
-                                MyUtil.closeSpotDialog();
-                            } else {
-                                // server-side error
-                                // display error dialog
-                                MyUtil.closeSpotDialog();
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
                         }
@@ -457,22 +518,14 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client side networking error
-                        // error 0 => request cancelled error
-                        if (anError.getErrorCode() != 0) {
-                            MyUtil.closeSpotDialog();
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
-                        }
+                        // Networking error
+                        displayErrorMessage(anError);
                     }
                 });
     }
 
-    private void getOfficeNames() {
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
+
+    private void getOfficeNames(String idToken) {
 
         MyUtil.showSpotDialog(this);
 
@@ -485,14 +538,16 @@ public class MakePaymentActivity extends AppCompatActivity {
         params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
         params.put("district_code", String.valueOf(parametersMap.get("DISTRICT_CODE")));
 
-        AndroidNetworking.get(URL)
+        AndroidNetworking.get(BASE_URL)
                 .addQueryParameter(params)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_OFFICE_NAMES)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        MyUtil.closeSpotDialog();
 
                         try {
                             if (response.getBoolean("success")) {
@@ -506,11 +561,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 // finally, set up the spinner
                                 setUpOfficeSpinner(false);
-                            } else {
-                                // server-side error
-                                // display error dialog
-                                MyUtil.closeSpotDialog();
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
                         }
@@ -518,12 +568,8 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client side networking error
-                        // error 0 => request cancelled error
-                        if (anError.getErrorCode() != 0) {
-                            MyUtil.closeSpotDialog();
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
-                        }
+                        // Networking Error
+                        displayErrorMessage(anError);
                     }
                 });
     }
@@ -537,20 +583,12 @@ public class MakePaymentActivity extends AppCompatActivity {
             officeModelList.clear();
         }
 
-        if (officeModelList != null) {
-            OfficeSpinnerAdapter adapter = new OfficeSpinnerAdapter(this, officeModelList);
-            officeSpinner.setAdapter(adapter);
-        }
-
-        MyUtil.closeSpotDialog();
+        OfficeSpinnerAdapter adapter = new OfficeSpinnerAdapter(this, officeModelList);
+        officeSpinner.setAdapter(adapter);
     }
 
-    private void getDistricts() {
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
+
+    private void getDistricts(String idToken) {
 
         MyUtil.showSpotDialog(this);
 
@@ -562,7 +600,8 @@ public class MakePaymentActivity extends AppCompatActivity {
         params.put("districts", "true");
         params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
 
-        AndroidNetworking.get(URL)
+        AndroidNetworking.get(BASE_URL)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .addQueryParameter(params)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_DISTRICT_NAMES)
@@ -570,6 +609,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        MyUtil.closeSpotDialog();
 
                         try {
                             if (response.getBoolean("success")) {
@@ -583,11 +624,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 // finally, set up the spinner
                                 setUpDistrictSpinner(false);
-                            } else {
-                                // server-side error
-                                // display error dialog
-                                MyUtil.closeSpotDialog();
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
                         }
@@ -595,12 +631,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client side networking error
-                        // error 0 => request cancelled error
-                        if (anError.getErrorCode() != 0) {
-                            MyUtil.closeSpotDialog();
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
-                        }
+                        displayErrorMessage(anError);
                     }
                 });
     }
@@ -613,21 +644,12 @@ public class MakePaymentActivity extends AppCompatActivity {
             districtModelList.clear();
         }
 
-        if (districtModelList != null) {
-            DistrictSpinnerAdapter adapter = new DistrictSpinnerAdapter(this, districtModelList);
-            districtSpinner.setAdapter(adapter);
-        }
-
-        MyUtil.closeSpotDialog();
+        DistrictSpinnerAdapter adapter = new DistrictSpinnerAdapter(this, districtModelList);
+        districtSpinner.setAdapter(adapter);
     }
 
 
-    private void getPaymentTypes() {
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
+    private void getPaymentTypes(String idToken) {
 
         MyUtil.showSpotDialog(this);
 
@@ -642,14 +664,18 @@ public class MakePaymentActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("paymenttypes", "true");
 
-        AndroidNetworking.get(URL)
+        AndroidNetworking.get(BASE_URL)
                 .addQueryParameter(params)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .setTag(TAG_PAYMENT_TYPES)
                 .setPriority(Priority.MEDIUM)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        // if status code is OK:200 then only
+
+                        MyUtil.closeSpotDialog();
 
                         try {
                             if (response.getBoolean("success")) {
@@ -663,11 +689,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 // finally, set up the payment spinner
                                 setUpPaymentSpinner(false);
-                            } else {
-                                // server-side error
-                                // display error dialog
-                                MyUtil.closeSpotDialog();
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
                         }
@@ -675,40 +696,45 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client side networking error
-                        // error 0 => request cancelled error
-                        if (anError.getErrorCode() != 0) {
-                            MyUtil.closeSpotDialog();
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
-                        }
+                        // Networking error
+                        displayErrorMessage(anError);
                     }
                 });
     }
 
 
+    private void displayErrorMessage(ANError anError) {
+        MyUtil.closeSpotDialog();
+
+        if (anError.getErrorCode() != 0) {
+            String jsonString = anError.getErrorBody();
+
+            try {
+                JSONObject obj = new JSONObject(jsonString);
+                MyUtil.showBottomDialog(MakePaymentActivity.this, obj.getString("msg"));
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+
     private void setUpPaymentSpinner(boolean reset) {
         // if reset is TRUE then clear the spinner
-
         if (reset) {
             parametersMap.remove("PAYMENT_TYPE");
             paymentModelList.clear();
         }
 
-        if (paymentModelList != null) {
-            PaymentSpinnerAdapter adapter = new PaymentSpinnerAdapter(this, paymentModelList);
-            paymentSpinner.setAdapter(adapter);
-        }
-
-        MyUtil.closeSpotDialog();
+        PaymentSpinnerAdapter adapter = new PaymentSpinnerAdapter(this, paymentModelList);
+        paymentSpinner.setAdapter(adapter);
     }
 
 
-    private void getDeptNames() {
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
+    private void getDeptNames(String idToken) {
+        // if list is refreshing then
+        // refresh completed. Stop the animation
+        refreshLayout.setRefreshing(false);
+
 
         MyUtil.showSpotDialog(this);
 
@@ -719,14 +745,18 @@ public class MakePaymentActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("deptnames", "true");
 
-        AndroidNetworking.get(URL)
+        AndroidNetworking.get(BASE_URL)
                 .addQueryParameter(params)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_DEPT_NAMES)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        // if response code 200:OK, then only
+                        MyUtil.closeSpotDialog();
+
                         try {
                             if (response.getBoolean("success")) {
                                 // if success is true
@@ -739,13 +769,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 // finally, set up the department spinner
                                 setUpDeptSpinner();
-                            } else {
-                                // Server-side error
-                                // display error dialog
-
-                                MyUtil.closeSpotDialog();
-
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (JSONException e) {
                         }
@@ -753,13 +776,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // client-side network error
-                        // error 0 => request cancelled error
-
-                        if (anError.getErrorCode() != 0) {
-                            MyUtil.closeSpotDialog();
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, anError.getMessage());
-                        }
+                        displayErrorMessage(anError);
                     }
                 });
     }
@@ -771,7 +788,16 @@ public class MakePaymentActivity extends AppCompatActivity {
             deptSpinner.setAdapter(adapter);
         }
 
-        MyUtil.closeSpotDialog();
+        // Now, highlight the * mark
+        // add the bubble showcase
+        new BubbleShowCaseBuilder(this)
+                .title("Attention!")
+                .description("Fields marked with \"*\" are mandatory")
+                .targetView(deptSpinner)
+                .backgroundColorResourceId(R.color.colorPrimary)
+                .textColorResourceId(R.color.white)
+                .imageResourceId(R.drawable.ic_about)
+                .show();
     }
 
 
@@ -975,14 +1001,8 @@ public class MakePaymentActivity extends AppCompatActivity {
     }
 
 
-    public void submitData(View view) {
+    public void submitData(String idToken) {
         // after validating all the data
-
-        // Check for network connection
-        if (!MyUtil.isNetworkAvailable(this)) {
-            MyUtil.showBottomDialog(this, getString(R.string.error_no_network));
-            return;
-        }
 
         MyUtil.showSpotDialog(this);
 
@@ -996,6 +1016,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         AndroidNetworking.post("http://192.168.43.211/my-projects/eGRAS/submit-payment-data.php")
                 .setTag(TAG_GENERATE_CHALLAN)
                 .setPriority(Priority.MEDIUM)
+                .addHeaders("Authorization", "Bearer " + idToken)
                 .addBodyParameter("payment-data", json)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
@@ -1013,25 +1034,16 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                                 finish();
                             } else {
-                                // server side error
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (Exception ex) {
-                            Log.d(TAG, ex.getMessage());
                         }
                     }
 
                     @Override
                     public void onError(ANError error) {
-                        // client-side network error
-                        // error 0 => request cancelled error
-                        MyUtil.closeSpotDialog();
-
-                        if (error.getErrorCode() != 0) {
-                            MyUtil.showBottomDialog(MakePaymentActivity.this, error.getMessage());
-                        }
-
-                        Log.d(TAG, error.getMessage());
+                        // Network error
+                        displayErrorMessage(error);
                     }
                 });
     }
@@ -1056,6 +1068,11 @@ public class MakePaymentActivity extends AppCompatActivity {
         this.unregisterReceiver(myReceiver);
     }
 
+    // submit form data to backend
+    public void doSubmit(View view) {
+        getJWTToken(TAG_GENERATE_CHALLAN);
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Receiver to receive CONNECTIVITY_CHANGED broadcast intent
@@ -1068,12 +1085,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                 // if network is available then
                 if (MyUtil.isNetworkAvailable(getApplicationContext())) {
-
-                    // dept list needs to be empty
-                    if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList == null) {
-                        // get the dept names
-                        getDeptNames();
-                    }
+                    Toast.makeText(MakePaymentActivity.this, getString(R.string.message_online), Toast.LENGTH_SHORT).show();
                 }
             }
         }

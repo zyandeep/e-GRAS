@@ -204,6 +204,7 @@
                     style="@style/FirebaseUI.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
                     android:onClick="updatePassword"
                     android:text="@string/update_password_button" />
 
