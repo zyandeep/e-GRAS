@@ -159,13 +159,21 @@ public class MakePaymentActivity extends AppCompatActivity {
             public void onRefresh() {
                 // check if the network request is not running
                 // and dept list ti empty
-                if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList.isEmpty()) {
-                    getJWTToken(TAG_DEPT_NAMES);
-                } else {
-                    // refresh completed
-                    // stop the animation
-                    refreshLayout.setRefreshing(false);
-                }
+               if (MyUtil.isNetworkAvailable(getApplicationContext())) {
+                   if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList.isEmpty()) {
+                       getJWTToken(TAG_DEPT_NAMES);
+                   }
+                   else {
+                       // refresh completed
+                       // stop the animation
+                       refreshLayout.setRefreshing(false);
+                   }
+               }
+               else {
+                   // No network
+                   // stop the animation
+                   refreshLayout.setRefreshing(false);
+               }
             }
         });
 
