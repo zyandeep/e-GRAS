@@ -79,7 +79,7 @@ public class MakePaymentActivity extends AppCompatActivity {
     public static final String TAG_SCHEME_NAMES = "scheme_names";
     public static final String TAG_GENERATE_CHALLAN = "generate_challan";
 
-    public static final String BASE_URL = "http://192.168.43.211/my-projects/eGRAS/get-payment-data.php";
+    public static final String BASE_URL = "http://192.168.43.211";
 
 
     StateProgressBar stateProgressBar;
@@ -154,13 +154,14 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         refreshLayout = findViewById(R.id.swip_to_refresh_layout);
         refreshLayout.setColorSchemeResources(R.color.colorAccent);
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // check if the network request is not running
                 // and dept list ti empty
                if (MyUtil.isNetworkAvailable(getApplicationContext())) {
-                   if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES) && deptModelList.isEmpty()) {
+                   if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES)) {
                        getJWTToken(TAG_DEPT_NAMES);
                    }
                    else {
@@ -196,7 +197,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         schemeAdapter = new SchemeAdapter(MakePaymentActivity.this, new ArrayList<SchemeModel>());    // an empty list
         schemeRecyclerView.setAdapter(schemeAdapter);
         // use a linear layout manager
-        schemeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        schemeRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
         schemeListData = findViewById(R.id.scheme_list);
         emptyState = findViewById(R.id.empty_scheme);
@@ -438,6 +439,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
 
+                                Log.d(TAG, idToken);
+
                                 switch (tag) {
                                     case TAG_DEPT_NAMES:
                                         getDeptNames(idToken);
@@ -492,12 +495,10 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         // send query parameters as a Map
         Map<String, String> params = new HashMap<>();
-        params.put("schemes", "true");
         params.put("office_code", String.valueOf(parametersMap.get("OFFICE_CODE")));
 
-
-        AndroidNetworking.get(BASE_URL)
-                .addQueryParameter(params)
+        AndroidNetworking.get(BASE_URL + "/offices/{office_code}/schemes")
+                .addPathParameter(params)
                 .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_SCHEME_NAMES)
@@ -542,12 +543,11 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         // send query parameters as a Map
         Map<String, String> params = new HashMap<>();
-        params.put("office_names", "true");
         params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
         params.put("district_code", String.valueOf(parametersMap.get("DISTRICT_CODE")));
 
-        AndroidNetworking.get(BASE_URL)
-                .addQueryParameter(params)
+        AndroidNetworking.get(BASE_URL + "/departments/{dept_code}/districts/{district_code}/offices")
+                .addPathParameter(params)
                 .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_OFFICE_NAMES)
@@ -600,17 +600,12 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         MyUtil.showSpotDialog(this);
 
-        // check for server reachability
+        // check for server reach-ability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_DISTRICT_NAMES);
 
-        // send query parameters as a Map
-        Map<String, String> params = new HashMap<>();
-        params.put("districts", "true");
-        params.put("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")));
-
-        AndroidNetworking.get(BASE_URL)
+        AndroidNetworking.get(BASE_URL + "/departments/{dept_code}/districts")
+                .addPathParameter("dept_code", String.valueOf(parametersMap.get("DEPT_CODE")))
                 .addHeaders("Authorization", "Bearer " + idToken)
-                .addQueryParameter(params)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_DISTRICT_NAMES)
                 .build()
@@ -668,12 +663,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         //  url?<K><V>&<K><V>
         /// where K: String, V: String
 
-        // send query parameters as a Map
-        Map<String, String> params = new HashMap<>();
-        params.put("paymenttypes", "true");
-
-        AndroidNetworking.get(BASE_URL)
-                .addQueryParameter(params)
+        AndroidNetworking.get(BASE_URL + "/paymenttypes")
                 .addHeaders("Authorization", "Bearer " + idToken)
                 .setTag(TAG_PAYMENT_TYPES)
                 .setPriority(Priority.MEDIUM)
@@ -743,18 +733,13 @@ public class MakePaymentActivity extends AppCompatActivity {
         // refresh completed. Stop the animation
         refreshLayout.setRefreshing(false);
 
-
         MyUtil.showSpotDialog(this);
 
         // check for server reachability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_DEPT_NAMES);
 
-        // send query parameters as a Map
-        Map<String, String> params = new HashMap<>();
-        params.put("deptnames", "true");
 
-        AndroidNetworking.get(BASE_URL)
-                .addQueryParameter(params)
+        AndroidNetworking.get(BASE_URL + "/departments")
                 .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
                 .setTag(TAG_DEPT_NAMES)
@@ -1017,15 +1002,22 @@ public class MakePaymentActivity extends AppCompatActivity {
         // check for server reachability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_GENERATE_CHALLAN);
 
-        // convert the data to be posted as a json string
+        // convert the data to be posted as a json
         String json = gson.toJson(parametersMap);
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
-        AndroidNetworking.post("http://192.168.43.211/my-projects/eGRAS/submit-payment-data.php")
+        AndroidNetworking.post(BASE_URL + "/submit-payment")
                 .setTag(TAG_GENERATE_CHALLAN)
                 .setPriority(Priority.MEDIUM)
+                .addJSONObjectBody(jsonObject)
                 .addHeaders("Authorization", "Bearer " + idToken)
-                .addBodyParameter("payment-data", json)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -1034,10 +1026,14 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                         try {
                             if (response.getBoolean("success")) {
-                                // get the url and open it in the webView
+
+                                // get the url and data and open it in the webView
+                                String url = response.getString("url");
+                                String postData = response.getString("data");
 
                                 Intent intent = new Intent(getApplicationContext(), PaymentGatewayActivity.class);
-                                intent.putExtra("url", response.getString("url"));
+                                intent.putExtra("url", url);
+                                intent.putExtra("data", postData);
                                 startActivity(intent);
 
                                 finish();

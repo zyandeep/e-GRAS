@@ -508,7 +508,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:entries="@array/spinner_data"
                 app:ms_alignLabels="true"
                 app:ms_arrowColor="@color/colorAccent"
                 app:ms_arrowSize="16dp"

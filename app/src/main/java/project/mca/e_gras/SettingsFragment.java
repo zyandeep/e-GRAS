@@ -5,17 +5,16 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import project.mca.e_gras.util.MyUtil;
-
-import android.util.DisplayMetrics;
 
 import java.util.Locale;
+
+import project.mca.e_gras.util.MyUtil;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -127,7 +126,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 value = "English";
                 break;
 
-            case "bn":
+            case "as":
                 value = getString(R.string.as_lang_label);
                 break;
         }

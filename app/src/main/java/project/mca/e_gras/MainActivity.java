@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity
         // to ensure that default setting values are set properly
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
+        // set the theme and language before setting the contentView
+
+
         // reading the setting values from the default shared pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
@@ -173,7 +176,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
         else if (id == R.id.transaction_history) {
-
+            Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.search_challan) {
 

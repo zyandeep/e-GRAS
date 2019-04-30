@@ -23,6 +23,7 @@ import project.mca.e_gras.R;
 public class MyUtil {
     private static AlertDialog spotDialog;
 
+
     public static void showBottomDialog(Context context, String msg) {
         // show the bottomSheet dialog
         // context : Activity context not Application's

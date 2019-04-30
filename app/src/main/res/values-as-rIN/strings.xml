@@ -34,8 +34,9 @@
     <string name="app_restart_info">Application টো  restart কৰাৰ প্ৰয়োযন</string>
     <string name="error_no_network">আপুনি Internet সংযোগৰ পৰা বিচ্ছিন্ন হৈ আছে</string>
     <string name="error_server_down">Server টো সংযোগ সীমাৰ বাহিৰত আছে</string>
-    <string name="spot_dialog_message">অলপ সময় ৰ\'ব...</string>
-    <string name="scheme_enter_amount">পৰিমাণ লিখক...</string>
+    <string name="spot_dialog_message">অলপ সময় ৰ\'ব…</string>
+    <string name="scheme_enter_amount">পৰিমাণ লিখক…</string>
     <string name="title_payment_gateway">পেমেন্ট গেটৱে</string>
     <string name="message_online">আপুনি এতিয়া Online আছে</string>
+    <string name="label_tran_history">লেনদেনৰ ইতিহাস</string>
 </resources>

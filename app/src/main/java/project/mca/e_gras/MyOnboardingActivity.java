@@ -28,6 +28,11 @@ public class MyOnboardingActivity extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // hide the action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         //create slides and add them
         addSlide(AppIntro2Fragment.newInstance("Welcome to e-GRAS Mobile",
                 "Add some description here...",
@@ -61,22 +66,6 @@ public class MyOnboardingActivity extends AppIntro {
 
         // Set silde animations
         setDepthAnimation();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // hide the status bar
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
-        // hide the action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
     }
 
 
