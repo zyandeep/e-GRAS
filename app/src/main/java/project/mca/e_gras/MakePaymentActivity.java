@@ -1,4 +1,4 @@
-// load spinner data like
+// load spinner bundle like
 // dept -> payment -> district -> office
 
 package project.mca.e_gras;
@@ -970,7 +970,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
     private void setUpSupperSpinner(String[] data) {
-        // refresh spinner data
+        // refresh spinner bundle
 
         ArrayAdapter<String> s_adapter = new ArrayAdapter<>(
                 this,
@@ -995,14 +995,14 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
     public void submitData(String idToken) {
-        // after validating all the data
+        // after validating all the bundle
 
         MyUtil.showSpotDialog(this);
 
         // check for server reachability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_GENERATE_CHALLAN);
 
-        // convert the data to be posted as a json
+        // convert the bundle to be posted as a json
         String json = gson.toJson(parametersMap);
         JSONObject jsonObject = null;
 
@@ -1027,13 +1027,13 @@ public class MakePaymentActivity extends AppCompatActivity {
                         try {
                             if (response.getBoolean("success")) {
 
-                                // get the url and data and open it in the webView
+                                // get the url and bundle and open it in the webView
                                 String url = response.getString("url");
-                                String postData = response.getString("data");
+                                String postData = response.getString("bundle");
 
                                 Intent intent = new Intent(getApplicationContext(), PaymentGatewayActivity.class);
                                 intent.putExtra("url", url);
-                                intent.putExtra("data", postData);
+                                intent.putExtra("bundle", postData);
                                 startActivity(intent);
 
                                 finish();
@@ -1072,7 +1072,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         this.unregisterReceiver(myReceiver);
     }
 
-    // submit form data to backend
+    // submit form bundle to backend
     public void doSubmit(View view) {
         getJWTToken(TAG_GENERATE_CHALLAN);
     }

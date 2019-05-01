@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import dmax.dialog.SpotsDialog;
 import project.mca.e_gras.R;
@@ -135,4 +137,10 @@ public class MyUtil {
         }
     }
 
+
+    public static String formatCurrency(double amount) {
+        Locale locale = new Locale("en", "IN");
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
+        return currencyFormat.format(amount);
+    }
 }

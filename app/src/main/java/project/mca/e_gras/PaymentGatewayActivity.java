@@ -24,7 +24,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment_gateway);
 
         String url = getIntent().getStringExtra("url");
-        String data = getIntent().getStringExtra("data");
+        String data = getIntent().getStringExtra("bundle");
 
         Log.d(TAG, data);
 

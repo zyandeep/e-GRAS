@@ -17,6 +17,7 @@ import java.util.List;
 import project.mca.e_gras.MakePaymentActivity;
 import project.mca.e_gras.R;
 import project.mca.e_gras.model.SchemeModel;
+import project.mca.e_gras.util.MyUtil;
 
 public class SchemeAdapter
         extends RecyclerView.Adapter<SchemeAdapter.MyViewHolder> {
@@ -94,7 +95,7 @@ public class SchemeAdapter
             // display the total
             TextView textView = ((MakePaymentActivity) mContext).totalAmountTextView;
             if (textView != null) {
-                textView.setText(String.format("%.2f", totalAmount));
+                textView.setText(MyUtil.formatCurrency(totalAmount));
             }
         }
     }

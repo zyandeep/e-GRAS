@@ -80,6 +80,7 @@
     <string name="title_payment_gateway">Payment Gateway</string>
     <string name="message_online">You are now online</string>
     <string name="label_tran_history">Transaction History</string>
+    <string name="label_tran_details">Transaction Details</string>
 
 
     <string-array name="spinner_data">

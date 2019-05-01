@@ -3,6 +3,10 @@ package project.mca.e_gras.model;
 import com.google.gson.annotations.SerializedName;
 
 public class TransactionModel {
+
+    @SerializedName("ID")
+    private int id;
+
     @SerializedName("NAME")
     private String name;
 
@@ -18,8 +22,27 @@ public class TransactionModel {
     @SerializedName("STATUS")
     private String status;
 
+    @SerializedName("MOP")
+    private String mop;
+
 
     public TransactionModel() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getMop() {
+        return mop;
+    }
+
+    public void setMop(String mop) {
+        this.mop = mop;
     }
 
     public String getName() {
@@ -65,11 +88,13 @@ public class TransactionModel {
     @Override
     public String toString() {
         return "TransactionModel{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", grn_no='" + grn_no + '\'' +
                 ", challan_date='" + challan_date + '\'' +
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
+                ", mop='" + mop + '\'' +
                 '}';
     }
 }

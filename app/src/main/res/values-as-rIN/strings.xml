@@ -39,4 +39,5 @@
     <string name="title_payment_gateway">পেমেন্ট গেটৱে</string>
     <string name="message_online">আপুনি এতিয়া Online আছে</string>
     <string name="label_tran_history">লেনদেনৰ ইতিহাস</string>
+    <string name="label_tran_details">লেনদেনৰ তথ্য়</string>
 </resources>

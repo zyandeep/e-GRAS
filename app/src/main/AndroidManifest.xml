@@ -15,16 +15,19 @@
         android:theme="@style/AppTheme">
 
         <activity
+            android:name=".TransactionDetailsActivity"
+            android:label="@string/label_tran_details"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
             android:name=".TransactionListActivity"
             android:label="@string/label_tran_history"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".PaymentGatewayActivity"
             android:label="@string/title_payment_gateway"
