@@ -82,16 +82,6 @@
     <string name="label_tran_history">Transaction History</string>
     <string name="label_tran_details">Transaction Details</string>
 
-
-    <string-array name="spinner_data">
-        <item>English</item>
-        <item>Assamese</item>
-        <item>Hindi</item>
-        <item>Bengali</item>
-        <item>Marathi</item>
-        <item>Bhojpuri</item>
-    </string-array>
-
     <string-array name="spinner_data_period">
         <item>Annual</item>
     </string-array>

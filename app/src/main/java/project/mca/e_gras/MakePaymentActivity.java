@@ -1024,12 +1024,14 @@ public class MakePaymentActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         MyUtil.closeSpotDialog();
 
+                        Log.d(TAG, response.toString());
+
                         try {
                             if (response.getBoolean("success")) {
 
                                 // get the url and bundle and open it in the webView
                                 String url = response.getString("url");
-                                String postData = response.getString("bundle");
+                                String postData = response.getString("data");
 
                                 Intent intent = new Intent(getApplicationContext(), PaymentGatewayActivity.class);
                                 intent.putExtra("url", url);
@@ -1041,6 +1043,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
                         } catch (Exception ex) {
+                            Log.d(TAG, ex.getMessage());
                         }
                     }
 

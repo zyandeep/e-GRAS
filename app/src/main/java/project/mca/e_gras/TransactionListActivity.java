@@ -23,7 +23,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -53,7 +52,6 @@ public class TransactionListActivity extends AppCompatActivity {
     CardView emptyState;
     RecyclerView recyclerView;
     TransactionAdapter adapter;
-    FloatingActionButton fab;
 
     //GSon reference
     Gson gson;
@@ -131,17 +129,6 @@ public class TransactionListActivity extends AppCompatActivity {
                         // load new items
                         getJWTToken(TAG_LOAD_MORE);
                     }
-                }
-            }
-        });
-
-        fab = findViewById(R.id.reload_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // load the first page
-                if (pageNo == 0) {
-                    getJWTToken(TAG_TRANSACTION_LIST);
                 }
             }
         });
@@ -327,6 +314,15 @@ public class TransactionListActivity extends AppCompatActivity {
         super.onStop();
 
         this.unregisterReceiver(myReceiver);
+    }
+
+
+    // Reload data again.. (From an empty view)
+    public void reloadData(View view) {
+        // load the first page
+        if (pageNo == 0) {
+            getJWTToken(TAG_TRANSACTION_LIST);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////

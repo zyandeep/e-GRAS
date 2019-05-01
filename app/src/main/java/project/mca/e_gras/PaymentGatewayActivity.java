@@ -26,6 +26,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra("url");
         String data = getIntent().getStringExtra("bundle");
 
+
         Log.d(TAG, data);
 
 
