@@ -148,11 +148,10 @@ public class MyUtil {
     }
 
 
-    public static void changeLocal(Context context, String language) {
+    public static void changeLocal(Context context, String language) {          // here the context is Activity context
         Locale newLocal = new Locale(language);
         Locale.setDefault(newLocal);
-
-        Resources res = context.getApplicationContext().getResources();
+        Resources res = context.getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
         conf.setLocale(newLocal);

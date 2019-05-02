@@ -69,7 +69,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         MyUtil.changeLocal(getActivity(), langValue);
 
         // restart the application
-        MyUtil.showBottomDialog(getActivity(), getActivity().getApplicationContext().getString(R.string.app_restart_info),
+        MyUtil.showBottomDialog(getActivity(), getString(R.string.app_restart_info),
                 true);
     }
 
