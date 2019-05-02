@@ -1,8 +1,9 @@
 package project.mca.e_gras;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -35,5 +36,6 @@ public class AboutActivity extends AppCompatActivity {
                 .create();
 
         setContentView(aboutPage);
+        setTitle(R.string.title_about_egras);
     }
 }

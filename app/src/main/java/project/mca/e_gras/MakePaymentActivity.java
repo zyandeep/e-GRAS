@@ -140,6 +140,9 @@ public class MakePaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_payment);
 
+        setTitle(R.string.make_payment_activity);
+
+
         myReceiver = new MyNetworkReceiver();
 
         parametersMap = new HashMap<>();

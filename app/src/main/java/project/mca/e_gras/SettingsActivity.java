@@ -1,15 +1,17 @@
 package project.mca.e_gras;
 
-import android.content.Intent;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.title_settings_activity);
+
 
         // Display the fragment as the main content
         getSupportFragmentManager().beginTransaction()

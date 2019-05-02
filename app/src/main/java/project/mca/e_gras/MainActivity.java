@@ -2,10 +2,7 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -30,7 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Locale;
+import project.mca.e_gras.util.MyUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +50,6 @@ public class MainActivity extends AppCompatActivity
 
         // set the theme and language before setting the contentView
 
-
         // reading the setting values from the default shared pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String themePrefValue = sharedPref.getString(getString(R.string.theme_pref_key), getString(R.string.theme_pref_default_value));
@@ -61,7 +57,6 @@ public class MainActivity extends AppCompatActivity
 
         applyTheme(themePrefValue);
         setLanguage(langValue);
-
 
         setContentView(R.layout.activity_main);
 
@@ -108,18 +103,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void setLanguage(String langValue) {
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-
-        Locale locale = conf.locale;
-
-        if (!locale.getLanguage().equals(new Locale(langValue).getLanguage())) {
-            // change the language
-            Locale newLocal = new Locale(langValue);
-            conf.setLocale(newLocal);
-            res.updateConfiguration(conf, dm);
-        }
+        MyUtil.changeLocal(this, langValue);
     }
 
 

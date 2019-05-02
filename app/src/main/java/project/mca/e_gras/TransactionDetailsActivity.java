@@ -29,6 +29,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         ActivityTransactionDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_transaction_details);
         binding.setModel(model);
+
+        setTitle(R.string.label_tran_details);
     }
 
     public void repeatPayment(View view) {

@@ -2,17 +2,12 @@ package project.mca.e_gras;
 
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-
-import java.util.Locale;
 
 import project.mca.e_gras.util.MyUtil;
 
@@ -71,15 +66,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     private void changeLanguage(String langValue) {
-        Locale newLocal = new Locale(langValue);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = newLocal;
-        res.updateConfiguration(conf, dm);
+        MyUtil.changeLocal(getActivity(), langValue);
 
         // restart the application
-        MyUtil.showBottomDialog(getActivity(), getString(R.string.app_restart_info),
+        MyUtil.showBottomDialog(getActivity(), getActivity().getApplicationContext().getString(R.string.app_restart_info),
                 true);
     }
 

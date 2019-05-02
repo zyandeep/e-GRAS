@@ -65,6 +65,8 @@ public class TransactionListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_list);
 
+        setTitle(R.string.label_tran_history);
+
         // instantiate the broadcast receiver
         myReceiver = new MyNetworkReceiver();
 

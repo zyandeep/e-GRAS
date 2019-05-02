@@ -16,12 +16,10 @@
 
         <activity
             android:name=".TransactionDetailsActivity"
-            android:label="@string/label_tran_details"
             android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".TransactionListActivity"
-            android:label="@string/label_tran_history"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -30,14 +28,12 @@
         </activity>
         <activity
             android:name=".PaymentGatewayActivity"
-            android:label="@string/title_payment_gateway"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MyOnboardingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_settings_activity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -46,7 +42,6 @@
         </activity>
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_about_egras"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -55,7 +50,6 @@
         </activity>
         <activity
             android:name=".MyProfileActivity"
-            android:label="@string/my_profile_activity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -64,7 +58,6 @@
         </activity>
         <activity
             android:name=".MakePaymentActivity"
-            android:label="@string/make_payment_activity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data

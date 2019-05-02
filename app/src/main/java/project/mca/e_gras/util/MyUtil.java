@@ -2,9 +2,12 @@ package project.mca.e_gras.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -142,5 +145,17 @@ public class MyUtil {
         Locale locale = new Locale("en", "IN");
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
         return currencyFormat.format(amount);
+    }
+
+
+    public static void changeLocal(Context context, String language) {
+        Locale newLocal = new Locale(language);
+        Locale.setDefault(newLocal);
+
+        Resources res = context.getApplicationContext().getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.setLocale(newLocal);
+        res.updateConfiguration(conf, dm);
     }
 }
