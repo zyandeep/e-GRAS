@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
 
     // BottomSheet dialog
-    implementation 'com.github.marcoscgdev:DialogSheet:2.0.3'
+    implementation 'com.github.marcoscgdev:DialogSheet:2.0.5'
 
     // TapTarget View
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
@@ -70,6 +70,9 @@ dependencies {
 
     // fast networking library
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
+
+    // Number picker
+    implementation 'com.shawnlin:number-picker:2.4.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

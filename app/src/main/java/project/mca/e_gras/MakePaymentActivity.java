@@ -933,7 +933,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.from_date_img_button:
 
-                // show "from date" dialog
+                // show "from date" dialogSheet
                 new DatePickerDialog(
                         MakePaymentActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth,
@@ -952,7 +952,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
             case R.id.to_date_img_button:
 
-                // show "to date" dialog
+                // show "to date" dialogSheet
                 new DatePickerDialog(
                         MakePaymentActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth,

@@ -121,7 +121,7 @@ public class MyOnboardingActivity extends AppIntro {
 
 
     private void showError(String message) {
-        // show the bottomSheet dialog
+        // show the bottomSheet dialogSheet
 
         new DialogSheet(this)
                 .setTitle(R.string.error_label_bottom_dialog)
@@ -131,7 +131,7 @@ public class MyOnboardingActivity extends AppIntro {
                 .setPositiveButton(android.R.string.ok, new DialogSheet.OnPositiveClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Close the dialog
+                        // Close the dialogSheet
                     }
                 })
                 .setRoundedCorners(true)

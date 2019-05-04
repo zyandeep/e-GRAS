@@ -33,11 +33,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public TransactionAdapter(List<TransactionModel> modelList, Context context) {
         // initialise the list with an empty list(with null)
-
         this.modelList = modelList;
         this.context = context;
         inflater = LayoutInflater.from(this.context);
-
     }
 
     @NonNull
@@ -83,15 +81,24 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // Add new items to the list
     public void addNewItems(List<TransactionModel> newList) {
-        // remove NULL from the list, add new items and put NULL at the end
+        // remove NULL from the list and add it to the end
+
         this.modelList.remove(null);
         this.modelList.addAll(newList);
-        this.modelList.add(null);
+
         notifyDataSetChanged();
+    }
+
+    public void removeNull() {
+        if (this.modelList.contains(null)) {
+            this.modelList.remove(null);
+            notifyItemRemoved(getItemCount() - 1);          // from position
+        }
     }
 
     public void clearItems() {
         this.modelList.clear();
+        notifyDataSetChanged();
     }
 
 

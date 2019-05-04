@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#005005</color>
     <color name="colorAccent">#FF9800</color>
     <color name="colorBackground">#EEEEEE</color>
+    <color name="numberPickerColor">@color/colorPrimary</color>
 </resources>

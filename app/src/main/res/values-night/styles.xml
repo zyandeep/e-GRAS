@@ -12,15 +12,6 @@
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
-
-    <!-- Splash Screen Theme -->
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/launch_screen</item>
-    </style>
-
-
     <!-- Spot dialog theme -->
     <style name="mySpotDialogTheme" parent="android:Theme.Holo.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
@@ -28,15 +19,5 @@
         <item name="DialogTitleText">@string/spot_dialog_message</item>
         <item name="DialogSpotColor">@color/colorAccent</item>
     </style>
-
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

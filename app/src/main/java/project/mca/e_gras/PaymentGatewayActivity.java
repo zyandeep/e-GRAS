@@ -37,12 +37,12 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         // configure settings
         webView.setWebChromeClient(new WebChromeClient());          // So that any pop-ups/alerts get displayed
 
-        webView.setWebViewClient(new WebViewClient() {              // to show and hide progress dialog
+        webView.setWebViewClient(new WebViewClient() {              // to show and hide progress dialogSheet
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
 
-                // Display the progress dialog
+                // Display the progress dialogSheet
                 MyUtil.showSpotDialog(PaymentGatewayActivity.this);
             }
 

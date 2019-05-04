@@ -1,11 +1,11 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
-
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -116,7 +116,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void showError(String message) {
-        // show the bottomSheet dialog
+        // show the bottomSheet dialogSheet
 
         new DialogSheet(this)
                 .setTitle(R.string.error_label_bottom_dialog)
@@ -126,7 +126,7 @@ public class SplashActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, new DialogSheet.OnPositiveClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Close the dialog
+                        // Close the dialogSheet
                     }
                 })
                 .setRoundedCorners(true)

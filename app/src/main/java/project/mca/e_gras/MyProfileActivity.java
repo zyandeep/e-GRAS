@@ -57,7 +57,7 @@ public class MyProfileActivity extends AppCompatActivity {
         // set up the initial UI
         updateUI();
 
-        // spot dialog
+        // spot dialogSheet
         dialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setCancelable(false)
@@ -106,7 +106,7 @@ public class MyProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // show the dialog
+        // show the dialogSheet
         dialog.show();
 
 
@@ -141,7 +141,7 @@ public class MyProfileActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = this.email.getEditText().getText().toString();
 
-        // show the dialog
+        // show the dialogSheet
         dialog.show();
 
         // update email
@@ -168,7 +168,7 @@ public class MyProfileActivity extends AppCompatActivity {
             phoneNumber = "+91" + phoneNumber;
         }
 
-        // show the dialog
+        // show the dialogSheet
         dialog.show();
 
 
@@ -212,7 +212,7 @@ public class MyProfileActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = displayName.getEditText().getText().toString();
 
-        // show the dialog
+        // show the dialogSheet
         dialog.show();
 
         // update display name

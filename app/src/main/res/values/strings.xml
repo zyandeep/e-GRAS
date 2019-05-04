@@ -81,6 +81,7 @@
     <string name="message_online">You are now online</string>
     <string name="label_tran_history">Transaction History</string>
     <string name="label_tran_details">Transaction Details</string>
+    <string name="number_picker_formatter" translatable="false">%4d</string>
 
     <string-array name="spinner_data_period">
         <item>Annual</item>
