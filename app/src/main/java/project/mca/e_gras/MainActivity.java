@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.about) {
             Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
+        } else if (id == R.id.help) {
+            Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

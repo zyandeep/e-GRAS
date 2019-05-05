@@ -152,6 +152,7 @@
     <string name="oct">OCT</string>
     <string name="nov">NOV</string>
     <string name="dec">DEC</string>
+    <string name="label_help">Help</string>
 
     <string-array name="months">
         <item>@string/jan</item>

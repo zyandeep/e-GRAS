@@ -35,6 +35,11 @@
             android:title="@string/about_menu_item" />
 
         <item
+            android:id="@+id/help"
+            android:icon="@drawable/ic_help"
+            android:title="@string/label_help" />
+
+        <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_logout"
             android:title="@string/logout_menu_item" />
