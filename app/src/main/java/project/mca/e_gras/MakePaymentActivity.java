@@ -387,11 +387,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                         setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_monthly));
                         break;
 
-                    case "Select Period *":
-                        superSpinner.setVisibility(View.GONE);
-                        datePickerPanel.setVisibility(View.GONE);
-                        break;
-
                     case "Annual":
                         superSpinner.setVisibility(View.GONE);
                         datePickerPanel.setVisibility(View.GONE);
@@ -416,12 +411,16 @@ public class MakePaymentActivity extends AppCompatActivity {
                         // show date pickers
 
                         // clear the dates first
-                        fromDateTextView.setText("Select From Date *");
-                        toDateTextView.setText("Select To Date *");
+                        fromDateTextView.setText(getString(R.string.label_select_from_date));
+                        toDateTextView.setText(getString(R.string.label_select_to_date));
 
                         datePickerPanel.setVisibility(View.VISIBLE);
-
                         break;
+
+                    default:                                                // "Select Period *" is chosen
+                        superSpinner.setVisibility(View.GONE);
+                        datePickerPanel.setVisibility(View.GONE);
+
                 }
             }
 
@@ -787,8 +786,8 @@ public class MakePaymentActivity extends AppCompatActivity {
         // Now, highlight the * mark
         // add the bubble showcase
         new BubbleShowCaseBuilder(this)
-                .title("Attention!")
-                .description("Fields marked with \"*\" are mandatory")
+                .title(getString(R.string.label_attention))
+                .description(getString(R.string.label_field_mandatory))
                 .targetView(deptSpinner)
                 .backgroundColorResourceId(R.color.colorPrimary)
                 .textColorResourceId(R.color.white)
@@ -847,13 +846,13 @@ public class MakePaymentActivity extends AppCompatActivity {
             case 1:
                 departmentDetailsForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-                headerTextView.setText("Department Details");
+                headerTextView.setText(getString(R.string.label_department_details));
                 break;
 
             case 2:
                 schemeDetailsForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                headerTextView.setText("Scheme Details");
+                headerTextView.setText(getString(R.string.label_scheme_details));
 
                 // show the empty state or the recycler view
                 if (schemeAdapter.getItemCount() == 0) {
@@ -877,7 +876,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             case 3:
                 payerDetailsForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
-                headerTextView.setText("Payer Details");
+                headerTextView.setText(getString(R.string.label_payer_details));
                 break;
 
             case 4:
@@ -889,7 +888,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             case 5:
                 viewSummaryForm.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
-                headerTextView.setText("Verify Input Data");
+                headerTextView.setText(getString(R.string.label_verify_data));
                 break;
         }
 
@@ -1036,7 +1035,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 String url = response.getString("url");
                                 String postData = response.getString("data");
 
-                                Intent intent = new Intent(getApplicationContext(), PaymentGatewayActivity.class);
+                                Intent intent = new Intent(MakePaymentActivity.this, PaymentGatewayActivity.class);
                                 intent.putExtra("url", url);
                                 intent.putExtra("bundle", postData);
                                 startActivity(intent);

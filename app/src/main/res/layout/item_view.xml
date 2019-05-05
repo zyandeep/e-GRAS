@@ -15,21 +15,63 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView41"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_sheme_code"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
+
+
+        <TextView
             android:id="@+id/hoa_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
-            android:textStyle="italic"
             tools:text="000-233-1717-199" />
+
+        <View
+            android:id="@+id/divider8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_sheme_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
 
         <TextView
             android:id="@+id/scheme_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/about_description_text_color"
+            android:paddingStart="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorAccent"
             android:textSize="18sp"
-            android:textStyle="bold"
             tools:text="Save India, Save Earth" />
+
+        <View
+            android:id="@+id/divider9"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_amount"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
 
         <EditText
             android:id="@+id/scheme_amount_edit_text"
@@ -37,6 +79,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/scheme_enter_amount"
             android:inputType="number"
+            android:paddingStart="8dp"
             android:singleLine="true" />
 
     </LinearLayout>

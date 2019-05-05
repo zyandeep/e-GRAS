@@ -1,5 +1,6 @@
 package project.mca.e_gras;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import java.nio.charset.StandardCharsets;
 
@@ -21,15 +23,17 @@ public class PaymentGatewayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_gateway);
 
+        // set the app's default Local, manually
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String langValue = sharedPref.getString(getString(R.string.lang_pref_key), getString(R.string.lang_pref_default_value));
+        MyUtil.changeLocal(this, langValue);
+
+        setContentView(R.layout.activity_payment_gateway);
         setTitle(R.string.title_payment_gateway);
 
         String url = getIntent().getStringExtra("url");
         String data = getIntent().getStringExtra("bundle");
-
-
-        Log.d(TAG, data);
 
 
         WebView webView = findViewById(R.id.my_web_view);
@@ -76,5 +80,6 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
+
     }
 }

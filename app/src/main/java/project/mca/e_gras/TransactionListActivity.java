@@ -200,7 +200,7 @@ public class TransactionListActivity extends AppCompatActivity {
         yearPicker = view.findViewById(R.id.year_picker);
         yearPicker.setValue(Calendar.getInstance().get(Calendar.YEAR));
 
-        String[] months = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        String[] months = getResources().getStringArray(R.array.months);
 
         monthPicker1 = view.findViewById(R.id.month_picker_1);
         monthPicker1.setMinValue(1);
@@ -255,10 +255,6 @@ public class TransactionListActivity extends AppCompatActivity {
             params.put("month1", String.valueOf(month1));
             params.put("month2", String.valueOf(month2));
 
-            Log.d(TAG, params.toString());
-
-
-
             AndroidNetworking.get(BASE_URL + "/transactions")
                     .addQueryParameter(params)
                     .addHeaders("Authorization", "Bearer " + idToken)
@@ -295,7 +291,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                         refreshLayout.setVisibility(View.GONE);
                                         emptyState.setVisibility(View.VISIBLE);
                                     } else {
-                                        Toast.makeText(TransactionListActivity.this, "No new transactions found",
+                                        Toast.makeText(TransactionListActivity.this, getString(R.string.label_no_transaction),
                                                 Toast.LENGTH_LONG).show();
 
                                         adapter.removeNull();

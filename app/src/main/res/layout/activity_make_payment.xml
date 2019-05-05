@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorBackground"
-                android:text="Department Details"
+                android:text="@string/label_department_details"
                 android:textAlignment="viewStart"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
@@ -93,7 +93,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Department *"
+                        app:ms_hint="@string/label_select_dept"
                         app:ms_thickness="1dp" />
 
                     <fr.ganfra.materialspinner.MaterialSpinner
@@ -105,7 +105,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Payment Type *"
+                        app:ms_hint="@string/label_select_payment"
                         app:ms_thickness="1dp" />
 
                     <fr.ganfra.materialspinner.MaterialSpinner
@@ -117,7 +117,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select District *"
+                        app:ms_hint="@string/label_select_district"
                         app:ms_thickness="1dp" />
 
                     <fr.ganfra.materialspinner.MaterialSpinner
@@ -129,7 +129,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Office Name *"
+                        app:ms_hint="@string/label_select_office"
                         app:ms_thickness="1dp" />
 
                     <fr.ganfra.materialspinner.MaterialSpinner
@@ -142,7 +142,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Year *"
+                        app:ms_hint="@string/label_select_year"
                         app:ms_thickness="1dp" />
 
                     <fr.ganfra.materialspinner.MaterialSpinner
@@ -155,7 +155,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Period *"
+                        app:ms_hint="@string/label_select_period"
                         app:ms_thickness="1dp" />
 
                     <!-- This spinner changes according to period -->
@@ -169,7 +169,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Month *"
+                        app:ms_hint="@string/label_select_month"
                         app:ms_thickness="1dp" />
 
 
@@ -193,7 +193,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:padding="8dp"
-                                android:text="Select From Date *"
+                                android:text="@string/label_select_from_date"
                                 android:textAlignment="textStart"
                                 android:textSize="18sp" />
 
@@ -219,7 +219,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:padding="8dp"
-                                android:text="Select To Date *"
+                                android:text="@string/label_select_to_date"
                                 android:textAlignment="textStart"
                                 android:textSize="18sp" />
 
@@ -246,7 +246,7 @@
                         app:ms_arrowSize="16dp"
                         app:ms_enableErrorLabel="true"
                         app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="Select Form ID *"
+                        app:ms_hint="@string/label_select_form_id"
                         app:ms_thickness="1dp" />
 
                     <Button
@@ -256,7 +256,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:onClick="showNextForm"
-                        android:text="Next" />
+                        android:text="@string/label_button_next" />
 
                 </LinearLayout>
             </ScrollView>
@@ -287,7 +287,7 @@
                     android:id="@+id/dept_text_id_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Department Tax ID *"
+                    android:hint="@string/label_tax_id"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -305,7 +305,7 @@
                     android:id="@+id/name_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name *"
+                    android:hint="@string/label_name"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -322,7 +322,7 @@
                     android:id="@+id/pan_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="PAN"
+                    android:hint="@string/label_pan"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -339,7 +339,7 @@
                     android:id="@+id/block_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Block No/Premises"
+                    android:hint="@string/label_block_no"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -356,7 +356,7 @@
                     android:id="@+id/locality_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Locality/Road"
+                    android:hint="@string/label_locality_road"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -374,7 +374,7 @@
                     android:id="@+id/area_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Area/City"
+                    android:hint="@string/label_area_city"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -392,7 +392,7 @@
                     android:id="@+id/pin_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="PIN"
+                    android:hint="@string/label_pin"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -410,7 +410,7 @@
                     android:id="@+id/mobile_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Mobile No. *"
+                    android:hint="@string/label_mobile_no"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -427,7 +427,7 @@
                     android:id="@+id/remarks_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Remarks"
+                    android:hint="@string/label_remarks"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
@@ -448,7 +448,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
                     android:onClick="showNextForm"
-                    android:text="Next" />
+                    android:text="@string/label_button_next" />
 
 
             </LinearLayout>
@@ -524,7 +524,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:onClick="showNextForm"
-                android:text="Next" />
+                android:text="@string/label_button_next" />
 
 
         </LinearLayout>
@@ -564,7 +564,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:onClick="doSubmit"
-                android:text="Submit" />
+                android:text="@string/label_button_submit" />
 
         </LinearLayout>
 
@@ -602,7 +602,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Amount:"
+                        android:text="@string/label_total_amount"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                     <TextView
@@ -647,7 +647,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="No schemes found..."
+                    android:text="@string/label_no_schemes_found"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -661,7 +661,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:onClick="showNextForm"
-                android:text="Next" />
+                android:text="@string/label_button_next" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

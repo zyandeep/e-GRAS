@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Challan Date"
+            android:text="@string/label_challan_date"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/about_item_text_color" />
 
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="GRN NO"
+            android:text="@string/label_grn_no"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/about_item_text_color" />
 
@@ -69,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Amount"
+            android:text="@string/label_amount"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/about_item_text_color" />
 

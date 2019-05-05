@@ -73,7 +73,7 @@
     <string name="error_server_down">The Server is not reachable at the moment</string>
     <string name="spot_dialog_message">Please wait…</string>
     <string name="scheme_enter_amount">Enter Amount…</string>
-    <string name="msg_verify_form_data" translatable="false">Please, verify the data you have entered before submitting the from.
+    <string name="msg_verify_form_data">Please, verify the data you have entered before submitting the from.
         \n\nYou can go back and forth between the forms by selecting the stage number above.
         \n\nOnce, everything is verified, hit \"Submit\".
     </string>
@@ -82,6 +82,53 @@
     <string name="label_tran_history">Transaction History</string>
     <string name="label_tran_details">Transaction Details</string>
     <string name="number_picker_formatter" translatable="false">%4d</string>
+    <string name="label_department_details">Department Details</string>
+    <string name="label_select_dept">Select Department *</string>
+    <string name="label_select_payment">Select Payment Type *</string>
+    <string name="label_select_district">Select District *</string>
+    <string name="label_select_office">Select Office Name *</string>
+    <string name="label_select_year">Select Year *</string>
+    <string name="label_select_period">Select Period *</string>
+    <string name="label_select_month">Select Month *</string>
+    <string name="label_select_from_date">Select From Date *</string>
+    <string name="label_select_to_date">Select To Date *</string>
+    <string name="label_button_next">Next</string>
+    <string name="label_select_form_id">Select Form ID *</string>
+    <string name="label_tax_id">Department Tax ID *</string>
+    <string name="label_name">Name *</string>
+    <string name="label_pan">PAN</string>
+    <string name="label_block_no">Block No/Premises</string>
+    <string name="label_locality_road">Locality/Road</string>
+    <string name="label_area_city">Area/City</string>
+    <string name="label_pin">PIN</string>
+    <string name="label_mobile_no">Mobile No. *</string>
+    <string name="label_remarks">Remarks</string>
+    <string name="label_button_submit">Submit</string>
+    <string name="label_total_amount">Total Amount:</string>
+    <string name="label_no_schemes_found">No schemes found…</string>
+    <string name="label_scheme_details">Scheme Details</string>
+    <string name="label_payer_details">Payer Details</string>
+    <string name="label_verify_data">Verify Input Data</string>
+    <string name="label_attention">Attention!</string>
+    <string name="label_field_mandatory">Fields marked with \"*\" are mandatory</string>
+    <string name="label_challan_date">Challan Date</string>
+    <string name="label_grn_no">GRN NO</string>
+    <string name="label_sheme_code">Sheme Code</string>
+    <string name="label_sheme_name">Sheme Name</string>
+    <string name="label_amount">Amount</string>
+    <string name="label_office_location">Office Location</string>
+    <string name="label_mode_of_payment">Mode of Payment Selected</string>
+    <string name="label_status">Status</string>
+    <string name="label_repeat_payment">Repeat Payment</string>
+    <string name="label_payment_verification">Payment Verification with Bank</string>
+    <string name="label_select_year_and_month">Select Year and Month(s)…</string>
+    <string name="label_year">Year:</string>
+    <string name="label_month">Month:</string>
+    <string name="label_done">Done</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_no_transaction_history_found">No transaction history found. Try reloading…</string>
+    <string name="label_no_transaction">No new transactions found</string>
+
 
     <string-array name="spinner_data_period">
         <item>Annual</item>
@@ -91,6 +138,35 @@
         <item>2019-2020</item>
     </string-array>
 
+
+    <!-- All months -->
+    <string name="jan">JAN</string>
+    <string name="feb">FEB</string>
+    <string name="mar">MAR</string>
+    <string name="apr">APR</string>
+    <string name="may">MAY</string>
+    <string name="jun">JUN</string>
+    <string name="jul">JUL</string>
+    <string name="aug">AUG</string>
+    <string name="sep">SEP</string>
+    <string name="oct">OCT</string>
+    <string name="nov">NOV</string>
+    <string name="dec">DEC</string>
+
+    <string-array name="months">
+        <item>@string/jan</item>
+        <item>@string/feb</item>
+        <item>@string/mar</item>
+        <item>@string/apr</item>
+        <item>@string/may</item>
+        <item>@string/jun</item>
+        <item>@string/jul</item>
+        <item>@string/aug</item>
+        <item>@string/sep</item>
+        <item>@string/oct</item>
+        <item>@string/nov</item>
+        <item>@string/dec</item>
+    </string-array>
 
     <string-array name="spinner_data_half_yearly">
         <item>April-Sept</item>

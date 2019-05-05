@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.webkit.WebView;
 
 import androidx.core.content.ContextCompat;
 
@@ -156,5 +157,8 @@ public class MyUtil {
         Configuration conf = res.getConfiguration();
         conf.setLocale(newLocal);
         res.updateConfiguration(conf, dm);
+
+        //
+        new WebView(context).destroy();
     }
 }
