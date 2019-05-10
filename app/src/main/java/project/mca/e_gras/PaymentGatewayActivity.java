@@ -74,12 +74,14 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         webView.getSettings().setBuiltInZoomControls(true); // allow pinch to zooom
         webView.getSettings().setDisplayZoomControls(false); // disable the default zoom controls on the page
 
+
+        Log.d(TAG, data);
+
         // post to the url
         try {
             webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
-
     }
 }

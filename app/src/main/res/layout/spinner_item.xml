@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/about_description_text_color"
+        android:textColor="@color/about_text_color"
         tools:text="My Spinner Text" />
 
 </LinearLayout>

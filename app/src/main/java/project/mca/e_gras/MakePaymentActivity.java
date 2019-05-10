@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -80,7 +81,9 @@ public class MakePaymentActivity extends AppCompatActivity {
     public static final String TAG_GENERATE_CHALLAN = "generate_challan";
 
     public static final String BASE_URL = "http://192.168.43.211";
+    public TextView totalAmountTextView;            // so that it's visible in the package adapter
 
+    SuperSpinnerMode spinnerMode;
 
     StateProgressBar stateProgressBar;
     MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner, districtSpinner, officeSpinner, yearSpinner;
@@ -89,51 +92,36 @@ public class MakePaymentActivity extends AppCompatActivity {
 
     TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
-
-    public TextView totalAmountTextView;            // so that it's visible in the package adapter
-
     ViewGroup datePickerPanel;
-
     // all the five form layouts
     ViewGroup departmentDetailsForm;
     ViewGroup schemeDetailsForm;
     ViewGroup payerDetailsForm;
-    ViewGroup paymentDetailsForm;
+    //ViewGroup paymentDetailsForm;
     ViewGroup viewSummaryForm;
     ViewGroup emptyState;
     ViewGroup schemeListData;
-
     RecyclerView schemeRecyclerView;
     SchemeAdapter schemeAdapter;
-
     //GSon reference
     Gson gson;
-
     // Empty Department List
     List<DeptModel> deptModelList = new ArrayList<>();
-
     // Empty Payment Type List
     List<PaymentModel> paymentModelList = new ArrayList<>();
-
     // Empty District List
     List<DistrictModel> districtModelList = new ArrayList<>();
-
     // Empty Office List
     List<OfficeModel> officeModelList = new ArrayList<>();
-
     // Empty Scheme List
     List<SchemeModel> schemeModelList = new ArrayList<>();
-
+    // SwipToRefresh layout
+    SwipeRefreshLayout refreshLayout;
     // This map will contain all input parameters
     // and will get POSTed to PHP backend finally
     private Map<String, Object> parametersMap;
 
     private BroadcastReceiver myReceiver;
-
-    // SwipToRefresh layout
-    SwipeRefreshLayout refreshLayout;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,14 +134,11 @@ public class MakePaymentActivity extends AppCompatActivity {
         myReceiver = new MyNetworkReceiver();
 
         parametersMap = new HashMap<>();
-        parametersMap.put("TREASURY_CODE", "BIL");
-        parametersMap.put("MAJOR_HEAD", "0029");
 
         gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
-
 
         refreshLayout = findViewById(R.id.swip_to_refresh_layout);
         refreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -163,21 +148,19 @@ public class MakePaymentActivity extends AppCompatActivity {
             public void onRefresh() {
                 // check if the network request is not running
                 // and dept list ti empty
-               if (MyUtil.isNetworkAvailable(getApplicationContext())) {
-                   if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES)) {
-                       getJWTToken(TAG_DEPT_NAMES);
-                   }
-                   else {
-                       // refresh completed
-                       // stop the animation
-                       refreshLayout.setRefreshing(false);
-                   }
-               }
-               else {
-                   // No network
-                   // stop the animation
-                   refreshLayout.setRefreshing(false);
-               }
+                if (MyUtil.isNetworkAvailable(getApplicationContext())) {
+                    if (!AndroidNetworking.isRequestRunning(TAG_DEPT_NAMES)) {
+                        getJWTToken(TAG_DEPT_NAMES);
+                    } else {
+                        // refresh completed
+                        // stop the animation
+                        refreshLayout.setRefreshing(false);
+                    }
+                } else {
+                    // No network
+                    // stop the animation
+                    refreshLayout.setRefreshing(false);
+                }
             }
         });
 
@@ -216,7 +199,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         departmentDetailsForm = findViewById(R.id.dept_card_view);
         schemeDetailsForm = findViewById(R.id.scheme_card_view);
         payerDetailsForm = findViewById(R.id.payer_card_view);
-        paymentDetailsForm = findViewById(R.id.payment_card_view);
+        //paymentDetailsForm = findViewById(R.id.payment_card_view);
         viewSummaryForm = findViewById(R.id.form_summary_card_view);
 
 
@@ -365,6 +348,59 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
         superSpinner = findViewById(R.id.super_spinner);
+        superSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0) {
+                    String period = "";
+
+                    switch (spinnerMode) {
+                        case MODE_HALF:
+                            if (position == 0) {
+                                period = "H1";
+                            } else if (position == 1) {
+                                period = "H2";
+                            }
+                            break;
+
+                        case MODE_MONTH:
+                            period = "M";
+                            break;
+
+                        case MODE_QUATER:
+                            switch (position) {
+                                case 0:
+                                    period = "Q1";
+                                    break;
+
+                                case 1:
+                                    period = "Q2";
+                                    break;
+
+                                case 2:
+                                    period = "Q3";
+                                    break;
+
+                                case 3:
+                                    period = "Q4";
+                                    break;
+                            }
+
+                            break;
+                    }
+
+                    parametersMap.put("PERIOD", period);
+                    parametersMap.put("FROM_DATE", "");         // ?
+                    parametersMap.put("TO_DATE", "");           // ?
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         datePickerPanel = findViewById(R.id.date_viewGroup);
 
@@ -374,53 +410,43 @@ public class MakePaymentActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String data = parent.getItemAtPosition(position).toString();
 
-                switch (data) {
-                    case "Half Yearly":
-                        setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_half_yearly));
-                        break;
+                if (data.equals(getString(R.string.half))) {
+                    spinnerMode = SuperSpinnerMode.MODE_HALF;
+                    setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_half_yearly));
+                } else if (data.equals(getString(R.string.quater))) {
+                    spinnerMode = SuperSpinnerMode.MODE_QUATER;
+                    setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_quaterly));
+                } else if (data.equals(getString(R.string.month))) {
+                    spinnerMode = SuperSpinnerMode.MODE_MONTH;
+                    setUpSupperSpinner(getResources().getStringArray(R.array.months));
+                } else if (data.equals(getString(R.string.annual))) {
+                    superSpinner.setVisibility(View.GONE);
+                    datePickerPanel.setVisibility(View.GONE);
 
-                    case "Quarterly":
-                        setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_quaterly));
-                        break;
+                    parametersMap.put("PERIOD", "A");
+                    parametersMap.put("FROM_DATE", "01/04/2019");
+                    parametersMap.put("TO_DATE", "31/03/2020");
+                } else if (data.equals(getString(R.string.one_time))) {
+                    superSpinner.setVisibility(View.GONE);
+                    datePickerPanel.setVisibility(View.GONE);
 
-                    case "Monthly":
-                        setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_monthly));
-                        break;
+                    parametersMap.put("PERIOD", "O");
+                    parametersMap.put("FROM_DATE", "01/04/2019");
+                    parametersMap.put("TO_DATE", "31/03/2099");
+                } else if (data.equals(getString(R.string.specific))) {
+                    // show date pickers
+                    // clear the dates first
+                    superSpinner.setVisibility(View.GONE);
+                    datePickerPanel.setVisibility(View.VISIBLE);
 
-                    case "Annual":
-                        superSpinner.setVisibility(View.GONE);
-                        datePickerPanel.setVisibility(View.GONE);
+                    fromDateTextView.setText(getString(R.string.label_select_from_date));
+                    toDateTextView.setText(getString(R.string.label_select_to_date));
 
-                        parametersMap.put("PERIOD", "A");
-                        parametersMap.put("FROM_DATE", "01/04/2019");
-                        parametersMap.put("TO_DATE", "31/03/2020");
-                        break;
-
-                    case "One Time/Adhoc":
-                        // hide the supper spinner
-                        superSpinner.setVisibility(View.GONE);
-
-                        // hide date picker panel
-                        datePickerPanel.setVisibility(View.GONE);
-
-                        break;
-
-                    case "Specific Period":
-                        superSpinner.setVisibility(View.GONE);
-
-                        // show date pickers
-
-                        // clear the dates first
-                        fromDateTextView.setText(getString(R.string.label_select_from_date));
-                        toDateTextView.setText(getString(R.string.label_select_to_date));
-
-                        datePickerPanel.setVisibility(View.VISIBLE);
-                        break;
-
-                    default:                                                // "Select Period *" is chosen
-                        superSpinner.setVisibility(View.GONE);
-                        datePickerPanel.setVisibility(View.GONE);
-
+                    parametersMap.put("PERIOD", "S");
+                } else {
+                    // "Select Period *" is chosen
+                    superSpinner.setVisibility(View.GONE);
+                    datePickerPanel.setVisibility(View.GONE);
                 }
             }
 
@@ -429,7 +455,6 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void getJWTToken(final String tag) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -535,7 +560,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-
     private void getOfficeNames(String idToken) {
 
         MyUtil.showSpotDialog(this);
@@ -584,7 +608,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-
     private void setUpOfficeSpinner(boolean reset) {
         if (reset) {
             parametersMap.remove("OFFICE_CODE");
@@ -596,7 +619,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         OfficeSpinnerAdapter adapter = new OfficeSpinnerAdapter(this, officeModelList);
         officeSpinner.setAdapter(adapter);
     }
-
 
     private void getDistricts(String idToken) {
 
@@ -641,7 +663,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-
     private void setUpDistrictSpinner(boolean reset) {
 
         if (reset) {
@@ -652,7 +673,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         DistrictSpinnerAdapter adapter = new DistrictSpinnerAdapter(this, districtModelList);
         districtSpinner.setAdapter(adapter);
     }
-
 
     private void getPaymentTypes(String idToken) {
 
@@ -702,7 +722,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-
     private void displayErrorMessage(ANError anError) {
         MyUtil.closeSpotDialog();
 
@@ -717,7 +736,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         }
     }
 
-
     private void setUpPaymentSpinner(boolean reset) {
         // if reset is TRUE then clear the spinner
         if (reset) {
@@ -728,7 +746,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         PaymentSpinnerAdapter adapter = new PaymentSpinnerAdapter(this, paymentModelList);
         paymentSpinner.setAdapter(adapter);
     }
-
 
     private void getDeptNames(String idToken) {
         // if list is refreshing then
@@ -776,7 +793,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-
     private void setUpDeptSpinner() {
         if (deptModelList != null) {
             DeptSpinnerAdapter adapter = new DeptSpinnerAdapter(this, deptModelList);
@@ -791,10 +807,9 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .targetView(deptSpinner)
                 .backgroundColorResourceId(R.color.colorPrimary)
                 .textColorResourceId(R.color.white)
-                .imageResourceId(R.drawable.ic_about)
+                .imageResourceId(R.drawable.ic_warn)
                 .show();
     }
-
 
     private void showFrom(int curState, int nextState) {
 
@@ -830,11 +845,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 break;
 
             case 4:
-                // validation required
-                paymentDetailsForm.setVisibility(View.GONE);
-                break;
-
-            case 5:
                 viewSummaryForm.setVisibility(View.GONE);
                 break;
         }
@@ -880,22 +890,12 @@ public class MakePaymentActivity extends AppCompatActivity {
                 break;
 
             case 4:
-                paymentDetailsForm.setVisibility(View.VISIBLE);
-                stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-                headerTextView.setText("Payment Details");
-                break;
-
-            case 5:
                 viewSummaryForm.setVisibility(View.VISIBLE);
-                stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
+                stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
                 headerTextView.setText(getString(R.string.label_verify_data));
                 break;
         }
-
-        //
-        Log.d(TAG, parametersMap.toString());
     }
-
 
     private void savePayerDetails() {
         ///Validation required
@@ -941,7 +941,11 @@ public class MakePaymentActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 month += 1;
 
-                                fromDateTextView.setText(dayOfMonth + "/" + month + "/" + year);
+                                String f_date = String.format(new Locale("en", "IN"), "%d/%d/%d",
+                                        dayOfMonth, month, year);
+
+                                fromDateTextView.setText(f_date);
+                                parametersMap.put("FROM_DATE", f_date);
                             }
                         },
                         year, month, day
@@ -960,7 +964,11 @@ public class MakePaymentActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 month += 1;
 
-                                toDateTextView.setText(dayOfMonth + "/" + month + "/" + year);
+                                String t_date = String.format(new Locale("en", "IN"), "%d/%d/%d",
+                                        dayOfMonth, month, year);
+
+                                toDateTextView.setText(t_date);
+                                parametersMap.put("TO_DATE", t_date);
                             }
                         },
                         year, month, day
@@ -969,7 +977,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
     private void setUpSupperSpinner(String[] data) {
         // refresh spinner bundle
@@ -987,14 +994,12 @@ public class MakePaymentActivity extends AppCompatActivity {
         datePickerPanel.setVisibility(View.GONE);
     }
 
-
     public void showNextForm(View view) {
         // get the current state number
         int curState = stateProgressBar.getCurrentStateNumber();
 
         showFrom(curState, curState + 1);
     }
-
 
     public void submitData(String idToken) {
         // after validating all the bundle
@@ -1026,8 +1031,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         MyUtil.closeSpotDialog();
 
-                        Log.d(TAG, response.toString());
-
                         try {
                             if (response.getBoolean("success")) {
 
@@ -1039,8 +1042,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 intent.putExtra("url", url);
                                 intent.putExtra("bundle", postData);
                                 startActivity(intent);
-
                                 finish();
+
                             } else {
                                 MyUtil.showBottomDialog(MakePaymentActivity.this, response.getString("msg"));
                             }
@@ -1051,12 +1054,10 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError error) {
-                        // Network error
                         displayErrorMessage(error);
                     }
                 });
     }
-
 
     @Override
     protected void onStart() {
@@ -1068,7 +1069,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         // register the receiver dynamically
         this.registerReceiver(myReceiver, filter);
     }
-
 
     @Override
     protected void onStop() {
@@ -1082,6 +1082,12 @@ public class MakePaymentActivity extends AppCompatActivity {
         getJWTToken(TAG_GENERATE_CHALLAN);
     }
 
+    // to tell the mode of the super spinner
+    private enum SuperSpinnerMode {
+        MODE_HALF,
+        MODE_MONTH,
+        MODE_QUATER
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Receiver to receive CONNECTIVITY_CHANGED broadcast intent

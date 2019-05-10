@@ -31,7 +31,7 @@
                 android:layout_margin="8dp"
                 app:spb_checkStateCompleted="true"
                 app:spb_currentStateNumber="one"
-                app:spb_maxStateNumber="five"
+                app:spb_maxStateNumber="four"
                 app:spb_stateBackgroundColor="#BDBDBD"
                 app:spb_stateForegroundColor="#2E7D32"
                 app:spb_stateNumberBackgroundColor="#808080"
@@ -195,6 +195,8 @@
                                 android:padding="8dp"
                                 android:text="@string/label_select_from_date"
                                 android:textAlignment="textStart"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/about_text_color"
                                 android:textSize="18sp" />
 
                             <ImageButton
@@ -221,6 +223,8 @@
                                 android:padding="8dp"
                                 android:text="@string/label_select_to_date"
                                 android:textAlignment="textStart"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/about_text_color"
                                 android:textSize="18sp" />
 
                             <ImageButton
@@ -456,80 +460,80 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Payment Details Card View -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/payment_card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:cardElevation="8dp">
+    <!--<androidx.cardview.widget.CardView-->
+    <!--android:id="@+id/payment_card_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:visibility="gone"-->
+    <!--app:cardElevation="8dp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Payment Mode"
-                android:textSize="16sp" />
-
-
-            <RadioGroup
-                android:id="@+id/payment_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <RadioButton
-                    android:id="@+id/e_payment_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="e-Payment" />
-
-                <RadioButton
-                    android:id="@+id/bank_counter_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Payment Across Bank Counter (Cash/Cheque)" />
-
-                <RadioButton
-                    android:id="@+id/sbi_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SBI epay Payment Gateway" />
-
-            </RadioGroup>
-
-            <fr.ganfra.materialspinner.MaterialSpinner
-                android:id="@+id/bank_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:ms_alignLabels="true"
-                app:ms_arrowColor="@color/colorAccent"
-                app:ms_arrowSize="16dp"
-                app:ms_enableErrorLabel="true"
-                app:ms_floatingLabelColor="@color/colorAccent"
-                app:ms_hint="Select Bank*"
-                app:ms_thickness="1dp" />
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:text="Payment Mode"-->
+    <!--android:textSize="16sp" />-->
 
 
-            <Button
-                android:id="@+id/next_button_payment"
-                style="@style/FirebaseUI.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:onClick="showNextForm"
-                android:text="@string/label_button_next" />
+    <!--<RadioGroup-->
+    <!--android:id="@+id/payment_radio_group"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/e_payment_radio"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:checked="true"-->
+    <!--android:text="e-Payment" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/bank_counter_radio"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Payment Across Bank Counter (Cash/Cheque)" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/sbi_radio"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="SBI epay Payment Gateway" />-->
+
+    <!--</RadioGroup>-->
+
+    <!--<fr.ganfra.materialspinner.MaterialSpinner-->
+    <!--android:id="@+id/bank_spinner"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--app:ms_alignLabels="true"-->
+    <!--app:ms_arrowColor="@color/colorAccent"-->
+    <!--app:ms_arrowSize="16dp"-->
+    <!--app:ms_enableErrorLabel="true"-->
+    <!--app:ms_floatingLabelColor="@color/colorAccent"-->
+    <!--app:ms_hint="Select Bank*"-->
+    <!--app:ms_thickness="1dp" />-->
 
 
-        </LinearLayout>
+    <!--<Button-->
+    <!--android:id="@+id/next_button_payment"-->
+    <!--style="@style/FirebaseUI.Button"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|center"-->
+    <!--android:onClick="showNextForm"-->
+    <!--android:text="@string/label_button_next" />-->
 
-    </androidx.cardview.widget.CardView>
+
+    <!--</LinearLayout>-->
+
+    <!--</androidx.cardview.widget.CardView>-->
 
 
     <!-- Verify Submission and Submit Data -->

@@ -22,12 +22,14 @@
     <string name="fab_tap_target_title">Make Payment Button</string>
     <string name="fab_tap_target_desc">Tap this button to make a new payment…</string>
     <string name="title_about_egras">About e-GRAS</string>
+
     <string name="about_page_description">
         e-GRAS is an electronic payment gateway to receive payments electronically. It\'s a medium for on-line payment of
         Assam State\'s Taxes through the internet portals of various banks. To avail of this facility the taxpayer is required
         to have a net-banking account with any of the banks listed by the government on e-GRAS site. This is a 24X7 facility and
         citizen can make the payment any time of the day. To know more, please visit the official web site.
-</string>
+    </string>
+
     <string name="connect_us_label">Connect with us</string>
     <string name="egras_web_address" translatable="false">https://assamegras.gov.in/</string>
     <string name="version_info">Version 1.0</string>
@@ -130,9 +132,23 @@
     <string name="label_no_transaction">No new transactions found</string>
 
 
+    <!-- All periods -->
+    <string name="annual">Annual</string>
+    <string name="half">Half Yearly</string>
+    <string name="quater">Quarterly</string>
+    <string name="month">Monthly</string>
+    <string name="one_time">One Time/Adhoc</string>
+    <string name="specific">Specific Period</string>
+
     <string-array name="spinner_data_period">
-        <item>Annual</item>
+        <item>@string/annual</item>
+        <item>@string/half</item>
+        <item>@string/quater</item>
+        <item>@string/month</item>
+        <item>@string/one_time</item>
+        <item>@string/specific</item>
     </string-array>
+
 
     <string-array name="spinner_data_year">
         <item>2019-2020</item>
@@ -153,7 +169,6 @@
     <string name="nov">NOV</string>
     <string name="dec">DEC</string>
     <string name="label_help">Help</string>
-
     <string-array name="months">
         <item>@string/jan</item>
         <item>@string/feb</item>
@@ -169,24 +184,26 @@
         <item>@string/dec</item>
     </string-array>
 
+
+    <!-- Half yearly data -->
+    <string name="apr_sep">April-Sept</string>
+    <string name="oct_mar">Oct-March</string>
     <string-array name="spinner_data_half_yearly">
-        <item>April-Sept</item>
-        <item>Oct-March</item>
+        <item>@string/apr_sep</item>
+        <item>@string/oct_mar</item>
     </string-array>
 
+
+    <!-- Quarterly data -->
+    <string name="apr_june">April-June</string>
+    <string name="july_sept">July-Sept</string>
+    <string name="oct_dec">Oct-Dec</string>
+    <string name="jan_mar">Jan-March</string>
     <string-array name="spinner_data_quaterly">
-        <item>April-June</item>
-        <item>July-Sept</item>
-        <item>Oct-Dec</item>
-        <item>Jan-March</item>
-    </string-array>
-
-    <string-array name="spinner_data_monthly">
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>...</item>
+        <item>@string/apr_june</item>
+        <item>@string/july_sept</item>
+        <item>@string/oct_dec</item>
+        <item>@string/jan_mar</item>
     </string-array>
 
 

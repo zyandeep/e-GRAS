@@ -45,13 +45,13 @@
         \n\nশেষত, সকলো পৰীক্ষা কৰি তথ্য়সমুহ দাখিল কৰক।</string>
     <string name="label_area_city">চহৰ/নগৰ</string>
     <string name="label_block_no">ঘৰ/চৌহদ নম্বৰ</string>
-    <string name="label_button_next">পৰবৰ্তী অংশ</string>
+    <string name="label_button_next">পৰৱৰ্তী অংশ</string>
     <string name="label_button_submit">দাখিল কৰক</string>
     <string name="label_department_details">বিভাগৰ তথ্য়</string>
     <string name="label_locality_road">চুবুৰী/পথ</string>
     <string name="label_mobile_no">মোবাইল ফোন নম্বৰ *</string>
     <string name="label_name">নাম *</string>
-    <string name="label_no_schemes_found">কোনো আচনি পোৱা ন\'গল...</string>
+    <string name="label_no_schemes_found">কোনো আচনি পোৱা ন\'গল…</string>
     <string name="label_pan">PAN নম্বৰ</string>
     <string name="label_pin">PIN নম্বৰ</string>
     <string name="label_remarks">মন্তব্য</string>
@@ -87,12 +87,12 @@
     <string name="label_month">মাহ:</string>
     <string name="label_done">হৈ গ\'ল</string>
     <string name="label_cancel">এ বাদ দিয়ক!</string>
-    <string name="label_no_transaction_history_found">কোনো  transaction পোৱা নগ\'ল। আকৌ চেষ্টা কৰি চাওক...</string>
+    <string name="label_no_transaction_history_found">কোনো transaction পোৱা নগ\'ল। আকৌ চেষ্টা কৰি চাওক…</string>
     <string name="jan">জানু</string>
     <string name="mar">মাৰ্চ</string>
     <string name="apr">এপ্ৰিল</string>
     <string name="may">মে</string>
-    <string name="jun">"জুন "</string>
+    <string name="jun">জুন</string>
     <string name="jul">জুলাই</string>
     <string name="aug">আগ</string>
     <string name="sep">ছেপ্ত</string>
@@ -102,4 +102,16 @@
     <string name="feb">ফেব্ৰু</string>
     <string name="label_no_transaction">কোনো  নতুন transaction পোৱা নগ\'ল</string>
     <string name="label_help">e-GRAS ৰ ব্য়ৱহাৰ</string>
+    <string name="annual">বাৰ্ষিক</string>
+    <string name="half">ছমহীয়া</string>
+    <string name="month">মাহেকীয়া</string>
+    <string name="one_time">কোনো এবাৰ</string>
+    <string name="quater">চাৰিমহীয়া</string>
+    <string name="specific">নিৰ্দিষ্ট সময়</string>
+    <string name="apr_sep">এপ্ৰিল-ছেপ্ত</string>
+    <string name="oct_mar">অক্টো-মাৰ্চ</string>
+    <string name="apr_june">এপ্ৰিল-জুন</string>
+    <string name="jan_mar">জানু-মাৰ্চ</string>
+    <string name="july_sept">জুলাই-ছেপ্ত</string>
+    <string name="oct_dec">অক্টো-ডিচে</string>
 </resources>
