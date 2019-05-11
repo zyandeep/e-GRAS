@@ -24,6 +24,8 @@ public class MyOnboardingActivity extends AppIntro {
 
     private static final int RC_SIGN_IN = 200;
 
+    private boolean fromMain = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,10 @@ public class MyOnboardingActivity extends AppIntro {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
+        Intent intent = getIntent();
+        fromMain = intent.getBooleanExtra("from_main", false);
+
 
         //create slides and add them
         addSlide(AppIntro2Fragment.newInstance("Welcome to e-GRAS Mobile",
@@ -141,8 +147,10 @@ public class MyOnboardingActivity extends AppIntro {
 
 
     private void signInUser() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+        if (!fromMain) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 

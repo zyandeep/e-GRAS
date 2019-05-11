@@ -199,6 +199,7 @@
     <string name="july_sept">July-Sept</string>
     <string name="oct_dec">Oct-Dec</string>
     <string name="jan_mar">Jan-March</string>
+    <string name="label_egras_info">with e-GRAS, you can make new payments, review your transaction history and generate challans online</string>
     <string-array name="spinner_data_quaterly">
         <item>@string/apr_june</item>
         <item>@string/july_sept</item>

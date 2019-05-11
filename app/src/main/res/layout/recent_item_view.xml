@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tran_item_cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_t_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_challan_date"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
+
+        <TextView
+            android:id="@+id/date_details_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="12/JAN/2019"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/about_text_color" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/about_separator_color" />
+
+        <TextView
+            android:id="@+id/textView_t_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_grn_no"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
+
+        <TextView
+            android:id="@+id/grn_details_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="ADFS456WERTYSDF4"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#FF6F00" />
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/about_separator_color" />
+
+        <TextView
+            android:id="@+id/textView_t_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/label_amount"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/about_item_text_color" />
+
+        <TextView
+            android:id="@+id/amount_details_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="12.00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/about_text_color" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -3,8 +3,10 @@ package project.mca.e_gras;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +18,14 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -26,20 +35,38 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import project.mca.e_gras.adapter.RecentTransactionAdapter;
+import project.mca.e_gras.model.TransactionModel;
 import project.mca.e_gras.util.MyUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "MY-APP";
+    public static final String TAG_RECENT_TRANS = "recent_trans";
     private static final int REQUEST_CODE = 12;
-
+    public static final String BASE_URL = "http://192.168.43.211";
+    RecyclerView recyclerView;
+    RecentTransactionAdapter adapter;
+    ViewGroup emptyLayout;
     private TextView displayName;
     private TextView emailOrPhone;
-
     private SharedPreferences sharedPref;
-
+    ViewGroup transLayout;
+    //GSon reference
+    Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +126,25 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         displayName = headerView.findViewById(R.id.username_textView);
         emailOrPhone = headerView.findViewById(R.id.user_email_phone_textView);
+
+
+        emptyLayout = findViewById(R.id.empty_linearLayout);
+        transLayout = findViewById(R.id.tran_linearLayout);
+
+        // initialize the recyclerView
+        recyclerView = findViewById(R.id.recent_tran_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        // create an empty transaction model list
+        List<TransactionModel> modelList = new ArrayList<>();
+        adapter = new RecentTransactionAdapter(modelList, this);
+        recyclerView.setAdapter(adapter);
+
+        gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create();
     }
 
 
@@ -147,6 +193,10 @@ public class MainActivity extends AppCompatActivity
             // No user is signed in
             finish();
         }
+
+
+        // get 5 recent transactions
+        getJWTToken();
     }
 
 
@@ -158,24 +208,19 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.make_payment) {
             Intent intent = new Intent(getApplicationContext(), MakePaymentActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.transaction_history) {
+        } else if (id == R.id.transaction_history) {
             Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.search_challan) {
+        } else if (id == R.id.search_challan) {
 
-        }
-        else if (id == R.id.settings) {
+        } else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             //startActivity(intent);
 
             startActivityForResult(intent, REQUEST_CODE);
-        }
-        else if (id == R.id.logout) {
+        } else if (id == R.id.logout) {
             signOutUser();
-        }
-        else if (id == R.id.about) {
+        } else if (id == R.id.about) {
             Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
         } else if (id == R.id.help) {
@@ -221,5 +266,85 @@ public class MainActivity extends AppCompatActivity
         // close the drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+
+    public void showOnBoarding(View view) {
+        Intent intent = new Intent(this, MyOnboardingActivity.class);
+        intent.putExtra("from_main", true);
+        startActivity(intent);
+    }
+
+    public void loadAllTransaction(View view) {
+        Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
+        startActivity(intent);
+    }
+
+
+    private void getJWTToken() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+
+                                getRecentTransaction(idToken);
+                            } else {
+                                // Handle error -> task.getException();
+                                Exception ex = task.getException();
+                                MyUtil.showBottomDialog(MainActivity.this, ex.getMessage());
+                            }
+                        }
+                    });
+        }
+    }
+
+
+    private void getRecentTransaction(String idToken) {
+        AndroidNetworking.get(BASE_URL + "/recent-transactions")
+                .addHeaders("Authorization", "Bearer " + idToken)
+                .setTag(TAG_RECENT_TRANS)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // if status code is OK:200 then only
+
+                        try {
+                            if (response.getBoolean("success")) {
+
+                                // converting jsonArray of payments into ArrayList
+                                Type type = new TypeToken<ArrayList<TransactionModel>>() {
+                                }.getType();
+
+                                List<TransactionModel> list = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                if (list.isEmpty()) {
+                                    // show the empty view
+                                    emptyLayout.setVisibility(View.VISIBLE);
+                                    transLayout.setVisibility(View.GONE);
+                                } else {
+                                    emptyLayout.setVisibility(View.GONE);
+                                    transLayout.setVisibility(View.VISIBLE);
+                                    adapter.addNewItems(list);
+                                }
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        // Networking error
+                        //displayErrorMessage(anError);
+
+                        Log.d(TAG, anError.getMessage());
+                    }
+                });
+
     }
 }
