@@ -56,17 +56,17 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MY-APP";
     public static final String TAG_RECENT_TRANS = "recent_trans";
-    private static final int REQUEST_CODE = 12;
     public static final String BASE_URL = "http://192.168.43.211";
+    private static final int REQUEST_CODE = 12;
     RecyclerView recyclerView;
     RecentTransactionAdapter adapter;
     ViewGroup emptyLayout;
-    private TextView displayName;
-    private TextView emailOrPhone;
-    private SharedPreferences sharedPref;
     ViewGroup transLayout;
     //GSon reference
     Gson gson;
+    private TextView displayName;
+    private TextView emailOrPhone;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,47 +304,50 @@ public class MainActivity extends AppCompatActivity
 
 
     private void getRecentTransaction(String idToken) {
-        AndroidNetworking.get(BASE_URL + "/recent-transactions")
-                .addHeaders("Authorization", "Bearer " + idToken)
-                .setTag(TAG_RECENT_TRANS)
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // if status code is OK:200 then only
 
-                        try {
-                            if (response.getBoolean("success")) {
+        if (!AndroidNetworking.isRequestRunning(TAG_RECENT_TRANS)) {
 
-                                // converting jsonArray of payments into ArrayList
-                                Type type = new TypeToken<ArrayList<TransactionModel>>() {
-                                }.getType();
+            AndroidNetworking.get(BASE_URL + "/recent-transactions")
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .setTag(TAG_RECENT_TRANS)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // if status code is OK:200 then only
 
-                                List<TransactionModel> list = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+                            try {
+                                if (response.getBoolean("success")) {
 
-                                if (list.isEmpty()) {
-                                    // show the empty view
-                                    emptyLayout.setVisibility(View.VISIBLE);
-                                    transLayout.setVisibility(View.GONE);
-                                } else {
-                                    emptyLayout.setVisibility(View.GONE);
-                                    transLayout.setVisibility(View.VISIBLE);
-                                    adapter.addNewItems(list);
+                                    // converting jsonArray of payments into ArrayList
+                                    Type type = new TypeToken<ArrayList<TransactionModel>>() {
+                                    }.getType();
+
+                                    List<TransactionModel> list = gson.fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                    if (list.isEmpty()) {
+                                        // show the empty view
+                                        emptyLayout.setVisibility(View.VISIBLE);
+                                        transLayout.setVisibility(View.GONE);
+                                    } else {
+                                        emptyLayout.setVisibility(View.GONE);
+                                        transLayout.setVisibility(View.VISIBLE);
+                                        adapter.addNewItems(list);
+                                    }
                                 }
+                            } catch (JSONException e) {
                             }
-                        } catch (JSONException e) {
                         }
-                    }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        // Networking error
-                        //displayErrorMessage(anError);
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            //displayErrorMessage(anError);
 
-                        Log.d(TAG, anError.getMessage());
-                    }
-                });
-
+                            Log.d(TAG, anError.getMessage());
+                        }
+                    });
+        }
     }
 }
