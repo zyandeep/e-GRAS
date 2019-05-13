@@ -11,7 +11,8 @@ import androidx.fragment.app.Fragment;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2Fragment;
+import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.github.paolorotolo.appintro.model.SliderPage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcoscg.dialogsheet.DialogSheet;
@@ -40,30 +41,46 @@ public class MyOnboardingActivity extends AppIntro {
 
 
         //create slides and add them
-        addSlide(AppIntro2Fragment.newInstance("Welcome to e-GRAS Mobile",
-                "Add some description here...",
-                R.drawable.logo,
-                Color.parseColor("#9B59B6")));
+        SliderPage s1 = new SliderPage();
+        s1.setTitle("Welcome to e-GRAS Mobile");
+        s1.setTitleColor(Color.parseColor("#595959"));
+        s1.setDescription(getString(R.string.label_egras_info));
+        s1.setDescColor(Color.parseColor("#595959"));
+        s1.setImageDrawable(R.drawable.logo);
+        s1.setBgColor(Color.parseColor("#EEEEEE"));
+        addSlide(AppIntroFragment.newInstance(s1));
 
-        addSlide(AppIntro2Fragment.newInstance("Generate e-Challans",
-                "Add some description here...",
-                R.drawable.invoice,
-                Color.DKGRAY));
+        SliderPage s2 = new SliderPage();
+        s2.setTitle("Generate e-Challans");
+        s2.setTitleColor(Color.parseColor("#595959"));
+        s2.setDescription(getString(R.string.label_generate_echallan));
+        s2.setDescColor(Color.parseColor("#595959"));
+        s2.setImageDrawable(R.drawable.invoice);
+        s2.setBgColor(Color.parseColor("#EEEEEE"));
+        addSlide(AppIntroFragment.newInstance(s2));
 
-        addSlide(AppIntro2Fragment.newInstance("Search for Challans",
-                "Add some description here...",
-                R.drawable.search,
-                Color.parseColor("#16A085")));
+        SliderPage s3 = new SliderPage();
+        s3.setTitle("Search for Challans");
+        s3.setTitleColor(Color.parseColor("#595959"));
+        s3.setDescription(getString(R.string.label_search_challan));
+        s3.setDescColor(Color.parseColor("#595959"));
+        s3.setImageDrawable(R.drawable.search);
+        s3.setBgColor(Color.parseColor("#EEEEEE"));
+        addSlide(AppIntroFragment.newInstance(s3));
 
-        addSlide(AppIntro2Fragment.newInstance("Review Transaction History",
-                "Add some description here...",
-                R.drawable.payment_history,
-                Color.parseColor("#CD5C5C")));
+
+        SliderPage s4 = new SliderPage();
+        s4.setTitle("Review Transaction History");
+        s4.setTitleColor(Color.parseColor("#595959"));
+        s4.setDescription(getString(R.string.label_review_trans));
+        s4.setDescColor(Color.parseColor("#595959"));
+        s4.setImageDrawable(R.drawable.payment_history1);
+        s4.setBgColor(Color.parseColor("#EEEEEE"));
+        addSlide(AppIntroFragment.newInstance(s4));
 
 
         // divider color
-        setSeparatorColor(Color.WHITE);
-
+        setBarColor(Color.parseColor("#2E7D32"));
 
         // Hide Skip/Done button.
         showSkipButton(true);
