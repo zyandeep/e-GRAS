@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF9800</color>
     <color name="colorBackground">#263238</color>
     <color name="numberPickerColor">@color/about_item_text_color</color>
+
+    <color name="onBoardingTextColor">#ffffff</color>
 </resources>

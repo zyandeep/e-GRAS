@@ -1,11 +1,13 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -30,13 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         // do I show on-boarding activity or the main activity?
         // show the on-boarding activity during installation
 
-
-        Intent intent = new Intent(getApplicationContext(), MyOnboardingActivity.class);
-        startActivity(intent);
-        finish();
-
-
-       /* SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean appIntroShown = sharedPref.getBoolean(KEY_APP_INTO, false);
 
         if (!appIntroShown) {
@@ -54,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             // route to either log-in or mainActivity
             routeToAppropriateScreen();
-        }*/
+        }
     }
 
 

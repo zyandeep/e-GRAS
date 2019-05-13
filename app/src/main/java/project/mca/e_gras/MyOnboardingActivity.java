@@ -1,7 +1,6 @@
 package project.mca.e_gras;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -43,44 +42,35 @@ public class MyOnboardingActivity extends AppIntro {
         //create slides and add them
         SliderPage s1 = new SliderPage();
         s1.setTitle("Welcome to e-GRAS Mobile");
-        s1.setTitleColor(Color.parseColor("#595959"));
+        s1.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s1.setDescription(getString(R.string.label_egras_info));
-        s1.setDescColor(Color.parseColor("#595959"));
+        s1.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
         s1.setImageDrawable(R.drawable.logo);
-        s1.setBgColor(Color.parseColor("#EEEEEE"));
+        s1.setBgColor(getResources().getColor(R.color.colorBackground));
         addSlide(AppIntroFragment.newInstance(s1));
 
         SliderPage s2 = new SliderPage();
         s2.setTitle("Generate e-Challans");
-        s2.setTitleColor(Color.parseColor("#595959"));
+        s2.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s2.setDescription(getString(R.string.label_generate_echallan));
-        s2.setDescColor(Color.parseColor("#595959"));
+        s2.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
         s2.setImageDrawable(R.drawable.invoice);
-        s2.setBgColor(Color.parseColor("#EEEEEE"));
+        s2.setBgColor(getResources().getColor(R.color.colorBackground));
         addSlide(AppIntroFragment.newInstance(s2));
 
+
         SliderPage s3 = new SliderPage();
-        s3.setTitle("Search for Challans");
-        s3.setTitleColor(Color.parseColor("#595959"));
-        s3.setDescription(getString(R.string.label_search_challan));
-        s3.setDescColor(Color.parseColor("#595959"));
-        s3.setImageDrawable(R.drawable.search);
-        s3.setBgColor(Color.parseColor("#EEEEEE"));
+        s3.setTitle("Review Transaction History");
+        s3.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
+        s3.setDescription(getString(R.string.label_review_trans));
+        s3.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
+        s3.setImageDrawable(R.drawable.payment_history);
+        s3.setBgColor(getResources().getColor(R.color.colorBackground));
         addSlide(AppIntroFragment.newInstance(s3));
 
 
-        SliderPage s4 = new SliderPage();
-        s4.setTitle("Review Transaction History");
-        s4.setTitleColor(Color.parseColor("#595959"));
-        s4.setDescription(getString(R.string.label_review_trans));
-        s4.setDescColor(Color.parseColor("#595959"));
-        s4.setImageDrawable(R.drawable.payment_history1);
-        s4.setBgColor(Color.parseColor("#EEEEEE"));
-        addSlide(AppIntroFragment.newInstance(s4));
-
-
         // divider color
-        setBarColor(Color.parseColor("#2E7D32"));
+        setBarColor(getResources().getColor(R.color.colorPrimaryDark));
 
         // Hide Skip/Done button.
         showSkipButton(true);

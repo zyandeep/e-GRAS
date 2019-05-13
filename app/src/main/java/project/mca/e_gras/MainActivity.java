@@ -211,8 +211,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.transaction_history) {
             Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.search_challan) {
-
         } else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             //startActivity(intent);
@@ -295,7 +293,7 @@ public class MainActivity extends AppCompatActivity
                             } else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
-                                MyUtil.showBottomDialog(MainActivity.this, ex.getMessage());
+                                Log.d(TAG, ex.getMessage());
                             }
                         }
                     });

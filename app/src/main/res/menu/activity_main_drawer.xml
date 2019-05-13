@@ -14,11 +14,6 @@
             android:id="@+id/transaction_history"
             android:icon="@drawable/ic_history"
             android:title="@string/transaction_history_menu_item" />
-        <item
-            android:id="@+id/search_challan"
-            android:icon="@drawable/ic_search"
-            android:title="@string/search_challan_menu_item" />
-
     </group>
 
     <group android:id="@+id/group2"

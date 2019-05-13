@@ -73,6 +73,9 @@ dependencies {
 
     // Number picker
     implementation 'com.shawnlin:number-picker:2.4.8'
+
+    // Facebook Shimmer animation
+    implementation 'com.facebook.shimmer:shimmer:0.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

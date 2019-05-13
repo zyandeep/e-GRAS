@@ -27,6 +27,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,11 +59,14 @@ public class TransactionListActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://192.168.43.211";
     private static final String TAG_TRANSACTION_LIST = "transaction_list";
     private static final String TAG_LOAD_MORE = "load_more";
-    private static final int ITEMS_PER_PAGE = 4;
+    private static final int ITEMS_PER_PAGE = 10;
 
-    // The main two layouts
+    // The layouts
     SwipeRefreshLayout refreshLayout;
     CardView emptyState;
+    ShimmerFrameLayout shimmerFrameLayout;          // facebook's shimmer layout
+
+
     RecyclerView recyclerView;
     TransactionAdapter adapter;
 
@@ -85,6 +89,8 @@ public class TransactionListActivity extends AppCompatActivity {
         // instantiate the broadcast receiver
         myReceiver = new MyNetworkReceiver();
 
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+
         refreshLayout = findViewById(R.id.transaction_list_container);
         refreshLayout.setColorSchemeResources(R.color.colorAccent);         // Configure the refreshing colors
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -94,7 +100,6 @@ public class TransactionListActivity extends AppCompatActivity {
                 if (MyUtil.isNetworkAvailable(getApplicationContext())) {
                     if (!AndroidNetworking.isRequestRunning(TAG_TRANSACTION_LIST)) {
                         // clear filters and re-initialise the search
-
                         pageNo = year = month1 = month2 = 0;
                         getJWTToken(TAG_TRANSACTION_LIST);
                     } else {
@@ -117,6 +122,8 @@ public class TransactionListActivity extends AppCompatActivity {
                 .serializeNulls()
                 .create();
 
+
+        // the initial load of transaction list
         getJWTToken(TAG_TRANSACTION_LIST);
 
         recyclerView = findViewById(R.id.tran_list_recycler_view);
@@ -173,7 +180,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     // get filtered transaction list
                     getJWTToken(TAG_LOAD_MORE);
 
-                    MyUtil.showSpotDialog(TransactionListActivity.this);
+                    startShimmer();
 
                     dialogSheet.dismiss();
                 }
@@ -264,7 +271,8 @@ public class TransactionListActivity extends AppCompatActivity {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            MyUtil.closeSpotDialog();
+
+                            closeShimmer();
 
                             try {
                                 if (response.getBoolean("success")) {
@@ -335,7 +343,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                MyUtil.closeSpotDialog();
+                                closeShimmer();
 
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
@@ -351,7 +359,7 @@ public class TransactionListActivity extends AppCompatActivity {
         refreshLayout.setRefreshing(false);
 
         if (!AndroidNetworking.isRequestRunning(TAG_TRANSACTION_LIST)) {
-            MyUtil.showSpotDialog(this);                    // making network connection here...
+            startShimmer();
 
             // check for server reachability
             MyUtil.checkServerReachable(TransactionListActivity.this, TAG_TRANSACTION_LIST);
@@ -365,7 +373,7 @@ public class TransactionListActivity extends AppCompatActivity {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            MyUtil.closeSpotDialog();
+                            closeShimmer();
 
                             try {
                                 if (response.getBoolean("success")) {
@@ -383,7 +391,7 @@ public class TransactionListActivity extends AppCompatActivity {
                                         refreshLayout.setVisibility(View.GONE);
                                         emptyState.setVisibility(View.VISIBLE);
                                     } else {
-                                        // clear the bundle source first
+                                        // clear the data source first
                                         adapter.clearItems();
 
                                         if (dataSet.size() >= ITEMS_PER_PAGE) {
@@ -413,7 +421,13 @@ public class TransactionListActivity extends AppCompatActivity {
 
 
     private void displayErrorMessage(ANError anError) {
-        MyUtil.closeSpotDialog();
+        closeShimmer();
+
+        if (adapter.getItemCount() == 0) {
+            // no items in data source
+            emptyState.setVisibility(View.VISIBLE);
+        }
+
 
         if (anError.getErrorCode() != 0) {
             String jsonString = anError.getErrorBody();
@@ -423,6 +437,21 @@ public class TransactionListActivity extends AppCompatActivity {
                 MyUtil.showBottomDialog(TransactionListActivity.this, obj.getString("msg"));
             } catch (Exception ex) {
             }
+        }
+    }
+
+
+    private void startShimmer() {
+        refreshLayout.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+    }
+
+    private void closeShimmer() {
+        if (shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.stopShimmer();
+            shimmerFrameLayout.setVisibility(View.GONE);
         }
     }
 
