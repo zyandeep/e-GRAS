@@ -128,7 +128,7 @@
     <string name="label_month">Month:</string>
     <string name="label_done">Done</string>
     <string name="label_cancel">Cancel</string>
-    <string name="label_no_transaction_history_found">No transaction history found. Try reloading…</string>
+    <string name="label_no_transaction_history_found">No transaction history found</string>
     <string name="label_no_transaction">No new transactions found</string>
 
 

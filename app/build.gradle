@@ -76,6 +76,9 @@ dependencies {
 
     // Facebook Shimmer animation
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
+
+    // Advanced NavDrawer
+    implementation 'com.infideap.drawerbehavior:drawer-behavior:0.1.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

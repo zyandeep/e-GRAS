@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.infideap.drawerbehavior.AdvanceDrawerLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     public static final String TAG = "MY-APP";
     public static final String TAG_RECENT_TRANS = "recent_trans";
     public static final String BASE_URL = "http://192.168.43.211";
-    private static final int REQUEST_CODE = 12;
+
     RecyclerView recyclerView;
     RecentTransactionAdapter adapter;
     ViewGroup emptyLayout;
@@ -113,7 +115,9 @@ public class MainActivity extends AppCompatActivity
         );
 
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        AdvanceDrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.useCustomBehavior(Gravity.START);            //assign custom behavior for "Left" drawer
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -208,25 +212,28 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.make_payment) {
             Intent intent = new Intent(getApplicationContext(), MakePaymentActivity.class);
             startActivity(intent);
-        } else if (id == R.id.transaction_history) {
+        }
+        else if (id == R.id.transaction_history) {
             Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.settings) {
+        }
+        else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            //startActivity(intent);
-
-            startActivityForResult(intent, REQUEST_CODE);
-        } else if (id == R.id.logout) {
+            startActivity(intent);
+        }
+        else if (id == R.id.logout) {
             signOutUser();
-        } else if (id == R.id.about) {
+        }
+        else if (id == R.id.about) {
             Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
-        } else if (id == R.id.help) {
+        }
+        else if (id == R.id.help) {
             Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
             startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        AdvanceDrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -247,11 +254,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        AdvanceDrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -290,7 +298,8 @@ public class MainActivity extends AppCompatActivity
                                 String idToken = task.getResult().getToken();
 
                                 getRecentTransaction(idToken);
-                            } else {
+                            } 
+                            else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
                                 Log.d(TAG, ex.getMessage());
@@ -334,16 +343,15 @@ public class MainActivity extends AppCompatActivity
                                         adapter.addNewItems(list);
                                     }
                                 }
-                            } catch (JSONException e) {
+                            }
+                            catch (JSONException e) {
                             }
                         }
 
                         @Override
                         public void onError(ANError anError) {
                             // Networking error
-                            //displayErrorMessage(anError);
-
-                            Log.d(TAG, anError.getMessage());
+                            Log.d(TAG, "onError: " + anError.getErrorBody());
                         }
                     });
         }

@@ -87,7 +87,7 @@
     <string name="label_month">মাহ:</string>
     <string name="label_done">হৈ গ\'ল</string>
     <string name="label_cancel">এ বাদ দিয়ক!</string>
-    <string name="label_no_transaction_history_found">কোনো transaction পোৱা নগ\'ল। আকৌ চেষ্টা কৰি চাওক…</string>
+    <string name="label_no_transaction_history_found">"কোনো transaction পোৱা নগ'ল। "</string>
     <string name="jan">জানু</string>
     <string name="mar">মাৰ্চ</string>
     <string name="apr">এপ্ৰিল</string>
