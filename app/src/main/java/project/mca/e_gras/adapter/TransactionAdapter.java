@@ -2,7 +2,6 @@ package project.mca.e_gras.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,8 +140,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                         // flashing a model to JSON
                         String json = new Gson().toJson(model);
-
-                        Log.d(TAG, json);
 
                         // start Details Activity
                         Intent intent = new Intent(context, TransactionDetailsActivity.class);

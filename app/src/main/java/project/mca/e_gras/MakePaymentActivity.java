@@ -1080,7 +1080,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         this.unregisterReceiver(myReceiver);
     }
 
-    // submit form bundle to backend
+    // submit form data to backend
     public void doSubmit(View view) {
         getJWTToken(TAG_GENERATE_CHALLAN);
     }
