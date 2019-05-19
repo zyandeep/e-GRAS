@@ -2,6 +2,7 @@ package project.mca.e_gras;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,15 +14,21 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import project.mca.e_gras.databinding.ActivityTransactionDetailsBinding;
 import project.mca.e_gras.model.TransactionModel;
@@ -33,6 +40,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     public static final String BASE_URL = "http://192.168.43.211";
     private static final String TAG_REPEAT_PAYMENT = "repeat_payment";
     private static final String TAG_VERIFY_PAYMENT = "verify_payment";
+    private static final String TAG_GET_GRN = "get_grn";
 
     Button repeatButton, verificationButton;
 
@@ -68,7 +76,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         verificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                getJWTToken(TAG_VERIFY_PAYMENT);
             }
         });
     }
@@ -89,7 +97,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                                         break;
 
                                     case TAG_VERIFY_PAYMENT:
-                                        //getPaymentTypes(idToken);
+                                        verifyPayment(idToken);
                                         break;
                                 }
                             } else {
@@ -100,6 +108,85 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+
+    private void verifyPayment(String idToken) {
+        if (!AndroidNetworking.isRequestRunning(TAG_VERIFY_PAYMENT)) {
+
+            MyUtil.showSpotDialog(this);
+
+            // check for server reachability
+            MyUtil.checkServerReachable(TransactionDetailsActivity.this, TAG_VERIFY_PAYMENT);
+
+            AndroidNetworking.get(BASE_URL + "/verify-payment/{id}")
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .addPathParameter("id", String.valueOf(model.getId()))
+                    .setTag(TAG_VERIFY_PAYMENT)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // if status code is OK:200 then only
+                            MyUtil.closeSpotDialog();
+
+                            try {
+                                if (response.getBoolean("success")) {
+                                    // get the url and data and open it in the webView
+                                    String url = response.getString("url");
+                                    String data = response.getString("data");          // a json object for get parameters
+
+                                    getGRN(url, data);
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            displayErrorMessage(anError);
+                        }
+                    });
+        }
+    }
+
+
+    private void getGRN(String url, String data) {
+//        Intent intent = new Intent(this, PaymentGatewayActivity.class);
+//        intent.putExtra("url", url);
+//        intent.putExtra("bundle", data);
+//        intent.putExtra("type_verify_payment", true);
+//
+//        startActivity(intent);
+//        finish();
+
+        Log.d(TAG, "getGRN: " + url + "\n" + data);
+
+        Type type = new TypeToken<HashMap<String, String>>() {
+        }.getType();
+
+        Map<String, String> param = new Gson().fromJson(data, type);
+
+        Log.d(TAG, "param: " + param.toString());
+
+        AndroidNetworking.post(url)
+                .addBodyParameter(param)
+                .setTag(TAG_GET_GRN)
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "onResponse: " + response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: " + anError.getErrorCode());
+                    }
+                });
     }
 
 
@@ -154,6 +241,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         MyUtil.closeSpotDialog();
 
         if (anError.getErrorCode() != 0) {
+            // received error from server
             String jsonString = anError.getErrorBody();
 
             try {

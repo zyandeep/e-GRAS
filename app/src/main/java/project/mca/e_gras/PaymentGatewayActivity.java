@@ -34,7 +34,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
 
         String url = getIntent().getStringExtra("url");
         String data = getIntent().getStringExtra("bundle");
-
+        boolean type = getIntent().getBooleanExtra("type_verify_payment", false);
 
         WebView webView = findViewById(R.id.my_web_view);
 
@@ -75,13 +75,20 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         webView.getSettings().setDisplayZoomControls(false); // disable the default zoom controls on the page
 
 
-        Log.d(TAG, data);
-
-        // post to the url
-        try {
-            webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+        // load url into webview
+        if (type) {
+            // it's for payment verification
+            // so query URL with data
+            Log.d(TAG, "web view: " + url + "?" + data);
+            webView.loadUrl(url + "?" + data);
+        } else {
+            // it's for make a payment
+            // so, post data to the URL
+            try {
+                webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
         }
     }
 }
