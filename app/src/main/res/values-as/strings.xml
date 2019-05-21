@@ -116,6 +116,10 @@
     <string name="oct_dec">অক্টো-ডিচে</string>
     <string name="label_egras_info">baki ase...</string>
     <string name="label_generate_echallan">baki ase</string>
-    <string name="label_search_challan">baki ase</string>
     <string name="label_review_trans">baki ase</string>
+    <string name="passowrd_helper">baki ase</string>
+    <string name="password_error">baki ase</string>
+    <string name="error_user_name">baki ase</string>
+    <string name="label_serach_challan">চালান অনুসন্ধান</string>
+    <string name="search_hint">GRN No টো দিয়ক...</string>
 </resources>

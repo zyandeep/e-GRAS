@@ -1,6 +1,5 @@
 package project.mca.e_gras;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,11 +37,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     public static final String TAG = "MY-APP";
     public static final String BASE_URL = "http://192.168.43.211";
-    private static final String TAG_REPEAT_PAYMENT = "repeat_payment";
     private static final String TAG_VERIFY_PAYMENT = "verify_payment";
     private static final String TAG_GET_GRN = "get_grn";
 
-    Button repeatButton, verificationButton;
+    Button verificationButton;
 
     // all the details of a transaction
     TransactionModel model;
@@ -61,27 +59,20 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         setTitle(R.string.label_tran_details);
 
-        repeatButton = findViewById(R.id.repeat_button);
-        if (model.getStatus().equalsIgnoreCase("F")) {
-            repeatButton.setVisibility(View.VISIBLE);
-            repeatButton.setOnClickListener(new View.OnClickListener() {
+        verificationButton = findViewById(R.id.verification_button);
+        if (!model.getStatus().equalsIgnoreCase("Y")) {
+            verificationButton.setVisibility(View.VISIBLE);
+
+            verificationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getJWTToken(TAG_REPEAT_PAYMENT);
+                    getJWTToken();
                 }
             });
         }
-
-        verificationButton = findViewById(R.id.verification_button);
-        verificationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getJWTToken(TAG_VERIFY_PAYMENT);
-            }
-        });
     }
 
-    private void getJWTToken(final String tag) {
+    private void getJWTToken() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
@@ -91,15 +82,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
 
-                                switch (tag) {
-                                    case TAG_REPEAT_PAYMENT:
-                                        repeatPayment(idToken);
-                                        break;
+                                verifyPayment(idToken);
 
-                                    case TAG_VERIFY_PAYMENT:
-                                        verifyPayment(idToken);
-                                        break;
-                                }
                             } else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
@@ -154,16 +138,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
     private void getGRN(String url, String data) {
-//        Intent intent = new Intent(this, PaymentGatewayActivity.class);
-//        intent.putExtra("url", url);
-//        intent.putExtra("bundle", data);
-//        intent.putExtra("type_verify_payment", true);
-//
-//        startActivity(intent);
-//        finish();
-
-        Log.d(TAG, "getGRN: " + url + "\n" + data);
-
         Type type = new TypeToken<HashMap<String, String>>() {
         }.getType();
 
@@ -188,54 +162,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-    private void repeatPayment(String idToken) {
-
-        if (!AndroidNetworking.isRequestRunning(TAG_REPEAT_PAYMENT)) {
-
-            MyUtil.showSpotDialog(this);
-
-            // check for server reachability
-            MyUtil.checkServerReachable(TransactionDetailsActivity.this, TAG_REPEAT_PAYMENT);
-
-            AndroidNetworking.get(BASE_URL + "/repeat-payment/{id}")
-                    .addHeaders("Authorization", "Bearer " + idToken)
-                    .addPathParameter("id", String.valueOf(model.getId()))
-                    .setTag(TAG_REPEAT_PAYMENT)
-                    .setPriority(Priority.MEDIUM)
-                    .build()
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // if status code is OK:200 then only
-                            MyUtil.closeSpotDialog();
-
-                            try {
-                                if (response.getBoolean("success")) {
-                                    // get the url and data and open it in the webView
-                                    String url = response.getString("url");
-                                    String postData = response.getString("data");
-
-                                    Intent intent = new Intent(TransactionDetailsActivity.this, PaymentGatewayActivity.class);
-                                    intent.putExtra("url", url);
-                                    intent.putExtra("bundle", postData);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            } catch (JSONException e) {
-                            }
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-                            // Networking error
-                            displayErrorMessage(anError);
-                        }
-                    });
-        }
-    }
-
 
     private void displayErrorMessage(ANError anError) {
         MyUtil.closeSpotDialog();

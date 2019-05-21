@@ -102,7 +102,8 @@ public class MyProfileActivity extends AppCompatActivity {
         String c_pwd = confPassword.getEditText().getText().toString().trim();
 
         if (pwd.isEmpty() || c_pwd.isEmpty() || !pwd.equals(c_pwd)) {
-            displayErrorMessage("Enter a valid password");
+            confPassword.setErrorEnabled(true);
+            confPassword.setError(getString(R.string.password_error));
             return;
         }
 
@@ -116,8 +117,8 @@ public class MyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //updateUI();
                             dialog.dismiss();
+                            confPassword.setErrorEnabled(false);
                         } else {
                             displayErrorMessage(task.getException().getMessage());
                         }
@@ -126,16 +127,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
     }
-
-
-    private void displayErrorMessage(String msg) {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
-
-        MyUtil.showBottomDialog(this, msg);
-    }
-
 
     public void updateUserEmail(View view) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -212,6 +203,12 @@ public class MyProfileActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String name = displayName.getEditText().getText().toString();
 
+        if (name.isEmpty()) {
+            displayName.setErrorEnabled(true);
+            displayName.setError(getString(R.string.error_user_name));
+            return;
+        }
+
         // show the dialogSheet
         dialog.show();
 
@@ -224,12 +221,21 @@ public class MyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //updateUI();
                             dialog.dismiss();
+                            displayName.setErrorEnabled(false);
                         } else {
                             displayErrorMessage(task.getException().getMessage());
                         }
                     }
                 });
+    }
+
+
+    private void displayErrorMessage(String msg) {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+        MyUtil.showBottomDialog(this, msg);
     }
 }

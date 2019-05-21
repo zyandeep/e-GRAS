@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:hint="@string/search_hint"
+    android:imeOptions="actionSearch"
+    android:inputType="text"
+    android:label="@string/app_name"
+    android:queryAfterZeroResults="true"
+    android:searchSuggestThreshold="3"
+    android:voiceLanguage="en"
+    android:voicePromptText="@string/search_hint"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"></searchable>

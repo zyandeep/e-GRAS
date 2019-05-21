@@ -176,22 +176,14 @@
                     android:background="@color/about_separator_color" />
 
                 <Button
-                    android:id="@+id/repeat_button"
-                    style="@style/FirebaseUI.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="@string/label_repeat_payment" />
-
-                <Button
                     android:id="@+id/verification_button"
                     style="@style/FirebaseUI.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:text="@string/label_payment_verification" />
-
-
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
     </FrameLayout>
 </layout>

@@ -210,5 +210,11 @@
         <item>@string/jan_mar</item>
     </string-array>
 
+    <string name="passowrd_helper">Password should be at least 6 character long and a mix of letters and numbers</string>
+    <string name="password_error">Please, enter a valid password</string>
+    <string name="error_user_name">Please, enter an username</string>
+    <string name="label_serach_challan">Search Challan</string>
+    <string name="search_hint">Your GRN No…</string>
+
 
 </resources>

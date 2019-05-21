@@ -216,19 +216,18 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.transaction_history) {
             Intent intent = new Intent(getApplicationContext(), TransactionListActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.settings) {
+        } else if (id == R.id.search_challan) {
+            Intent intent = new Intent(getApplicationContext(), SearchChallanActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.logout) {
+        } else if (id == R.id.logout) {
             signOutUser();
-        }
-        else if (id == R.id.about) {
+        } else if (id == R.id.about) {
             Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.help) {
+        } else if (id == R.id.help) {
             Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
             startActivity(intent);
         }

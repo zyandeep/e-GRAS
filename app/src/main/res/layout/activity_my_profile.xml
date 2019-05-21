@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_text_input_layout"
@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email_text_input_layout"
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/password_text_input_layout"
@@ -164,6 +164,7 @@
                     android:visibility="visible"
                     app:errorEnabled="true"
                     app:helperTextEnabled="true"
+                    app:helperText="@string/passowrd_helper"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:passwordToggleEnabled="true">
