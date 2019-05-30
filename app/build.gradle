@@ -79,6 +79,9 @@ dependencies {
 
     // Advanced NavDrawer
     implementation 'com.infideap.drawerbehavior:drawer-behavior:0.1.5'
+
+    // Dexter => Android Runtime permission library
+    implementation 'com.karumi:dexter:5.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

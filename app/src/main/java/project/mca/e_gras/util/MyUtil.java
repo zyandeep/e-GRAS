@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebView;
@@ -161,4 +162,15 @@ public class MyUtil {
         //
         new WebView(context).destroy();
     }
+
+
+    // check if external storage is available for saving PDFs
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+
+
 }

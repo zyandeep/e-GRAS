@@ -56,7 +56,7 @@ import project.mca.e_gras.util.MyUtil;
 public class TransactionListActivity extends AppCompatActivity {
 
     public static final String TAG = "MY-APP";
-    public static final String BASE_URL = "http://192.168.43.211";
+    public static final String BASE_URL = "http://192.168.43.211/api";
     private static final String TAG_TRANSACTION_LIST = "transaction_list";
     private static final String TAG_LOAD_MORE = "load_more";
     private static final int ITEMS_PER_PAGE = 10;
@@ -86,8 +86,14 @@ public class TransactionListActivity extends AppCompatActivity {
         setTitle(R.string.label_tran_history);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // instantiate the broadcast receiver
+        // instantiate the broadcast myReceiver
         myReceiver = new MyNetworkReceiver();
+
+        // register the myReceiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(myReceiver, filter);
+
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
 
@@ -207,7 +213,7 @@ public class TransactionListActivity extends AppCompatActivity {
         yearPicker = view.findViewById(R.id.year_picker);
         yearPicker.setValue(Calendar.getInstance().get(Calendar.YEAR));
 
-        String[] months = getResources().getStringArray(R.array.months);
+        String[] months = getResources().getStringArray(R.array.spinner_data_months);
 
         monthPicker1 = view.findViewById(R.id.month_picker_1);
         monthPicker1.setMinValue(1);
@@ -240,6 +246,11 @@ public class TransactionListActivity extends AppCompatActivity {
                     dialogSheet.show();
                 }
 
+                break;
+
+            case R.id.search_menu_item:
+                Intent intent = new Intent(this, SearchChallanActivity.class);
+                startActivity(intent);
                 break;
 
             case android.R.id.home:
@@ -457,22 +468,10 @@ public class TransactionListActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        // register the receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+    protected void onDestroy() {
+        super.onDestroy();
 
-        // register the receiver dynamically
-        this.registerReceiver(myReceiver, filter);
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        this.unregisterReceiver(myReceiver);
+        unregisterReceiver(myReceiver);
     }
 
 
@@ -496,6 +495,8 @@ public class TransactionListActivity extends AppCompatActivity {
                 // if network is available then
                 if (MyUtil.isNetworkAvailable(getApplicationContext())) {
                     Toast.makeText(TransactionListActivity.this, getString(R.string.message_online), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TransactionListActivity.this, getString(R.string.message_offline), Toast.LENGTH_SHORT).show();
                 }
             }
         }

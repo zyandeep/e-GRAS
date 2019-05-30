@@ -51,8 +51,6 @@
             android:id="@+id/grn_details_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
             android:paddingStart="8dp"
             android:text="ADFS456WERTYSDF4"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"

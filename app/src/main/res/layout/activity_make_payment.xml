@@ -136,7 +136,6 @@
                         android:id="@+id/year_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/spinner_data_year"
                         app:ms_alignLabels="true"
                         app:ms_arrowColor="@color/colorAccent"
                         app:ms_arrowSize="16dp"
@@ -149,7 +148,6 @@
                         android:id="@+id/period_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:entries="@array/spinner_data_period"
                         app:ms_alignLabels="true"
                         app:ms_arrowColor="@color/colorAccent"
                         app:ms_arrowSize="16dp"
@@ -239,19 +237,6 @@
 
 
                     </LinearLayout>
-
-
-                    <fr.ganfra.materialspinner.MaterialSpinner
-                        android:id="@+id/form_id_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:ms_alignLabels="true"
-                        app:ms_arrowColor="@color/colorAccent"
-                        app:ms_arrowSize="16dp"
-                        app:ms_enableErrorLabel="true"
-                        app:ms_floatingLabelColor="@color/colorAccent"
-                        app:ms_hint="@string/label_select_form_id"
-                        app:ms_thickness="1dp" />
 
                     <Button
                         android:id="@+id/next_button_dept"
@@ -458,83 +443,6 @@
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
-
-    <!-- Payment Details Card View -->
-    <!--<androidx.cardview.widget.CardView-->
-    <!--android:id="@+id/payment_card_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:visibility="gone"-->
-    <!--app:cardElevation="8dp">-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:text="Payment Mode"-->
-    <!--android:textSize="16sp" />-->
-
-
-    <!--<RadioGroup-->
-    <!--android:id="@+id/payment_radio_group"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<RadioButton-->
-    <!--android:id="@+id/e_payment_radio"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:checked="true"-->
-    <!--android:text="e-Payment" />-->
-
-    <!--<RadioButton-->
-    <!--android:id="@+id/bank_counter_radio"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Payment Across Bank Counter (Cash/Cheque)" />-->
-
-    <!--<RadioButton-->
-    <!--android:id="@+id/sbi_radio"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="SBI epay Payment Gateway" />-->
-
-    <!--</RadioGroup>-->
-
-    <!--<fr.ganfra.materialspinner.MaterialSpinner-->
-    <!--android:id="@+id/bank_spinner"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginBottom="16dp"-->
-    <!--app:ms_alignLabels="true"-->
-    <!--app:ms_arrowColor="@color/colorAccent"-->
-    <!--app:ms_arrowSize="16dp"-->
-    <!--app:ms_enableErrorLabel="true"-->
-    <!--app:ms_floatingLabelColor="@color/colorAccent"-->
-    <!--app:ms_hint="Select Bank*"-->
-    <!--app:ms_thickness="1dp" />-->
-
-
-    <!--<Button-->
-    <!--android:id="@+id/next_button_payment"-->
-    <!--style="@style/FirebaseUI.Button"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|center"-->
-    <!--android:onClick="showNextForm"-->
-    <!--android:text="@string/label_button_next" />-->
-
-
-    <!--</LinearLayout>-->
-
-    <!--</androidx.cardview.widget.CardView>-->
-
 
     <!-- Verify Submission and Submit Data -->
     <androidx.cardview.widget.CardView

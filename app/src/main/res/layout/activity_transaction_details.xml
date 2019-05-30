@@ -6,6 +6,8 @@
 
     <data>
         <import type="project.mca.e_gras.util.MyUtil"/>
+
+        <import type="android.view.View" />
         <variable name="model" type="project.mca.e_gras.model.TransactionModel"/>
     </data>
 
@@ -164,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
-                    android:text="@{model.status}"
+                    android:text='@{model.status.equals("Y") ? @string/status_success : model.status.equals("P") ? @string/status_pending : @string/status_fail}'
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/about_text_color" />
 
@@ -176,12 +178,12 @@
                     android:background="@color/about_separator_color" />
 
                 <Button
-                    android:id="@+id/verification_button"
+                    android:id="@+id/action_button"
                     style="@style/FirebaseUI.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="@string/label_payment_verification" />
+                    android:text='@{model.status.equals("Y") ? @string/label_download_challan : @string/label_payment_verification}'
+                    android:visibility='@{(model.status.equals("Y") || model.status.equals("P")) ? View.VISIBLE : View.GONE}' />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

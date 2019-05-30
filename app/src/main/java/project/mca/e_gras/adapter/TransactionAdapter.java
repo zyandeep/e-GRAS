@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,25 +114,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             grnTextView = itemView.findViewById(R.id.grn_details_textView);
             amountTextView = itemView.findViewById(R.id.amount_details_textView);
 
-            // Add click listener to GRN Number
-            grnTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();        // gets item position
-
-                    if (position != RecyclerView.NO_POSITION) {
-                        String grnNo = modelList.get(position).getGrn_no();
-
-                        Toast.makeText(context, "GRN: " + grnNo, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
             // Add click listener to the whole itemView
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();        // gets item position
+                    int position = getAdapterPosition();        // get the item position
 
                     if (position != RecyclerView.NO_POSITION) {
                         TransactionModel model = modelList.get(position);

@@ -8,4 +8,11 @@
         android:title="Filter Search"
         android:visible="true"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/search_menu_item"
+        android:icon="@drawable/ic_search_menu"
+        android:title="Search Challan"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
 </menu>

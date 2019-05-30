@@ -1,4 +1,4 @@
-// load spinner bundle like
+// load spinner data like
 // dept -> payment -> district -> office
 
 package project.mca.e_gras;
@@ -80,7 +80,7 @@ public class MakePaymentActivity extends AppCompatActivity {
     public static final String TAG_SCHEME_NAMES = "scheme_names";
     public static final String TAG_GENERATE_CHALLAN = "generate_challan";
 
-    public static final String BASE_URL = "http://192.168.43.211";
+    public static final String BASE_URL = "http://192.168.43.211/api";
     public TextView totalAmountTextView;            // so that it's visible in the package adapter
 
     SuperSpinnerMode spinnerMode;
@@ -117,11 +117,18 @@ public class MakePaymentActivity extends AppCompatActivity {
     List<SchemeModel> schemeModelList = new ArrayList<>();
     // SwipToRefresh layout
     SwipeRefreshLayout refreshLayout;
+
     // This map will contain all input parameters
     // and will get POSTed to PHP backend finally
     private Map<String, Object> parametersMap;
 
     private BroadcastReceiver myReceiver;
+
+
+    // the year user selected
+    int selectedYear;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +139,12 @@ public class MakePaymentActivity extends AppCompatActivity {
 
 
         myReceiver = new MyNetworkReceiver();
+
+        // register the myReceiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(myReceiver, filter);
+
 
         parametersMap = new HashMap<>();
 
@@ -215,9 +228,13 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
 
+        yearSpinner = findViewById(R.id.year_spinner);
+        // generate years and set up the year spinner
+        setUpYearSpinner();
+
+        periodSpinner = findViewById(R.id.period_spinner);
 
         deptSpinner = findViewById(R.id.dept_spinner);
-
         // need to talk to backend to get the dept names. So, for that, grab the jwt token first
         getJWTToken(TAG_DEPT_NAMES);
 
@@ -330,15 +347,22 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
 
-        yearSpinner = findViewById(R.id.year_spinner);
+
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= 0) {
                     String year = (String) parent.getItemAtPosition(position);
 
+                    selectedYear = Integer.parseInt(year.split("-")[0]);
                     parametersMap.put("REC_FIN_YEAR", year);
+                } else {
+                    // remove the key
+                    parametersMap.remove("REC_FIN_YEAR");
                 }
+
+                // reset the period spinner
+                setUpPeriodSpinner();
             }
 
             @Override
@@ -351,38 +375,136 @@ public class MakePaymentActivity extends AppCompatActivity {
         superSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if (position >= 0) {
                     String period = "";
+                    String f_date = "";
+                    String t_date = "";
 
                     switch (spinnerMode) {
                         case MODE_HALF:
                             if (position == 0) {
                                 period = "H1";
+                                f_date = "01/04/" + selectedYear;
+                                t_date = "30/09/" + selectedYear;
                             } else if (position == 1) {
                                 period = "H2";
+                                f_date = "01/10/" + selectedYear;
+                                t_date = "31/03/" + (selectedYear + 1);
                             }
                             break;
 
                         case MODE_MONTH:
                             period = "M";
+
+                            switch (position) {
+                                case 0:
+                                    // JAN
+                                    f_date = "01/01/" + selectedYear;
+                                    t_date = "31/01/" + selectedYear;
+                                    break;
+
+                                case 1:
+                                    // FEB
+                                    f_date = "01/02/" + selectedYear;
+
+                                    // check if the year is a leap year
+
+                                    if (selectedYear / 4 == 0) {
+                                        t_date = "29/02/" + selectedYear;
+                                    } else {
+                                        t_date = "28/02/" + selectedYear;
+                                    }
+                                    break;
+
+                                case 2:
+                                    // MAR
+                                    f_date = "01/03/" + selectedYear;
+                                    t_date = "31/03/" + selectedYear;
+                                    break;
+
+                                case 3:
+                                    // APR
+                                    f_date = "01/04/" + selectedYear;
+                                    t_date = "30/04/" + selectedYear;
+                                    break;
+
+                                case 4:
+                                    // MAY
+                                    f_date = "01/05/" + selectedYear;
+                                    t_date = "31/05/" + selectedYear;
+                                    break;
+
+                                case 5:
+                                    // JUN
+                                    f_date = "01/06/" + selectedYear;
+                                    t_date = "30/06/" + selectedYear;
+                                    break;
+
+                                case 6:
+                                    // JUL
+                                    f_date = "01/07/" + selectedYear;
+                                    t_date = "31/07/" + selectedYear;
+                                    break;
+
+                                case 7:
+                                    // AUG
+                                    f_date = "01/08/" + selectedYear;
+                                    t_date = "31/08/" + selectedYear;
+                                    break;
+
+                                case 8:
+                                    // SEP
+                                    f_date = "01/09/" + selectedYear;
+                                    t_date = "30/09/" + selectedYear;
+                                    break;
+
+                                case 9:
+                                    // OCT
+                                    f_date = "01/10/" + selectedYear;
+                                    t_date = "31/10/" + selectedYear;
+                                    break;
+
+                                case 10:
+                                    // NOV
+                                    f_date = "01/11/" + selectedYear;
+                                    t_date = "30/11/" + selectedYear;
+                                    break;
+
+                                case 11:
+                                    // DEC
+                                    f_date = "01/12/" + selectedYear;
+                                    t_date = "31/12/" + selectedYear;
+                                    break;
+                            }
+
+
                             break;
 
                         case MODE_QUATER:
                             switch (position) {
                                 case 0:
                                     period = "Q1";
+                                    f_date = "01/04/" + selectedYear;
+                                    t_date = "30/06/" + selectedYear;
                                     break;
 
                                 case 1:
                                     period = "Q2";
+                                    f_date = "01/07/" + selectedYear;
+                                    t_date = "30/09/" + selectedYear;
                                     break;
 
                                 case 2:
                                     period = "Q3";
+                                    f_date = "01/10/" + selectedYear;
+                                    t_date = "31/12/" + selectedYear;
                                     break;
 
                                 case 3:
                                     period = "Q4";
+                                    f_date = "01/01/" + (selectedYear + 1);
+                                    t_date = "31/03/" + (selectedYear + 1);
                                     break;
                             }
 
@@ -390,8 +512,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                     }
 
                     parametersMap.put("PERIOD", period);
-                    parametersMap.put("FROM_DATE", "");         // ?
-                    parametersMap.put("TO_DATE", "");           // ?
+                    parametersMap.put("FROM_DATE", f_date);
+                    parametersMap.put("TO_DATE", t_date);
                 }
             }
 
@@ -404,7 +526,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         datePickerPanel = findViewById(R.id.date_viewGroup);
 
-        periodSpinner = findViewById(R.id.period_spinner);
+
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -418,20 +540,20 @@ public class MakePaymentActivity extends AppCompatActivity {
                     setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_quaterly));
                 } else if (data.equals(getString(R.string.month))) {
                     spinnerMode = SuperSpinnerMode.MODE_MONTH;
-                    setUpSupperSpinner(getResources().getStringArray(R.array.months));
+                    setUpSupperSpinner(getResources().getStringArray(R.array.spinner_data_months));
                 } else if (data.equals(getString(R.string.annual))) {
                     superSpinner.setVisibility(View.GONE);
                     datePickerPanel.setVisibility(View.GONE);
 
                     parametersMap.put("PERIOD", "A");
-                    parametersMap.put("FROM_DATE", "01/04/2019");
-                    parametersMap.put("TO_DATE", "31/03/2020");
+                    parametersMap.put("FROM_DATE", "01/04/" + selectedYear);
+                    parametersMap.put("TO_DATE", "31/03/" + (selectedYear + 1));
                 } else if (data.equals(getString(R.string.one_time))) {
                     superSpinner.setVisibility(View.GONE);
                     datePickerPanel.setVisibility(View.GONE);
 
                     parametersMap.put("PERIOD", "O");
-                    parametersMap.put("FROM_DATE", "01/04/2019");
+                    parametersMap.put("FROM_DATE", "01/04/" + selectedYear);
                     parametersMap.put("TO_DATE", "31/03/2099");
                 } else if (data.equals(getString(R.string.specific))) {
                     // show date pickers
@@ -447,6 +569,11 @@ public class MakePaymentActivity extends AppCompatActivity {
                     // "Select Period *" is chosen
                     superSpinner.setVisibility(View.GONE);
                     datePickerPanel.setVisibility(View.GONE);
+
+                    // remove the keys
+                    parametersMap.remove("PERIOD");
+                    parametersMap.remove("FROM_DATE");
+                    parametersMap.remove("TO_DATE");
                 }
             }
 
@@ -455,6 +582,41 @@ public class MakePaymentActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void setUpPeriodSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter
+                .createFromResource(this, R.array.spinner_data_period, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodSpinner.setAdapter(adapter);
+
+        // remove the keys, if exist
+        parametersMap.remove("PERIOD");
+        parametersMap.remove("FROM_DATE");
+        parametersMap.remove("TO_DATE");
+    }
+
+
+    private void setUpYearSpinner() {
+        // first generate the list of years
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -3);
+
+        List<String> years = new ArrayList<>();
+
+        for (int i = 1; i <= 6; i++) {
+            int y = calendar.get(Calendar.YEAR);
+            years.add(String.format(new Locale("en", "IN"), "%d-%d", y, y + 1));
+
+            calendar.add(Calendar.YEAR, 1);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSpinner.setAdapter(adapter);
+
+    }
+
 
     private void getJWTToken(final String tag) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -512,6 +674,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         parametersMap.remove("CHALLAN_AMOUNT");
         parametersMap.remove("HOA");
     }
+
 
     private void getSchemes(String idToken) {
 
@@ -994,12 +1157,14 @@ public class MakePaymentActivity extends AppCompatActivity {
         datePickerPanel.setVisibility(View.GONE);
     }
 
+
     public void showNextForm(View view) {
         // get the current state number
         int curState = stateProgressBar.getCurrentStateNumber();
 
         showFrom(curState, curState + 1);
     }
+
 
     public void submitData(String idToken) {
         // after validating all the bundle
@@ -1037,9 +1202,11 @@ public class MakePaymentActivity extends AppCompatActivity {
                         try {
                             if (response.getBoolean("success")) {
 
-                                // get the url and bundle and open it in the webView
+                                // get the url and data and open it in the webView
                                 String url = response.getString("url");
                                 String postData = response.getString("data");
+
+                                Log.d(TAG, "onResponse: " + postData);
 
                                 Intent intent = new Intent(MakePaymentActivity.this, PaymentGatewayActivity.class);
                                 intent.putExtra("url", url);
@@ -1062,28 +1229,20 @@ public class MakePaymentActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // register the receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-
-        // register the receiver dynamically
-        this.registerReceiver(myReceiver, filter);
-    }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
-        this.unregisterReceiver(myReceiver);
+        unregisterReceiver(myReceiver);
     }
+
 
     // submit form data to backend
     public void doSubmit(View view) {
         getJWTToken(TAG_GENERATE_CHALLAN);
     }
+
 
     // to tell the mode of the super spinner
     private enum SuperSpinnerMode {
@@ -1104,6 +1263,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                 // if network is available then
                 if (MyUtil.isNetworkAvailable(getApplicationContext())) {
                     Toast.makeText(MakePaymentActivity.this, getString(R.string.message_online), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MakePaymentActivity.this, getString(R.string.message_offline), Toast.LENGTH_SHORT).show();
                 }
             }
         }

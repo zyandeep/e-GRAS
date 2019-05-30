@@ -58,15 +58,23 @@ public class MyOnboardingActivity extends AppIntro {
         s2.setBgColor(getResources().getColor(R.color.colorBackground));
         addSlide(AppIntroFragment.newInstance(s2));
 
-
         SliderPage s3 = new SliderPage();
-        s3.setTitle("Review Transaction History");
+        s3.setTitle("Search Challans");
         s3.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
-        s3.setDescription(getString(R.string.label_review_trans));
+        s3.setDescription(getString(R.string.label_egras_serach_challan));
         s3.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
-        s3.setImageDrawable(R.drawable.payment_history);
+        s3.setImageDrawable(R.drawable.search);
         s3.setBgColor(getResources().getColor(R.color.colorBackground));
         addSlide(AppIntroFragment.newInstance(s3));
+
+        SliderPage s4 = new SliderPage();
+        s4.setTitle("Review Transaction History");
+        s4.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
+        s4.setDescription(getString(R.string.label_review_trans));
+        s4.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
+        s4.setImageDrawable(R.drawable.payment_history);
+        s4.setBgColor(getResources().getColor(R.color.colorBackground));
+        addSlide(AppIntroFragment.newInstance(s4));
 
 
         // divider color

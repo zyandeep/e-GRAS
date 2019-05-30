@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MY-APP";
     public static final String TAG_RECENT_TRANS = "recent_trans";
-    public static final String BASE_URL = "http://192.168.43.211";
+    public static final String BASE_URL = "http://192.168.43.211/api";
 
     RecyclerView recyclerView;
     RecentTransactionAdapter adapter;
@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.search_challan) {
             Intent intent = new Intent(getApplicationContext(), SearchChallanActivity.class);
             startActivity(intent);
+        } else if (id == R.id.activity_log) {
+            //
         } else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
