@@ -1,11 +1,15 @@
 package project.mca.e_gras.util;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -13,21 +17,32 @@ import android.view.View;
 import android.webkit.WebView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.androidnetworking.AndroidNetworking;
 import com.marcoscg.dialogsheet.DialogSheet;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import dmax.dialog.SpotsDialog;
 import project.mca.e_gras.R;
 
 public class MyUtil {
+
+    private static final String TAG = "MY-APP";
     private static AlertDialog spotDialog;
 
 
@@ -172,5 +187,58 @@ public class MyUtil {
     }
 
 
+    public static Uri createFile(Context context, InputStream is) {
+        // DO FILE I/O IN A BACKGROUND THREAD
 
+        if (isExternalStorageWritable()) {
+            File path = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS);
+
+            // Make sure the directory exist
+            path.mkdirs();
+
+            String fileName = "challan_" + new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()) + ".pdf";
+            File file = new File(path, fileName);
+
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                IOUtils.copyLarge(is, fos);
+                fos.close();
+
+                // returns a content:// uri
+                return FileProvider.getUriForFile(context,
+                        context.getApplicationContext().getPackageName() + ".fileprovider",
+                        file);
+
+            } catch (Exception ex) {
+                showBottomDialog(context, ex.getMessage());
+            }
+        } else {
+            showBottomDialog(context, context.getString(R.string.label_write_file_error));
+        }
+
+        return null;
+    }
+
+
+    public static void showNotification(Context context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PugNotification.with(context)
+                .load()
+                .title(context.getString(R.string.label_file_downloaded))
+                .message(context.getString(R.string.label_notification))
+                .smallIcon(R.drawable.ic_noti_file)
+                .largeIcon(R.drawable.notification)
+                .flags(Notification.DEFAULT_ALL)
+                .click(pendingIntent)
+                .autoCancel(true)
+                .simple()
+                .build();
+    }
 }

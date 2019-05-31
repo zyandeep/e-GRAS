@@ -82,6 +82,12 @@ dependencies {
 
     // Dexter => Android Runtime permission library
     implementation 'com.karumi:dexter:5.0.0'
+
+    // apache commons io util
+    implementation 'org.apache.commons:commons-io:1.3.2'
+
+    // Pug => Notification Library
+    implementation 'com.github.halysongoncalves:pugnotification:1.8.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

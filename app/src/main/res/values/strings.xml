@@ -219,6 +219,10 @@
     <string name="status_success" translatable="false">Success</string>
     <string name="status_pending" translatable="false">Pending</string>
     <string name="status_fail" translatable="false">Fail</string>
+    <string name="label_downloading_file" translatable="false">Downloading Challan…</string>
+    <string name="label_file_downloaded" translatable="false">File downloaded</string>
+    <string name="label_write_file_error" translatable="false">No external storage</string>
+    <string name="label_notification" translatable="false">Your challan has been downloaded</string>
 
 
 </resources>

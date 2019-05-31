@@ -1,20 +1,16 @@
 package project.mca.e_gras;
 
 import android.Manifest;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -28,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -38,7 +35,13 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import project.mca.e_gras.databinding.ActivityTransactionDetailsBinding;
 import project.mca.e_gras.model.TransactionModel;
@@ -56,10 +59,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     // all the details of a transaction
     TransactionModel model;
 
-    // downloaded file's ID
-    long downloadID;
-
-    BroadcastReceiver myReceiver;
+    AlertDialog dialog;
 
 
     @Override
@@ -76,11 +76,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         setTitle(R.string.label_tran_details);
 
-        myReceiver = new FileDownloadReceiver();
-
-        // register the myReceiver
-        registerReceiver(myReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
         actionButton = findViewById(R.id.action_button);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +89,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        // Build the custome alert dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setView(R.layout.custome_dialog_layout);
+
+        dialog = builder.create();
     }
 
 
@@ -128,8 +131,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void downloadChallan(String idToken) {
-        // log data in backend database
+    private void downloadChallan(final String idToken) {
 
         // Check for WRITE_EXTERNAL_STORAGE permission
         Dexter.withActivity(TransactionDetailsActivity.this)
@@ -137,7 +139,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        downloadFile();
+                        downloadFile(idToken);
                     }
 
                     @Override
@@ -153,30 +155,51 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void downloadFile() {
-        Log.d(TAG, "downloadChallan: " + MyUtil.isExternalStorageWritable());
+    private void downloadFile(String idToken) {
+        // log data in backend database
 
-        File path = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS);
+        if (!AndroidNetworking.isRequestRunning(TAG_DOWNLOAD_CHALLAN)) {
 
-        // Make sure the directory exist
-        path.mkdirs();
+            MyUtil.showSpotDialog(this);
 
-        String url = "https://www.govst.edu/uploadedFiles/Academics/Colleges_and_Programs/CAS/Trigonometry_Short_Course_Tutorial_Lauren_Johnson.pdf";
+            // check for server reachability
+            MyUtil.checkServerReachable(TransactionDetailsActivity.this, TAG_DOWNLOAD_CHALLAN);
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url))
-                .setTitle("Sample Challan")                 // Title of the Download Notification
-                .setDescription("Downloading...")           // Description of the Download Notification
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)      // Visibility of the download Notification
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, "test_challan.pdf")
-                .setAllowedOverMetered(true)            // Set if download is allowed on Mobile network
-                .setVisibleInDownloadsUi(true)
-                .setAllowedOverRoaming(true);
+            AndroidNetworking.get(BASE_URL + "/download-challan")
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .addQueryParameter("id", String.valueOf(model.getId()))
+                    .setTag(TAG_DOWNLOAD_CHALLAN)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // if status code is OK:200 then only
+                            MyUtil.closeSpotDialog();
 
-        request.allowScanningByMediaScanner();
+                            try {
+                                if (response.getBoolean("success")) {
+                                    String url = response.getString("url");
 
-        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        downloadID = downloadManager.enqueue(request);
+                                    Map<String, String> params = new HashMap<>();
+                                    Type type = new TypeToken<HashMap<String, String>>() {
+                                    }.getType();
+                                    params = new Gson().fromJson(String.valueOf(response.getJSONObject("data")), type);
+
+                                    new DownloadFileTask(params).execute("http://www.axmag.com/download/pdfurl-guide.pdf");
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            displayErrorMessage(anError);
+                        }
+                    });
+        }
+
     }
 
 
@@ -244,30 +267,74 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    /// ASYNCTASK TO DOWNLOAD THE FILE
+    private class DownloadFileTask extends AsyncTask<String, Void, Uri> {
 
-        unregisterReceiver(myReceiver);
-    }
+        // data to POST
+        private Map<String, String> params;
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Receiver to receive CONNECTIVITY_CHANGED broadcast intent
-    private class FileDownloadReceiver extends BroadcastReceiver {
+        public DownloadFileTask(Map<String, String> params) {
+            this.params = params;
+        }
+
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.show();
+        }
 
-            if (intent.getAction().equalsIgnoreCase(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+        @Override
+        protected Uri doInBackground(String... strings) {
+            InputStream is = null;
+            OutputStream os = null;
+            HttpURLConnection conn = null;
 
-                //Fetching the download id received with the broadcast
-                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            try {
+                URL url = new URL(strings[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);                                             // in milliseconds
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+                conn.setRequestMethod("GET");
+                //conn.setDoOutput(true);                                               // to POST
+                conn.connect();
 
-                //Checking if the received broadcast is for our enqueued download by matching download id
-                if (downloadID == id) {
-                    Toast.makeText(getApplicationContext(), "Download Completed", Toast.LENGTH_SHORT).show();
+
+                int response = conn.getResponseCode();
+
+                if (response == 200) {
+                    // input stream to read file
+                    is = conn.getInputStream();
+
+                    return MyUtil.createFile(TransactionDetailsActivity.this, is);
                 }
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            } finally {
+                conn.disconnect();
+
+                try {
+                    if (is != null) {
+                        is.close();
+                    }
+                } catch (Exception ex) {
+                }
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            dialog.dismiss();
+
+            // show a notification
+            if (uri != null) {
+                MyUtil.showNotification(TransactionDetailsActivity.this, uri);
             }
         }
     }
