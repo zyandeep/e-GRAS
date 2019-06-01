@@ -9,18 +9,24 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 
 
 public class SearchChallanActivity extends AppCompatActivity {
 
     private static final String TAG = "MY-APP";
+    private static final String NETWORK_REQUEST = "network_request";
     SearchView searchView;
     SearchView.SearchAutoComplete autoComplete;
-    TextView searchTextView;
+    CardView tranCard;
+    TextView searchTextView, dateTextView, grnTextView, officeTextView, amountTextView, mopTextView, statusTextView;
+    Button actionButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +46,21 @@ public class SearchChallanActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "submit: " + query);
-
                 // hide the soft keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+
+                // make network request search the challan
 
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d(TAG, "typed: " + newText);
+                if (newText.length() >= 5) {
+                    Log.d(TAG, "typed: " + newText);
+                }
+
                 return true;
             }
         });
@@ -62,7 +72,7 @@ public class SearchChallanActivity extends AppCompatActivity {
         autoComplete.setDropDownAnchor(R.id.my_searchView);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{
-                "Bob Marley", "John Doe", "Ram Ravan", "Keshav Stupid", "Kabir Sarmah", "Anup", "Microsoft", "John Snow"
+                "1ddpn", "1ddpn344", "1ddpnassd", "1ddpn45", "1ddpn23", "1ddpnvbnm", "1ddpnyh56", "1ddpnbgg56"
         });
 
         autoComplete.setAdapter(adapter);
@@ -73,8 +83,20 @@ public class SearchChallanActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
                 String queryString = (String) adapterView.getItemAtPosition(itemIndex);
                 autoComplete.setText(queryString);
+                // make network request search the challan
             }
         });
+
+        ///// Transaction details card
+        tranCard = findViewById(R.id.tran_card);
+        amountTextView = findViewById(R.id.amount_tv);
+        dateTextView = findViewById(R.id.date_tv);
+        grnTextView = findViewById(R.id.grn_tv);
+        mopTextView = findViewById(R.id.mop_tv);
+        officeTextView = findViewById(R.id.office_tv);
+        statusTextView = findViewById(R.id.status_tv);
+
+        actionButton = findViewById(R.id.action_button_2);
     }
 
 
@@ -86,7 +108,7 @@ public class SearchChallanActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            searchTextView.setText(query);
+            autoComplete.setText(query);
         }
     }
 }

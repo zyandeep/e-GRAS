@@ -67,8 +67,6 @@
                     android:id="@+id/grn_details_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground"
                     android:paddingStart="8dp"
                     android:text="@{model.grn_no}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"

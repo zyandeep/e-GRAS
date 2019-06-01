@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MY-APP";
     public static final String TAG_RECENT_TRANS = "recent_trans";
+    //public static final String BASE_URL = "http://10.177.15.95/api";
+
     public static final String BASE_URL = "http://192.168.43.211/api";
 
     RecyclerView recyclerView;

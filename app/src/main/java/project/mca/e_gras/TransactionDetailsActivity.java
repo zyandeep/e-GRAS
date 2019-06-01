@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -37,11 +36,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import project.mca.e_gras.databinding.ActivityTransactionDetailsBinding;
 import project.mca.e_gras.model.TransactionModel;
@@ -51,8 +49,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     public static final String TAG = "MY-APP";
     public static final String BASE_URL = "http://192.168.43.211/api";
-    private static final String TAG_VERIFY_PAYMENT = "verify_payment";
     private static final String TAG_DOWNLOAD_CHALLAN = "download_challan";
+    //public static final String BASE_URL = "http://10.177.15.95/api";
+    private static final String TAG_VERIFY_PAYMENT = "verify_payment";
 
     Button actionButton;
 
@@ -154,8 +153,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }).check();
     }
 
-
-    private void downloadFile(String idToken) {
+    private void downloadFile(final String idToken) {
         // log data in backend database
 
         if (!AndroidNetworking.isRequestRunning(TAG_DOWNLOAD_CHALLAN)) {
@@ -179,14 +177,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                             try {
                                 if (response.getBoolean("success")) {
+
+                                    Log.d(TAG, "response: " + response);
+
                                     String url = response.getString("url");
+                                    String data = response.getString("data");
 
-                                    Map<String, String> params = new HashMap<>();
-                                    Type type = new TypeToken<HashMap<String, String>>() {
-                                    }.getType();
-                                    params = new Gson().fromJson(String.valueOf(response.getJSONObject("data")), type);
+                                    // row id; primary key
+                                    int id = response.getInt("id");
 
-                                    new DownloadFileTask(params).execute("http://www.axmag.com/download/pdfurl-guide.pdf");
+                                    new DownloadFileTask(idToken, id).execute("http://www.axmag.com/download/pdfurl-guide.pdf", data);
                                 }
                             } catch (JSONException e) {
                             }
@@ -254,6 +254,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void displayErrorMessage(ANError anError) {
         MyUtil.closeSpotDialog();
 
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+
         if (anError.getErrorCode() != 0) {
             // received error from server
             String jsonString = anError.getErrorBody();
@@ -266,19 +271,51 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void updateLog(final Uri uri, final String idToken, int id) {
+
+        AndroidNetworking.post(BASE_URL + "/update-challan")
+                .addHeaders("Authorization", "Bearer " + idToken)
+                .addBodyParameter("id", String.valueOf(id))             // the row id
+                .addBodyParameter("data", uri.toString())
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d(TAG, "update: " + response);
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                dialog.dismiss();
+
+                                // show a notification
+                                if (uri != null) {
+                                    MyUtil.showNotification(TransactionDetailsActivity.this, uri);
+                                }
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        displayErrorMessage(error);
+                    }
+                });
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     /// ASYNCTASK TO DOWNLOAD THE FILE
     private class DownloadFileTask extends AsyncTask<String, Void, Uri> {
 
-        // data to POST
-        private Map<String, String> params;
+        private String idToken;
+        private int id;
 
-
-        public DownloadFileTask(Map<String, String> params) {
-            this.params = params;
+        public DownloadFileTask(String idToken, int id) {
+            this.idToken = idToken;
+            this.id = id;
         }
-
 
         @Override
         protected void onPreExecute() {
@@ -299,25 +336,35 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 conn.setConnectTimeout(15000);
                 conn.setDoInput(true);
                 conn.setRequestMethod("GET");
+
+                //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 //conn.setDoOutput(true);                                               // to POST
+
+//                os = conn.getOutputStream();
+//                BufferedWriter writer = new BufferedWriter(
+//                        new OutputStreamWriter(os, StandardCharsets.UTF_8));
+//                writer.write(strings[1]);
+//                writer.flush();
+//                writer.close();
+
                 conn.connect();
 
-
-                int response = conn.getResponseCode();
-
-                if (response == 200) {
+                if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
                     // input stream to read file
                     is = conn.getInputStream();
 
                     return MyUtil.createFile(TransactionDetailsActivity.this, is);
                 }
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                MyUtil.showBottomDialog(TransactionDetailsActivity.this, e.getMessage());
             } finally {
                 conn.disconnect();
 
                 try {
                     if (is != null) {
+                        is.close();
+                    }
+                    if (os != null) {
                         is.close();
                     }
                 } catch (Exception ex) {
@@ -330,12 +377,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Uri uri) {
-            dialog.dismiss();
-
-            // show a notification
-            if (uri != null) {
-                MyUtil.showNotification(TransactionDetailsActivity.this, uri);
-            }
+            // update log data in the database
+            updateLog(uri, idToken, id);
         }
     }
 }

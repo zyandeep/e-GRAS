@@ -1,21 +1,25 @@
 package project.mca.e_gras.util;
 
 import android.app.AlertDialog;
-import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebView;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -36,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import dmax.dialog.SpotsDialog;
 import project.mca.e_gras.R;
 
@@ -102,6 +105,7 @@ public class MyUtil {
                 boolean exists = false;
 
                 try {
+                    // 10.177.15.95
                     SocketAddress sockaddr = new InetSocketAddress("192.168.43.211", 80);
                     // Create an unbound socket
                     Socket sock = new Socket();
@@ -229,16 +233,29 @@ public class MyUtil {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        PugNotification.with(context)
-                .load()
-                .title(context.getString(R.string.label_file_downloaded))
-                .message(context.getString(R.string.label_notification))
-                .smallIcon(R.drawable.ic_noti_file)
-                .largeIcon(R.drawable.notification)
-                .flags(Notification.DEFAULT_ALL)
-                .click(pendingIntent)
-                .autoCancel(true)
-                .simple()
-                .build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Build a notification channel for Android O > devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel defaultChannel =
+                    new NotificationChannel("default_channel", "Challan Download",
+                            NotificationManager.IMPORTANCE_HIGH);
+
+            notificationManager.createNotificationChannel(defaultChannel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default_channel")
+                .setAutoCancel(true)
+                .setSmallIcon(R.drawable.ic_noti_file)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification))
+                .setContentTitle(context.getString(R.string.label_file_downloaded))
+                .setContentText(context.getString(R.string.label_notification))
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL);
+
+        notificationManager.notify(23, builder.build());
+
     }
 }

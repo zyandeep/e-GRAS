@@ -80,7 +80,10 @@ public class MakePaymentActivity extends AppCompatActivity {
     public static final String TAG_SCHEME_NAMES = "scheme_names";
     public static final String TAG_GENERATE_CHALLAN = "generate_challan";
 
+    //public static final String BASE_URL = "http://10.177.15.95/api";
     public static final String BASE_URL = "http://192.168.43.211/api";
+
+
     public TextView totalAmountTextView;            // so that it's visible in the package adapter
 
     SuperSpinnerMode spinnerMode;
