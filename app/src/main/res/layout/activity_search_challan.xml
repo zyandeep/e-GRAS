@@ -202,7 +202,8 @@
                 android:id="@+id/action_button_2"
                 style="@style/FirebaseUI.Button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

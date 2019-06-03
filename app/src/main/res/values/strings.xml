@@ -224,6 +224,8 @@
     <string name="label_write_file_error" translatable="false">No external storage</string>
     <string name="label_notification" translatable="false">Your challan has been downloaded</string>
     <string name="label_search_challans_here" translatable="false">Search challans here…</string>
+    <string name="label_network_error" translatable="false">Network error occurred! Make sure you are connected to the Internet.</string>
 
+    <string name="label_zero_transaction" translatable="false">No transaction found.</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package project.mca.e_gras.util;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,37 +17,60 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.marcoscg.dialogsheet.DialogSheet;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import dmax.dialog.SpotsDialog;
+import project.mca.e_gras.PaymentGatewayActivity;
 import project.mca.e_gras.R;
+
+import static project.mca.e_gras.MyApplication.BASE_URL;
+import static project.mca.e_gras.MyApplication.HOST_NAME;
 
 public class MyUtil {
 
     private static final String TAG = "MY-APP";
     private static AlertDialog spotDialog;
+    private static androidx.appcompat.app.AlertDialog fileDialog;
 
 
     public static void showBottomDialog(Context context, String msg) {
@@ -105,8 +129,7 @@ public class MyUtil {
                 boolean exists = false;
 
                 try {
-                    // 10.177.15.95
-                    SocketAddress sockaddr = new InetSocketAddress("192.168.43.211", 80);
+                    SocketAddress sockaddr = new InetSocketAddress(HOST_NAME, 80);
                     // Create an unbound socket
                     Socket sock = new Socket();
 
@@ -154,6 +177,27 @@ public class MyUtil {
         spotDialog.show();
     }
 
+    public static void showFileDialog(Context context) {
+        if (fileDialog != null && fileDialog.isShowing()) {
+            return;
+        }
+
+        // Build the custome alert dialog
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setCancelable(false)
+                .setView(R.layout.custome_dialog_layout);
+
+        fileDialog = builder.create();
+
+        fileDialog.show();
+    }
+
+    public static void closeFileDialog() {
+        if (fileDialog != null && fileDialog.isShowing()) {
+            fileDialog.dismiss();
+        }
+    }
+
 
     public static void closeSpotDialog() {
         if (spotDialog != null && spotDialog.isShowing()) {
@@ -181,9 +225,6 @@ public class MyUtil {
         //
         new WebView(context).destroy();
     }
-
-
-    // check if external storage is available for saving PDFs
 
     public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -242,6 +283,8 @@ public class MyUtil {
                     new NotificationChannel("default_channel", "Challan Download",
                             NotificationManager.IMPORTANCE_HIGH);
 
+            defaultChannel.setShowBadge(true);
+
             notificationManager.createNotificationChannel(defaultChannel);
         }
 
@@ -258,4 +301,258 @@ public class MyUtil {
         notificationManager.notify(23, builder.build());
 
     }
+
+
+    public static void downloadChallan(final Context context, final String token, final String tag, final int id) {
+
+        // Check for WRITE_EXTERNAL_STORAGE permission
+        Dexter.withActivity((AppCompatActivity) context)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        downloadFile(context, token, tag, id);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Log.d(TAG, "Permission Denied");
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+    }
+
+
+    private static void downloadFile(final Context context, final String token, final String tag, final int id) {
+        // log data in backend database
+
+        if (!AndroidNetworking.isRequestRunning(tag)) {
+
+            MyUtil.showSpotDialog(context);
+
+            // check for server reachability
+            MyUtil.checkServerReachable(context, tag);
+
+            AndroidNetworking.get(BASE_URL + "/download-challan")
+                    .addHeaders("Authorization", "Bearer " + token)
+                    .addQueryParameter("id", String.valueOf(id))
+                    .setTag(tag)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // if status code is OK:200 then only
+                            MyUtil.closeSpotDialog();
+
+                            try {
+                                if (response.getBoolean("success")) {
+
+                                    Log.d(TAG, "response: " + response);
+
+                                    String url = response.getString("url");
+                                    String data = response.getString("data");
+
+                                    // row id; primary key
+                                    int rowId = response.getInt("id");
+
+                                    new DownloadFileTask(context, token, rowId).execute("https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf", data);
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            displayErrorMessage(context, anError);
+                        }
+                    });
+        }
+
+    }
+
+
+    public static void displayErrorMessage(Context context, ANError anError) {
+        MyUtil.closeSpotDialog();
+        MyUtil.closeFileDialog();
+
+        if (anError.getErrorCode() != 0) {
+            // received error from server
+            String jsonString = anError.getErrorBody();
+
+            try {
+                JSONObject obj = new JSONObject(jsonString);
+                MyUtil.showBottomDialog(context, obj.getString("msg"));
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private static void updateLog(final Context context, final Uri uri, final String idToken, int id) {
+
+        AndroidNetworking.post(BASE_URL + "/update-challan")
+                .addHeaders("Authorization", "Bearer " + idToken)
+                .addBodyParameter("id", String.valueOf(id))             // the row id
+                .addBodyParameter("data", uri.toString())
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d(TAG, "update: " + response);
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                MyUtil.closeFileDialog();
+
+                                // show a notification
+                                if (uri != null) {
+                                    MyUtil.showNotification(context, uri);
+                                }
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        MyUtil.displayErrorMessage(context, error);
+                    }
+                });
+    }
+
+    public static void verifyPayment(final Context context, final String token, final String tag, final int id) {
+        if (!AndroidNetworking.isRequestRunning(tag)) {
+
+            MyUtil.showSpotDialog(context);
+
+            // check for server reachability
+            MyUtil.checkServerReachable(context, tag);
+
+            AndroidNetworking.get(BASE_URL + "/verify-payment/{id}")
+                    .addHeaders("Authorization", "Bearer " + token)
+                    .addPathParameter("id", String.valueOf(id))
+                    .setTag(tag)
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // if status code is OK:200 then only
+                            MyUtil.closeSpotDialog();
+
+                            try {
+                                if (response.getBoolean("success")) {
+                                    // get the url and data and open it in the webView
+                                    String url = response.getString("url");
+                                    String data = response.getString("data");
+
+                                    Log.d(TAG, "verify payment: " + url + "\n" + data);
+
+                                    Intent intent = new Intent(context, PaymentGatewayActivity.class);
+                                    intent.putExtra("url", url);
+                                    intent.putExtra("bundle", data);
+                                    context.startActivity(intent);
+
+                                    ((AppCompatActivity) context).finish();
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            MyUtil.displayErrorMessage(context, anError);
+                        }
+                    });
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    /// ASYNCTASK TO DOWNLOAD THE FILE
+    private static class DownloadFileTask extends AsyncTask<String, Void, Uri> {
+
+        private String idToken;
+        private int id;
+        private Context context;
+
+        public DownloadFileTask(Context context, String idToken, int id) {
+            this.idToken = idToken;
+            this.id = id;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            MyUtil.showFileDialog(context);
+        }
+
+        @Override
+        protected Uri doInBackground(String... strings) {
+            InputStream is = null;
+            OutputStream os = null;
+            HttpURLConnection conn = null;
+
+            try {
+                URL url = new URL(strings[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);                                             // in milliseconds
+                conn.setConnectTimeout(15000);
+                conn.setDoInput(true);
+
+               /* conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                conn.setDoOutput(true);                                               // to POST
+
+                os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, StandardCharsets.UTF_8));
+                writer.write(strings[1]);
+                writer.flush();
+                writer.close();*/
+
+                conn.connect();
+
+                if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+                    // input stream to read file
+                    is = conn.getInputStream();
+
+                    return MyUtil.createFile(context, is);
+                }
+            } catch (Exception e) {
+                MyUtil.showBottomDialog(context, e.getMessage());
+            } finally {
+                conn.disconnect();
+
+                try {
+                    if (is != null) {
+                        is.close();
+                    }
+                    if (os != null) {
+                        is.close();
+                    }
+                } catch (Exception ex) {
+                }
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            // update log data in the database
+            updateLog(context, uri, idToken, id);
+        }
+    }
+
 }

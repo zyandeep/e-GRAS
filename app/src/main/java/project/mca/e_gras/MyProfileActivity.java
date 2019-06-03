@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -144,7 +145,13 @@ public class MyProfileActivity extends AppCompatActivity {
                             //updateUI();
                             dialog.dismiss();
                         } else {
-                            displayErrorMessage(task.getException().getMessage());
+                            Exception ex = task.getException();
+
+                            if (ex instanceof FirebaseAuthException) {
+                                Log.d(TAG, "firebase: " + ((FirebaseAuthException) ex).getErrorCode());
+                            }
+
+                            displayErrorMessage(ex.getMessage());
                         }
                     }
                 });

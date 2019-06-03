@@ -53,13 +53,13 @@ import project.mca.e_gras.adapter.TransactionAdapter;
 import project.mca.e_gras.model.TransactionModel;
 import project.mca.e_gras.util.MyUtil;
 
+import static project.mca.e_gras.MyApplication.BASE_URL;
+
 public class TransactionListActivity extends AppCompatActivity {
 
     public static final String TAG = "MY-APP";
-    public static final String BASE_URL = "http://192.168.43.211/api";
     private static final String TAG_LOAD_MORE = "load_more";
     private static final int ITEMS_PER_PAGE = 10;
-    //public static final String BASE_URL = "http://10.177.15.95/api";
     private static final String TAG_TRANSACTION_LIST = "transaction_list";
 
     // The layouts

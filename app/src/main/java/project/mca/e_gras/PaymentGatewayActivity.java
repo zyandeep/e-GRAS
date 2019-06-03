@@ -1,11 +1,13 @@
 package project.mca.e_gras;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -55,6 +57,22 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 MyUtil.closeSpotDialog();
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (request.getUrl().toString().equals("http://transaction_activity/")) {
+
+                    // finish this activity and go to Transaction list activity
+                    Intent intent = new Intent(PaymentGatewayActivity.this, TransactionListActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                    return true;
+                }
+
+                // let my WebView load the page
+                return false;
             }
         });
 
