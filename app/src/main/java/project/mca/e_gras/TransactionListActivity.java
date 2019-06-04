@@ -11,12 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,7 +64,7 @@ public class TransactionListActivity extends AppCompatActivity {
 
     // The layouts
     SwipeRefreshLayout refreshLayout;
-    CardView emptyState;
+    ViewGroup emptyState;
     ShimmerFrameLayout shimmerFrameLayout;          // facebook's shimmer layout
 
 

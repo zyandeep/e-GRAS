@@ -7,12 +7,12 @@ import com.androidnetworking.AndroidNetworking;
 
 public class MyApplication extends Application {
 
-    public static final String BASE_URL = "http://10.177.15.95/api";
-    public static final String HOST_NAME = "10.177.15.95";
+//    public static final String BASE_URL = "http://10.177.15.95/api";
+//    public static final String HOST_NAME = "10.177.15.95";
 
     // Home server
-//    public static final String BASE_URL = "http://192.168.43.211/api";
-//    public static final String HOST_NAME = "192.168.43.211";
+    public static final String BASE_URL = "http://192.168.43.211/api";
+    public static final String HOST_NAME = "192.168.43.211";
 
     @Override
     public void onCreate() {

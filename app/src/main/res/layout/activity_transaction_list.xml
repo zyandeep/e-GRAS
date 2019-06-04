@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".TransactionListActivity">
 
@@ -61,50 +62,38 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Empty State View -->
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:id="@+id/empty_state_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:visibility="visible"
-        app:cardElevation="8dp">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <LinearLayout
-            android:id="@+id/empty_state_view"
+        <ImageView
+            android:id="@+id/empty_state_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_empty_box" />
+
+        <TextView
+            android:id="@+id/empty_state_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_reload"
+            android:onClick="reloadData"
+            android:padding="8dp"
+            android:text="@string/label_no_transaction_history_found"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/about_item_text_color" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/empty_state_imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/empty" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/empty_state_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawableEnd="@drawable/ic_reload"
-                android:onClick="reloadData"
-                android:padding="16dp"
-                android:text="@string/label_no_transaction_history_found"
-                android:textAllCaps="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/about_item_text_color" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 </LinearLayout>
