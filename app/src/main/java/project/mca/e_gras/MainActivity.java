@@ -221,7 +221,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), SearchChallanActivity.class);
             startActivity(intent);
         } else if (id == R.id.activity_log) {
-            //
+            Intent intent = new Intent(getApplicationContext(), LogActivity.class);
+            startActivity(intent);
         } else if (id == R.id.settings) {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
@@ -290,7 +291,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void getJWTToken() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
             currentUser.getIdToken(true)
@@ -298,7 +299,6 @@ public class MainActivity extends AppCompatActivity
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
-
                                 getRecentTransaction(idToken);
                             } 
                             else {

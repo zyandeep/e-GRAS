@@ -191,7 +191,7 @@
     <string name="july_sept">July-Sept</string>
     <string name="oct_dec">Oct-Dec</string>
     <string name="jan_mar">Jan-March</string>
-    <string name="label_egras_info">With e-GRAS, you can easily make online payments and review all of your transaction history.</string>
+    <string name="label_egras_info" translatable="false">With e-GRAS, you can easily make online payments and review all of your transaction history.</string>
     <string name="label_generate_echallan">Generation of e-challans has become easier.Just go to Payment Screen, fill up necessary details and hit Submit. Done!</string>
     <string name="label_egras_serach_challan" translatable="false">You can search for already generated challans and download them whenever you need.</string>
     <string name="label_review_trans"> And, to review all of your transaction history in detail, just go to Transaction History Screen.</string>

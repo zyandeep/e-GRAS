@@ -8,5 +8,8 @@
 
     <color name="onBoardingTextColor">#595959</color>
 
-    <color name="shimmerBackground">#A9A9A9</color>
+    <!--<color name="shimmerBackground">#A9A9A9</color>-->
+
+    <color name="shimmerBackground">#DCDCDC</color>
+
 </resources>
