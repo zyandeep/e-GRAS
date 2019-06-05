@@ -60,7 +60,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView_t_1"
+                android:id="@+id/activity_item_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
@@ -83,7 +83,7 @@
                 android:background="@color/about_separator_color" />
 
             <TextView
-                android:id="@+id/textView_t_2"
+                android:id="@+id/grn_item_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"

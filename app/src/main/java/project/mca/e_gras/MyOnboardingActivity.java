@@ -41,7 +41,7 @@ public class MyOnboardingActivity extends AppIntro {
 
         //create slides and add them
         SliderPage s1 = new SliderPage();
-        s1.setTitle("Welcome to e-GRAS Mobile");
+        s1.setTitle(getString(R.string.ob_welcome_msg));
         s1.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s1.setDescription(getString(R.string.label_egras_info));
         s1.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
@@ -50,7 +50,7 @@ public class MyOnboardingActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(s1));
 
         SliderPage s2 = new SliderPage();
-        s2.setTitle("Generate e-Challans");
+        s2.setTitle(getString(R.string.ob_generate_challan));
         s2.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s2.setDescription(getString(R.string.label_generate_echallan));
         s2.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
@@ -59,7 +59,7 @@ public class MyOnboardingActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(s2));
 
         SliderPage s3 = new SliderPage();
-        s3.setTitle("Search Challans");
+        s3.setTitle(getString(R.string.ob_search_challan));
         s3.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s3.setDescription(getString(R.string.label_egras_serach_challan));
         s3.setDescColor(getResources().getColor(R.color.onBoardingTextColor));
@@ -68,7 +68,7 @@ public class MyOnboardingActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(s3));
 
         SliderPage s4 = new SliderPage();
-        s4.setTitle("Review Transaction History");
+        s4.setTitle(getString(R.string.ob_review_transaction));
         s4.setTitleColor(getResources().getColor(R.color.onBoardingTextColor));
         s4.setDescription(getString(R.string.label_review_trans));
         s4.setDescColor(getResources().getColor(R.color.onBoardingTextColor));

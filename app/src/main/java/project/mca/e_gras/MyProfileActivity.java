@@ -1,10 +1,10 @@
 package project.mca.e_gras;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -22,7 +21,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.concurrent.TimeUnit;
 
-import dmax.dialog.SpotsDialog;
 import project.mca.e_gras.util.MyUtil;
 
 public class MyProfileActivity extends AppCompatActivity {
@@ -31,7 +29,6 @@ public class MyProfileActivity extends AppCompatActivity {
     ViewGroup phoneLayout;
     ViewGroup emailLayout;
     ViewGroup passwordLayout;
-    AlertDialog dialog;
     private TextInputLayout displayName;
     private TextInputLayout phone;
     private TextInputLayout email;
@@ -57,13 +54,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // set up the initial UI
         updateUI();
-
-        // spot dialogSheet
-        dialog = new SpotsDialog.Builder()
-                .setContext(this)
-                .setCancelable(false)
-                .setTheme(R.style.mySpotDialogTheme)
-                .build();
     }
 
 
@@ -108,9 +98,7 @@ public class MyProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // show the dialogSheet
-        dialog.show();
-
+        MyUtil.showSpotDialog(MyProfileActivity.this);
 
         // update password
         user.updatePassword(pwd)
@@ -118,23 +106,32 @@ public class MyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            dialog.dismiss();
+                            MyUtil.closeSpotDialog();
+
                             confPassword.setErrorEnabled(false);
+
+                            informUser(getString(R.string.label_password_changed));
                         } else {
-                            displayErrorMessage(task.getException().getMessage());
+                            //inspect Firebase Auth Exception and alert user accordingly with localised message
+
+                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
                         }
                     }
                 });
 
-
     }
+
+
+    private void informUser(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
 
     public void updateUserEmail(View view) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String email = this.email.getEditText().getText().toString();
 
-        // show the dialogSheet
-        dialog.show();
+        MyUtil.showSpotDialog(this);
 
         // update email
         user.updateEmail(email)
@@ -142,16 +139,10 @@ public class MyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //updateUI();
-                            dialog.dismiss();
+                            MyUtil.closeSpotDialog();
+                            informUser(getString(R.string.label_email_changed));
                         } else {
-                            Exception ex = task.getException();
-
-                            if (ex instanceof FirebaseAuthException) {
-                                Log.d(TAG, "firebase: " + ((FirebaseAuthException) ex).getErrorCode());
-                            }
-
-                            displayErrorMessage(ex.getMessage());
+                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
                         }
                     }
                 });
@@ -166,8 +157,7 @@ public class MyProfileActivity extends AppCompatActivity {
             phoneNumber = "+91" + phoneNumber;
         }
 
-        // show the dialogSheet
-        dialog.show();
+        MyUtil.showSpotDialog(this);
 
 
         // authenticate the new phone number
@@ -188,10 +178,12 @@ public class MyProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            dialog.dismiss();
+                                            MyUtil.closeSpotDialog();
+                                            informUser(getString(R.string.label_ph_changed));
                                         }
                                         else {
-                                            displayErrorMessage(task.getException().getMessage());
+                                            // handle FirebaseAuth Exception
+                                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
                                         }
                                     }
                                 });
@@ -200,7 +192,8 @@ public class MyProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
-                        displayErrorMessage(e.getMessage());
+                        // handle FirebaseAuth Exception
+                        MyUtil.showBottomDialog(MyProfileActivity.this, e.getMessage());
                     }
                 });
     }
@@ -216,8 +209,7 @@ public class MyProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // show the dialogSheet
-        dialog.show();
+        MyUtil.showSpotDialog(this);
 
         // update display name
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -228,21 +220,14 @@ public class MyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            dialog.dismiss();
+                            MyUtil.closeSpotDialog();
                             displayName.setErrorEnabled(false);
+                            informUser(getString(R.string.label_name_changed));
                         } else {
-                            displayErrorMessage(task.getException().getMessage());
+                            // handle FirebaseAuth Exception
+                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
                         }
                     }
                 });
-    }
-
-
-    private void displayErrorMessage(String msg) {
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
-
-        MyUtil.showBottomDialog(this, msg);
     }
 }

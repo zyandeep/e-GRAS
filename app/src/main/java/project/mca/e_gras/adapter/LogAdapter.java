@@ -1,7 +1,6 @@
 package project.mca.e_gras.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,28 +12,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 import project.mca.e_gras.R;
-import project.mca.e_gras.TransactionDetailsActivity;
-import project.mca.e_gras.model.TransactionModel;
-import project.mca.e_gras.util.MyUtil;
+import project.mca.e_gras.model.LogModel;
 
-public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+public class LogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = "MY-APP";
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    List<TransactionModel> modelList;
+    List<LogModel> modelList;
     Context context;
-    RecyclerView recyclerView;
     LayoutInflater inflater;
+    RecyclerView recyclerView;
 
 
-    public TransactionAdapter(List<TransactionModel> modelList, Context context, RecyclerView recyclerView) {
-        // initialise the list with an empty list(with null)
+    public LogAdapter(List<LogModel> modelList, Context context, RecyclerView recyclerView) {
         this.modelList = modelList;
         this.context = context;
         this.recyclerView = recyclerView;
@@ -45,23 +39,24 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = this.inflater.inflate(R.layout.transaction_item_view, parent, false);
-            return new ItemViewHolder(view);
+            View view = this.inflater.inflate(R.layout.log_item_view, parent, false);
+            return new LogAdapter.ItemViewHolder(view);
         } else {
             View view = this.inflater.inflate(R.layout.loading_item_view, parent, false);
-            return new LoadingViewHolder(view);
+            return new LogAdapter.LoadingViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ItemViewHolder) {
-            TransactionModel model = this.modelList.get(position);
+        if (holder instanceof LogAdapter.ItemViewHolder) {
+            LogModel model = this.modelList.get(position);
 
-            ((ItemViewHolder) holder).dateTextView.setText(model.getChallan_date());
-            ((ItemViewHolder) holder).grnTextView.setText(model.getGrn_no());
-            ((ItemViewHolder) holder).amountTextView.setText(MyUtil.formatCurrency(model.getAmount()));
-        } else if (holder instanceof LoadingViewHolder) {
+            ((ItemViewHolder) holder).activityTextView.setText(model.getActivity());
+            ((LogAdapter.ItemViewHolder) holder).dateTextView.setText(model.getDateTime());
+            ((LogAdapter.ItemViewHolder) holder).grnTextView.setText(model.getGrnNo());
+            ((ItemViewHolder) holder).officeTextView.setText(model.getName());
+        } else if (holder instanceof LogAdapter.LoadingViewHolder) {
             // Nothing to do here...
         }
     }
@@ -83,7 +78,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     // Add new items to the list
-    public void addNewItems(List<TransactionModel> newList) {
+    public void addNewItems(List<LogModel> newList) {
         // remove NULL from the list and add it to the end
 
         this.modelList.remove(null);
@@ -118,39 +113,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // View Holder to hold non-empty item view
     private class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        TextView activityTextView;
         TextView dateTextView;
         TextView grnTextView;
-        TextView amountTextView;
+        TextView officeTextView;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            dateTextView = itemView.findViewById(R.id.date_item_textview);
-            grnTextView = itemView.findViewById(R.id.grn_item_textView);
-            amountTextView = itemView.findViewById(R.id.amount_details_textView);
-
-            // Add click listener to the whole itemView
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();        // get the item position
-
-                    if (position != RecyclerView.NO_POSITION) {
-                        TransactionModel model = modelList.get(position);
-
-                        // flashing a model to JSON
-                        String json = new Gson().toJson(model);
-
-                        // start Details Activity
-                        Intent intent = new Intent(context, TransactionDetailsActivity.class);
-                        intent.putExtra("data", json);
-                        context.startActivity(intent);
-                    }
-                }
-            });
+            activityTextView = itemView.findViewById(R.id.activity_item_textview);
+            dateTextView = itemView.findViewById(R.id.date_time_item_textView);
+            grnTextView = itemView.findViewById(R.id.grn_item_tv);
+            officeTextView = itemView.findViewById(R.id.office_item_textView);
         }
     }
-
 
     // View Holder to hold empty item view
     private class LoadingViewHolder extends RecyclerView.ViewHolder {

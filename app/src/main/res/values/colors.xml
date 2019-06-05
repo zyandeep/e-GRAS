@@ -5,11 +5,7 @@
     <color name="colorAccent">#FF9800</color>
     <color name="colorBackground">#EEEEEE</color>
     <color name="numberPickerColor">@color/colorPrimary</color>
-
     <color name="onBoardingTextColor">#595959</color>
-
-    <!--<color name="shimmerBackground">#A9A9A9</color>-->
-
-    <color name="shimmerBackground">#DCDCDC</color>
+    <color name="shimmerBackground">#C0C0C0</color>
 
 </resources>

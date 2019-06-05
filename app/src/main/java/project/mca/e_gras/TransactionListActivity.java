@@ -136,7 +136,7 @@ public class TransactionListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.tran_list_recycler_view);
 
         // initialise the adapter with an empty list
-        adapter = new TransactionAdapter(new ArrayList<TransactionModel>(), this);
+        adapter = new TransactionAdapter(new ArrayList<TransactionModel>(), this, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

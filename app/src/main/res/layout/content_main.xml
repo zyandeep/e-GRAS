@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Transaction History is Empty"
+            android:text="@string/transaction_history_empty"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/about_text_color" />
@@ -75,7 +75,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:onClick="showOnBoarding"
-            android:text="Learn How" />
+            android:text="@string/label_learn_how" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Recent Transactions"
+            android:text="@string/label_recent_transactions"
             android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/about_text_color" />
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:onClick="loadAllTransaction"
-            android:text="See More" />
+            android:text="@string/label_see_more" />
 
     </LinearLayout>
 

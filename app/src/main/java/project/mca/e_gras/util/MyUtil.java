@@ -74,6 +74,10 @@ public class MyUtil {
 
 
     public static void showBottomDialog(Context context, String msg) {
+
+        // close the spot dialog if it's displaying
+        closeSpotDialog();
+
         // show the bottomSheet dialog
         // context : Activity context not Application's
         new DialogSheet(context)
@@ -185,7 +189,7 @@ public class MyUtil {
         // Build the custome alert dialog
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(context)
                 .setCancelable(false)
-                .setView(R.layout.custome_dialog_layout);
+                .setView(R.layout.download_dialog_layout);
 
         fileDialog = builder.create();
 

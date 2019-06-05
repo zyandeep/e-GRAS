@@ -225,7 +225,19 @@
     <string name="label_notification" translatable="false">Your challan has been downloaded</string>
     <string name="label_search_challans_here" translatable="false">Search challans here…</string>
     <string name="label_network_error" translatable="false">Network error occurred! Make sure you are connected to the Internet.</string>
-
-    <string name="label_zero_transaction" translatable="false">No transaction found.</string>
+    <string name="label_zero_transaction" translatable="false">No transactions found</string>
+    <string name="label_no_log" translatable="false">No activity logs found</string>
+    <string name="transaction_history_empty" translatable="false">Transaction History is Empty</string>
+    <string name="label_learn_how" translatable="false">Learn How</string>
+    <string name="label_recent_transactions" translatable="false">Recent Transactions</string>
+    <string name="label_see_more" translatable="false">See More</string>
+    <string name="label_password_changed" translatable="false">Password has been updated</string>
+    <string name="label_email_changed" translatable="false">Email has been updated</string>
+    <string name="label_ph_changed" translatable="false">Phone number has been updated</string>
+    <string name="label_name_changed" translatable="false">Username has been updated</string>
+    <string name="ob_welcome_msg" translatable="false">Welcome to e-GRAS Mobile</string>
+    <string name="ob_generate_challan" translatable="false">Generate e-Challans</string>
+    <string name="ob_search_challan" translatable="false">Search Challans</string>
+    <string name="ob_review_transaction" translatable="false">Review Transaction History</string>
 
 </resources>

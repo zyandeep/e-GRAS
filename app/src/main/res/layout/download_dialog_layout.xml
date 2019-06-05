@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_weight="1"
-        android:paddingStart="8dp"
+        android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:text="@string/label_downloading_file"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"

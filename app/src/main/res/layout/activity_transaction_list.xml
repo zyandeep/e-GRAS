@@ -55,6 +55,7 @@
             android:id="@+id/tran_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             android:scrollbars="vertical">
 
         </androidx.recyclerview.widget.RecyclerView>

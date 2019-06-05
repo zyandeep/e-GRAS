@@ -1040,7 +1040,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
                     // recycler view item animation
                     final LayoutAnimationController controller =
-                            AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_animation);
+                            AnimationUtils.loadLayoutAnimation(MakePaymentActivity.this, R.anim.layout_animation);
                     schemeRecyclerView.setLayoutAnimation(controller);
                     schemeRecyclerView.scheduleLayoutAnimation();
                 }

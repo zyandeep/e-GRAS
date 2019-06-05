@@ -68,8 +68,8 @@ public class RecentTransactionAdapter extends RecyclerView.Adapter<RecyclerView.
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            dateTextView = itemView.findViewById(R.id.date_details_textView);
-            grnTextView = itemView.findViewById(R.id.grn_details_textView);
+            dateTextView = itemView.findViewById(R.id.date_item_textview);
+            grnTextView = itemView.findViewById(R.id.office_item_textView);
             amountTextView = itemView.findViewById(R.id.amount_details_textView);
         }
     }

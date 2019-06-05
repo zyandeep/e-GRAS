@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tran_item_cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,7 +15,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView_t_1"
+            android:id="@+id/activity_item_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -23,11 +24,11 @@
             android:textColor="@color/about_item_text_color" />
 
         <TextView
-            android:id="@+id/date_details_textView"
+            android:id="@+id/date_item_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            android:text="12/JAN/2019"
+            tools:text="12/JAN/2019"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/about_text_color" />
 
@@ -38,7 +39,7 @@
             android:background="@color/about_separator_color" />
 
         <TextView
-            android:id="@+id/textView_t_2"
+            android:id="@+id/grn_item_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -47,11 +48,11 @@
             android:textColor="@color/about_item_text_color" />
 
         <TextView
-            android:id="@+id/grn_details_textView"
+            android:id="@+id/office_item_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            android:text="ADFS456WERTYSDF4"
+            tools:text="ADFS456WERTYSDF4"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#FF6F00" />
 
@@ -75,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            android:text="12.00"
+            tools:text="12.00"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/about_text_color" />
     </LinearLayout>
