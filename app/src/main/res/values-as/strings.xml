@@ -40,9 +40,7 @@
     <string name="message_online">আপুনি এতিয়া Online আছে</string>
     <string name="label_tran_history">লেনদেনৰ ইতিহাস</string>
     <string name="label_tran_details">লেনদেনৰ তথ্য়</string>
-    <string name="msg_verify_form_data" translatable="false">অনুগ্ৰহ কৰি তথ্য়সমুহ দাখিল কৰাৰ আগতে এবাৰ পৰীক্ষা কৰি লওক।
-        \n\nআপুনি ওপৰৰ \"stage number\" select কৰি এটা পর্যায় পৰা ইটো পর্যায়লৈ যাব পাৰে।
-        \n\nশেষত, সকলো পৰীক্ষা কৰি তথ্য়সমুহ দাখিল কৰক।</string>
+    <string name="msg_verify_form_data">অনুগ্ৰহ কৰি তথ্য়সমুহ দাখিল কৰাৰ আগতে এবাৰ পৰীক্ষা কৰি লওক।\nআপুনি ওপৰৰ Stage Number Select কৰি এটা পর্যায় পৰা ইটো পর্যায়লৈ যাব পাৰে।\n\nশেষত, সকলো পৰীক্ষা কৰি তথ্য়সমুহ দাখিল কৰক।</string>
     <string name="label_area_city">চহৰ/নগৰ</string>
     <string name="label_block_no">ঘৰ/চৌহদ নম্বৰ</string>
     <string name="label_button_next">পৰৱৰ্তী অংশ</string>
@@ -86,7 +84,7 @@
     <string name="label_select_year_and_month">বছৰ, মাহ নিবাৰ্চন কৰক</string>
     <string name="label_month">মাহ:</string>
     <string name="label_done">হৈ গ\'ল</string>
-    <string name="label_cancel">এ বাদ দিয়ক!</string>
+    <string name="label_cancel">এ বাদ দিয়ক আৰু।</string>
     <string name="label_no_transaction_history_found">"কোনো transaction পোৱা নগ'ল। "</string>
     <string name="jan">জানু</string>
     <string name="mar">মাৰ্চ</string>
@@ -114,11 +112,36 @@
     <string name="jan_mar">জানু-মাৰ্চ</string>
     <string name="july_sept">জুলাই-ছেপ্ত</string>
     <string name="oct_dec">অক্টো-ডিচে</string>
-    <string name="label_generate_echallan">baki ase</string>
-    <string name="label_review_trans">baki ase</string>
-    <string name="passowrd_helper">baki ase</string>
-    <string name="password_error">baki ase</string>
-    <string name="error_user_name">baki ase</string>
     <string name="label_serach_challan">চালান অনুসন্ধান</string>
     <string name="search_hint">GRN No টো দিয়ক…</string>
+    <string name="error_user_name">অনুগ্রহ কৰি ব্য়ৱহাৰকাৰীৰ নাম লিখক</string>
+    <string name="label_activity_log">কার্য বিৱৰণ</string>
+    <string name="label_download_challan">চালান Download কৰক</string>
+    <string name="label_downloading_file">চালান Download হৈ আছে…</string>
+    <string name="label_egras_info">e-GRAS ৰ সহায়ত আপুনি সহজে চালান জমা দিব পাৰে তথা সকলো লেনদেনৰ বিৱৰণ চাব পাৰে।</string>
+    <string name="label_egras_serach_challan">আপুনি ইতিমধ্যে কটা চালানৰ অনুসন্ধান পাৰে তথা download ও কৰিব পাৰে, ইচ্ছা কৰিলে।</string>
+    <string name="label_email_changed">Email update হ\'ল</string>
+    <string name="label_file_downloaded">File download হ\'ল</string>
+    <string name="label_generate_echallan">online চালান কটাটো সহজ হৈ পৰিল। Payment Screen লৈ যাওক, আৱশ্যকীয় তথ্য়সমুহৰ যোগান ধৰক আৰু Submit Button ত Click কৰক। হৈ গ\'ল।</string>
+    <string name="label_learn_how">জানক কেনেদৰে</string>
+    <string name="label_name_changed">ব্যৱহাৰকাৰীৰ নাম update হ\'ল</string>
+    <string name="label_network_error">Network Error! আপুনি Interner ত Connect হৈ আছেনে চাওকচোন বাৰু… </string>
+    <string name="label_no_log">কোনো কার্য বিৱৰণ পোৱা নগ\'ল</string>
+    <string name="label_notification">চালান Download হ\'ল</string>
+    <string name="label_password_changed">Password update হ\'ল</string>
+    <string name="label_ph_changed">Phone number update হ\'ল</string>
+    <string name="label_recent_transactions">শেহতীয়া লেনদেন</string>
+    <string name="label_review_trans">আৰু, সকলো লেনদেনৰ তথ্য় বিশদ ভাবে জানিবলৈ Transaction History Screen লৈ যাওক।</string>
+    <string name="label_search_challans_here">চালানৰ অনুসন্ধান কৰক…</string>
+    <string name="label_see_more">আৰু চাওক…</string>
+    <string name="label_write_file_error">External Storage পোৱা নগ\'ল</string>
+    <string name="transaction_history_empty">লেনদেনৰ তথ্য় পোৱা নগ\'ল</string>
+    <string name="password_error">অনুগ্ৰহ কৰি বৈধ Password দিয়ক</string>
+    <string name="label_zero_transaction">লেনদেনৰ তথ্য় পোৱা নগ\'ল</string>
+    <string name="message_offline">আপুনি এতিয়া Offline আছে</string>
+    <string name="ob_generate_challan">ই-চালান কাটক</string>
+    <string name="ob_review_transaction">লেনদেনৰ তথ্য় পৰীক্ষা কৰক</string>
+    <string name="ob_search_challan">চালানৰ অনুসন্ধান কৰক</string>
+    <string name="ob_welcome_msg">e-GRAS Mobile লৈ স্বাগতম</string>
+    <string name="passowrd_helper">Password টো অন্ততঃ ৬ টা আখৰযুক্ত, বর্ণ আৰু সংখ্যাৰ সংমিশ্রণ হ\'ব লাগিব</string>
 </resources>

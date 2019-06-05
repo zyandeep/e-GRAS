@@ -191,9 +191,9 @@
     <string name="july_sept">July-Sept</string>
     <string name="oct_dec">Oct-Dec</string>
     <string name="jan_mar">Jan-March</string>
-    <string name="label_egras_info" translatable="false">With e-GRAS, you can easily make online payments and review all of your transaction history.</string>
+    <string name="label_egras_info">With e-GRAS, you can easily make online payments and review all of your transaction history.</string>
     <string name="label_generate_echallan">Generation of e-challans has become easier.Just go to Payment Screen, fill up necessary details and hit Submit. Done!</string>
-    <string name="label_egras_serach_challan" translatable="false">You can search for already generated challans and download them whenever you need.</string>
+    <string name="label_egras_serach_challan">You can search for already generated challans and download them whenever you need.</string>
     <string name="label_review_trans"> And, to review all of your transaction history in detail, just go to Transaction History Screen.</string>
 
     <string-array name="spinner_data_quaterly">
@@ -210,34 +210,34 @@
     <string name="search_hint">Your GRN No…</string>
     <string name="label_help">Help</string>
 
-    <string name="label_activity_log" translatable="false">Activity Log</string>
-    <string name="message_offline" translatable="false">You are now offline</string>
+    <string name="label_activity_log">Activity Log</string>
+    <string name="message_offline">You are now offline</string>
 
-    <string name="label_download_challan" translatable="false">Download Challan</string>
+    <string name="label_download_challan">Download Challan</string>
     <string name="label_repeat_payment">Repeat Payment</string>
 
     <string name="status_success" translatable="false">Success</string>
     <string name="status_pending" translatable="false">Pending</string>
     <string name="status_fail" translatable="false">Fail</string>
-    <string name="label_downloading_file" translatable="false">Downloading Challan…</string>
-    <string name="label_file_downloaded" translatable="false">File downloaded</string>
-    <string name="label_write_file_error" translatable="false">No external storage</string>
-    <string name="label_notification" translatable="false">Your challan has been downloaded</string>
-    <string name="label_search_challans_here" translatable="false">Search challans here…</string>
-    <string name="label_network_error" translatable="false">Network error occurred! Make sure you are connected to the Internet.</string>
-    <string name="label_zero_transaction" translatable="false">No transactions found</string>
-    <string name="label_no_log" translatable="false">No activity logs found</string>
-    <string name="transaction_history_empty" translatable="false">Transaction History is Empty</string>
-    <string name="label_learn_how" translatable="false">Learn How</string>
-    <string name="label_recent_transactions" translatable="false">Recent Transactions</string>
-    <string name="label_see_more" translatable="false">See More</string>
-    <string name="label_password_changed" translatable="false">Password has been updated</string>
-    <string name="label_email_changed" translatable="false">Email has been updated</string>
-    <string name="label_ph_changed" translatable="false">Phone number has been updated</string>
-    <string name="label_name_changed" translatable="false">Username has been updated</string>
-    <string name="ob_welcome_msg" translatable="false">Welcome to e-GRAS Mobile</string>
-    <string name="ob_generate_challan" translatable="false">Generate e-Challans</string>
-    <string name="ob_search_challan" translatable="false">Search Challans</string>
-    <string name="ob_review_transaction" translatable="false">Review Transaction History</string>
+    <string name="label_downloading_file">Downloading Challan…</string>
+    <string name="label_file_downloaded">File downloaded</string>
+    <string name="label_write_file_error">No external storage</string>
+    <string name="label_notification">Your challan has been downloaded</string>
+    <string name="label_search_challans_here">Search challans here…</string>
+    <string name="label_network_error">Network error occurred! Make sure you are connected to the Internet.</string>
+    <string name="label_zero_transaction">No transactions found</string>
+    <string name="label_no_log">No activity logs found</string>
+    <string name="transaction_history_empty">Transaction History is Empty</string>
+    <string name="label_learn_how">Learn How</string>
+    <string name="label_recent_transactions">Recent Transactions</string>
+    <string name="label_see_more">See More…</string>
+    <string name="label_password_changed">Password has been updated</string>
+    <string name="label_email_changed">Email has been updated</string>
+    <string name="label_ph_changed">Phone number has been updated</string>
+    <string name="label_name_changed">Username has been updated</string>
+    <string name="ob_welcome_msg">Welcome to e-GRAS Mobile</string>
+    <string name="ob_generate_challan">Generate e-Challans</string>
+    <string name="ob_search_challan">Search Challans</string>
+    <string name="ob_review_transaction">Review Transaction History</string>
 
 </resources>
