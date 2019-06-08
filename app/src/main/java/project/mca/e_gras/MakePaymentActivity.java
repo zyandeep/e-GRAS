@@ -49,12 +49,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
 import project.mca.e_gras.adapter.DeptSpinnerAdapter;
@@ -90,9 +94,10 @@ public class MakePaymentActivity extends AppCompatActivity {
     MaterialSpinner deptSpinner, periodSpinner, superSpinner, paymentSpinner, districtSpinner, officeSpinner, yearSpinner;
 
     TextInputLayout deptTextID, payerName, panNo, blockNo, locality, area, pinNo, mobileNo, remarks;
+    TextInputLayout fromDateTextInput, toDateTextInput;
 
-    TextView fromDateTextView, toDateTextView;
     TextView headerTextView;
+
     ViewGroup datePickerPanel;
     // all the five form layouts
     ViewGroup departmentDetailsForm;
@@ -118,18 +123,12 @@ public class MakePaymentActivity extends AppCompatActivity {
     List<SchemeModel> schemeModelList = new ArrayList<>();
     // SwipToRefresh layout
     SwipeRefreshLayout refreshLayout;
-
+    // the year user selected
+    int selectedYear;
     // This map will contain all input parameters
     // and will get POSTed to PHP backend finally
     private Map<String, Object> parametersMap;
-
     private BroadcastReceiver myReceiver;
-
-
-    // the year user selected
-    int selectedYear;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,8 +202,8 @@ public class MakePaymentActivity extends AppCompatActivity {
         emptyState = findViewById(R.id.empty_scheme);
 
 
-        fromDateTextView = findViewById(R.id.from_date_text_view);
-        toDateTextView = findViewById(R.id.to_date_text_view);
+        fromDateTextInput = findViewById(R.id.from_date_text_input);
+        toDateTextInput = findViewById(R.id.to_date_text_input);
 
         // form header textView
         headerTextView = findViewById(R.id.header_textView);
@@ -562,8 +561,8 @@ public class MakePaymentActivity extends AppCompatActivity {
                     superSpinner.setVisibility(View.GONE);
                     datePickerPanel.setVisibility(View.VISIBLE);
 
-                    fromDateTextView.setText(getString(R.string.label_select_from_date));
-                    toDateTextView.setText(getString(R.string.label_select_to_date));
+                    fromDateTextInput.getEditText().setText("");
+                    toDateTextInput.getEditText().setText("");
 
                     parametersMap.put("PERIOD", "S");
                 } else {
@@ -628,8 +627,6 @@ public class MakePaymentActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
-
-                                Log.d(TAG, idToken);
 
                                 switch (tag) {
                                     case TAG_DEPT_NAMES:
@@ -981,11 +978,16 @@ public class MakePaymentActivity extends AppCompatActivity {
         switch (curState) {
             case 1:
                 // validation required
+                validateStageOne();
+
                 departmentDetailsForm.setVisibility(View.GONE);
 
                 break;
 
             case 2:
+                // check Total Amount
+                validateStageTwo();
+
                 schemeDetailsForm.setVisibility(View.GONE);
 
                 // if the user clicks "NEXT", then only
@@ -999,6 +1001,8 @@ public class MakePaymentActivity extends AppCompatActivity {
 
             case 3:
                 // validation required
+                Log.d(TAG, "showFrom: " + validateStageThree());
+
                 payerDetailsForm.setVisibility(View.GONE);
 
                 // if the user clicks "NEXT", OR when the user wants to go forward, then only
@@ -1061,18 +1065,289 @@ public class MakePaymentActivity extends AppCompatActivity {
         }
     }
 
+
+    private boolean validateStageThree() {
+        boolean[] isOk = new boolean[9];
+
+        if (!Pattern.matches("\\w+", deptTextID.getEditText().getText().toString().trim())) {
+            isOk[0] = false;
+            deptTextID.setErrorEnabled(true);
+            deptTextID.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[0] = true;
+            deptTextID.setErrorEnabled(false);
+        }
+
+        if (!Pattern.matches("^[a-zA-Z][\\w ]*$", payerName.getEditText().getText().toString().trim())) {
+            isOk[1] = false;
+            payerName.setErrorEnabled(true);
+            payerName.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[1] = true;
+            payerName.setErrorEnabled(false);
+        }
+
+
+        String pan = panNo.getEditText().getText().toString().trim();
+        if (pan.length() > 0) {
+            if (pan.length() != 10 ||
+                    Pattern.matches("\\p{Alpha}{10}", pan) ||
+                    Pattern.matches("\\p{Digit}{10}", pan) ||
+                    !Pattern.matches("\\p{Alnum}{10}", pan)
+            ) {
+
+                isOk[2] = false;
+                panNo.setErrorEnabled(true);
+                panNo.setError(getString(R.string.error_invalid_data));
+            } else {
+                isOk[2] = true;
+                panNo.setErrorEnabled(false);
+            }
+        } else {
+            isOk[2] = true;
+            panNo.setErrorEnabled(false);
+        }
+
+
+        if (!Pattern.matches("[\\w ]*", blockNo.getEditText().getText().toString().trim())) {
+            isOk[3] = false;
+            blockNo.setErrorEnabled(true);
+            blockNo.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[3] = true;
+            blockNo.setErrorEnabled(false);
+        }
+
+        if (!Pattern.matches("[\\w ]*", locality.getEditText().getText().toString().trim())) {
+            isOk[4] = false;
+            locality.setErrorEnabled(true);
+            locality.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[4] = true;
+            locality.setErrorEnabled(false);
+        }
+
+        if (!Pattern.matches("[\\w ]*", area.getEditText().getText().toString().trim())) {
+            isOk[5] = false;
+            area.setErrorEnabled(true);
+            area.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[5] = true;
+            area.setErrorEnabled(false);
+        }
+
+
+        if (!Pattern.matches("(\\d{6}|[ ]?)", pinNo.getEditText().getText().toString().trim())) {
+            isOk[6] = false;
+            pinNo.setErrorEnabled(true);
+            pinNo.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[6] = true;
+            pinNo.setErrorEnabled(false);
+        }
+
+
+        if (!Pattern.matches("\\d{10}", mobileNo.getEditText().getText().toString().trim())) {
+            isOk[7] = false;
+            mobileNo.setErrorEnabled(true);
+            mobileNo.setError(getString(R.string.error_invalid_data));
+        } else {
+            isOk[7] = true;
+            mobileNo.setErrorEnabled(false);
+        }
+
+
+        if (!Pattern.matches("[\\s\\S]*", remarks.getEditText().getText().toString().trim())) {
+            isOk[8] = false;
+            remarks.setErrorEnabled(true);
+            remarks.setError(getString(R.string.error_phone));
+        } else {
+            isOk[8] = true;
+            remarks.setErrorEnabled(false);
+        }
+
+
+        // if any array item is false, then return false
+        for (boolean item : isOk) {
+            if (!item) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    private boolean validateStageTwo() {
+        if (schemeAdapter.getTotalAmount() <= 0.00f) {
+
+            new BubbleShowCaseBuilder(this)
+                    .title(getString(R.string.label_error))
+                    .description(getString(R.string.error_total_amount))
+                    .targetView(totalAmountTextView)
+                    .backgroundColorResourceId(R.color.colorError)
+                    .textColorResourceId(R.color.white)
+                    .imageResourceId(R.drawable.ic_warn)
+                    .show();
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    private boolean validateStageOne() {
+        boolean[] isOk = new boolean[8];
+
+        if (deptSpinner.getSelectedItem() == null) {
+            isOk[0] = false;
+            deptSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[0] = true;
+            deptSpinner.setError(null);
+        }
+
+        if (paymentSpinner.getSelectedItem() == null) {
+            isOk[1] = false;
+            paymentSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[1] = true;
+            paymentSpinner.setError(null);
+        }
+
+        if (districtSpinner.getSelectedItem() == null) {
+            isOk[2] = false;
+            districtSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[2] = true;
+            districtSpinner.setError(null);
+        }
+
+        if (officeSpinner.getSelectedItem() == null) {
+            isOk[3] = false;
+            officeSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[3] = true;
+            officeSpinner.setError(null);
+        }
+
+        if (yearSpinner.getSelectedItem() == null) {
+            isOk[4] = false;
+            yearSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[4] = true;
+            yearSpinner.setError(null);
+        }
+
+        if (periodSpinner.getSelectedItem() == null) {
+            isOk[5] = false;
+            periodSpinner.setError(R.string.error_spinner);
+        } else {
+            isOk[5] = true;
+            periodSpinner.setError(null);
+        }
+
+
+        // only if this spinner is visible
+        if (superSpinner.getVisibility() == View.VISIBLE) {
+            if (superSpinner.getSelectedItem() == null) {
+                isOk[6] = false;
+                superSpinner.setError(R.string.error_spinner);
+            } else {
+                isOk[6] = true;
+                superSpinner.setError(null);
+            }
+        } else {
+            isOk[6] = true;
+            superSpinner.setError(null);
+        }
+
+
+        if (datePickerPanel.getVisibility() == View.VISIBLE) {
+
+            if (yearSpinner.getSelectedItem() != null) {
+                String[] y = yearSpinner.getSelectedItem().toString().split("-");
+                Arrays.sort(y);
+
+                try {
+                    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", new Locale("en", "IN"));
+                    Calendar calendar = Calendar.getInstance();
+
+                    Date d1 = df.parse(fromDateTextInput.getEditText().getText().toString());       // from date
+                    Date d2 = df.parse(toDateTextInput.getEditText().getText().toString());       // to date
+
+                    calendar.setTime(d1);
+                    if (Arrays.binarySearch(y, String.valueOf(calendar.get(Calendar.YEAR))) >= 0) {
+                        calendar.setTime(d2);
+
+                        if (Arrays.binarySearch(y, String.valueOf(calendar.get(Calendar.YEAR))) >= 0) {
+
+                            if (d1.before(d2)) {
+                                // valid dates
+                                isOk[7] = true;
+                                fromDateTextInput.setErrorEnabled(false);
+                                toDateTextInput.setErrorEnabled(false);
+                            } else {
+                                isOk[7] = false;
+                                fromDateTextInput.setErrorEnabled(true);
+                                fromDateTextInput.setError(getString(R.string.error_dates));
+                                toDateTextInput.setErrorEnabled(true);
+                                toDateTextInput.setError(getString(R.string.error_dates));
+                            }
+                        } else {
+                            isOk[7] = false;
+                            fromDateTextInput.setErrorEnabled(true);
+                            fromDateTextInput.setError(getString(R.string.error_dates));
+                            toDateTextInput.setErrorEnabled(true);
+                            toDateTextInput.setError(getString(R.string.error_dates));
+                        }
+                    } else {
+                        isOk[7] = false;
+                        fromDateTextInput.setErrorEnabled(true);
+                        fromDateTextInput.setError(getString(R.string.error_dates));
+                        toDateTextInput.setErrorEnabled(true);
+                        toDateTextInput.setError(getString(R.string.error_dates));
+                    }
+
+                } catch (Exception ex) {
+                    isOk[7] = false;
+                    fromDateTextInput.setErrorEnabled(true);
+                    fromDateTextInput.setError(getString(R.string.error_dates));
+                    toDateTextInput.setErrorEnabled(true);
+                    toDateTextInput.setError(getString(R.string.error_dates));
+                }
+            }
+        } else {
+            isOk[7] = true;
+            fromDateTextInput.setErrorEnabled(false);
+            toDateTextInput.setErrorEnabled(false);
+        }
+
+
+        // if any array item is false, then return false
+        for (boolean item : isOk) {
+            if (!item) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     private void savePayerDetails() {
         ///Validation required
 
-        String text_id = deptTextID.getEditText().getText().toString();
-        String party_name = payerName.getEditText().getText().toString();
-        String pan_no = panNo.getEditText().getText().toString();
-        String address1 = blockNo.getEditText().getText().toString();
-        String address2 = locality.getEditText().getText().toString();
-        String address3 = area.getEditText().getText().toString();
-        String pin_no = pinNo.getEditText().getText().toString();
-        String mobile_no = mobileNo.getEditText().getText().toString();
-        String remarks = this.remarks.getEditText().getText().toString();
+        String text_id = deptTextID.getEditText().getText().toString().trim();
+        String party_name = payerName.getEditText().getText().toString().trim();
+        String pan_no = panNo.getEditText().getText().toString().trim();
+        String address1 = blockNo.getEditText().getText().toString().trim();
+        String address2 = locality.getEditText().getText().toString().trim();
+        String address3 = area.getEditText().getText().toString().trim();
+        String pin_no = pinNo.getEditText().getText().toString().trim();
+        String mobile_no = mobileNo.getEditText().getText().toString().trim();
+        String remarks = this.remarks.getEditText().getText().toString().trim();
 
         parametersMap.put("TAX_ID", text_id);
         parametersMap.put("PARTY_NAME", party_name);
@@ -1108,7 +1383,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 String f_date = String.format(new Locale("en", "IN"), "%d/%d/%d",
                                         dayOfMonth, month, year);
 
-                                fromDateTextView.setText(f_date);
+                                fromDateTextInput.getEditText().setText(f_date);
                                 parametersMap.put("FROM_DATE", f_date);
                             }
                         },
@@ -1131,7 +1406,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                                 String t_date = String.format(new Locale("en", "IN"), "%d/%d/%d",
                                         dayOfMonth, month, year);
 
-                                toDateTextView.setText(t_date);
+                                toDateTextInput.getEditText().setText(t_date);
                                 parametersMap.put("TO_DATE", t_date);
                             }
                         },
@@ -1183,8 +1458,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             jsonObject = new JSONObject(json);
 
             Log.d(TAG, "submitData: " + jsonObject.toString(4));
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

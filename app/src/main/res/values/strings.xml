@@ -203,9 +203,12 @@
         <item>@string/jan_mar</item>
     </string-array>
 
-    <string name="passowrd_helper">Password should be at least 6 character long and a mix of letters and numbers</string>
+    <string name="passowrd_helper">Password should be at least 6 characters long and a mix of letters and numbers</string>
     <string name="password_error">Please, enter a valid password</string>
-    <string name="error_user_name">Please, enter an username</string>
+    <string name="error_user_name">Please, enter a valid username</string>
+    <string name="error_phone">Please, enter a valid phone number</string>
+    <string name="error_email">Please, enter a valid email address</string>
+    <string name="error_pwds_not_match">Both the passwords must be the same</string>
     <string name="label_serach_challan">Search Challan</string>
     <string name="search_hint">Your GRN No…</string>
     <string name="label_help">Help</string>
@@ -230,7 +233,7 @@
     <string name="transaction_history_empty">Transaction History is Empty</string>
     <string name="label_learn_how">Learn How</string>
     <string name="label_recent_transactions">Recent Transactions</string>
-    <string name="label_see_more">See More…</string>
+    <string name="label_see_more">See More</string>
     <string name="label_password_changed">Password has been updated</string>
     <string name="label_email_changed">Email has been updated</string>
     <string name="label_ph_changed">Phone number has been updated</string>
@@ -239,5 +242,10 @@
     <string name="ob_generate_challan">Generate e-Challans</string>
     <string name="ob_search_challan">Search Challans</string>
     <string name="ob_review_transaction">Review Transaction History</string>
+    <string name="error_spinner">Please, select an option</string>
+    <string name="error_dates">Please, select a valid date</string>
+    <string name="error_total_amount">Total Amount must be greater than zero</string>
+    <string name="label_error">Error!</string>
+    <string name="error_invalid_data">Please, provide valid data</string>
 
 </resources>

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -83,8 +81,7 @@ public class LogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         this.modelList.remove(null);
         this.modelList.addAll(newList);
-
-        runLayoutAnimation();
+        notifyDataSetChanged();
     }
 
     public void removeNull() {
@@ -98,17 +95,6 @@ public class LogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.modelList.clear();
         notifyDataSetChanged();
     }
-
-
-    private void runLayoutAnimation() {
-        LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
-
-        recyclerView.setLayoutAnimation(controller);
-        notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-    }
-
 
     // View Holder to hold non-empty item view
     private class ItemViewHolder extends RecyclerView.ViewHolder {

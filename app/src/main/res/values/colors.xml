@@ -7,5 +7,5 @@
     <color name="numberPickerColor">@color/colorPrimary</color>
     <color name="onBoardingTextColor">#595959</color>
     <color name="shimmerBackground">#C0C0C0</color>
-
+    <color name="colorError">#ea3c53</color>
 </resources>

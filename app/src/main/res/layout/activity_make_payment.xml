@@ -182,20 +182,31 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <!-- From date -->
-                            <TextView
-                                android:id="@+id/from_date_text_view"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/from_date_text_input"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:hint="@string/label_select_from_date"
                                 android:padding="8dp"
-                                android:text="@string/label_select_from_date"
-                                android:textAlignment="textStart"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/about_text_color"
-                                android:textSize="18sp" />
+                                app:errorEnabled="true"
+                                app:hintAnimationEnabled="true"
+                                app:hintEnabled="true">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/from_date_editText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:editable="false"
+                                    android:focusable="false"
+                                    android:inputType="none"
+                                    android:singleLine="true" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageButton
                                 android:id="@+id/from_date_img_button"
@@ -210,20 +221,31 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <!-- To date -->
-                            <TextView
-                                android:id="@+id/to_date_text_view"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/to_date_text_input"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:hint="@string/label_select_to_date"
                                 android:padding="8dp"
-                                android:text="@string/label_select_to_date"
-                                android:textAlignment="textStart"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/about_text_color"
-                                android:textSize="18sp" />
+                                app:errorEnabled="true"
+                                app:hintAnimationEnabled="true"
+                                app:hintEnabled="true">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/to_date_editText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:editable="false"
+                                    android:focusable="false"
+                                    android:inputType="none"
+                                    android:singleLine="true" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageButton
                                 android:id="@+id/to_date_img_button"
@@ -281,7 +303,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dept_text_id_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -299,7 +321,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -316,7 +338,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pan_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -333,7 +355,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/block_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -350,7 +372,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/locality_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -368,7 +390,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/area_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -386,7 +408,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pin_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -404,7 +426,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/mobile_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -421,7 +443,7 @@
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/remarks_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -23,7 +23,12 @@
     <string name="developer_info">NIC দ্বাৰা নিৰ্মিত</string>
     <string name="version_info">১ম সংস্কৰণ</string>
     <string name="connect_us_label">যোগাযোগ কৰক আমাৰ সৈতে…</string>
-    <string name="about_page_description">e-GRAS ৰ বিষয়ে আমি আপোনাক জনাব বিচৰা নাই। Sorry :(</string>
+    <string name="about_page_description">
+        e-GRAS হৈছে এটা চৰকাৰী Electronic Payment Gateway যাৰ জৰিয়তে online চালান কাটিব পাৰি।
+        দৰাচলতে, চৰকাৰৰ বিভিন্ন বিভাগৰ অৰ্ন্তগত অফিচসমুহে বিভিন্ন আচনিৰ বাবদ চৰকাৰক কৰ দিয়া প্ৰক্ৰিয়াটো e-GRAS এ online কৰি তুলিছে।
+        এই সুবিধা লাভ কৰিবৰ কাৰণে কৰজমাকাৰীৰ Net Banking Account, e-GRAS এ উল্লেখ কৰা যিকোনো এটা Bank ত এটা থাকিব লাগিব।
+        এই সুবিধা ২৪*৭ উপলব্ধ। আৰু অধিক জানিবলৈ অনুগ্ৰহ কৰি e-GRAS ৰ Website তলৈ যাওক।
+    </string>
     <string name="title_about_egras">e-GRAS ৰ বিষয়ে</string>
     <string name="fab_tap_target_desc">এই Button টিপি নতুন চালান জমা দিয়ক</string>
     <string name="fab_tap_target_title">\"চালান জমা দিয়া\" Button</string>
@@ -31,7 +36,7 @@
     <string name="update_password_button">পাছৱৰ্দ সলনি কৰক</string>
     <string name="as_lang_label">অসমীয়া</string>
     <string name="theme_pref_title">থিম</string>
-    <string name="app_restart_info">Application টো  restart কৰাৰ প্ৰয়োযন</string>
+    <string name="app_restart_info">Application টো Restart কৰাৰ প্ৰয়োযন</string>
     <string name="error_no_network">আপুনি Internet সংযোগৰ পৰা বিচ্ছিন্ন হৈ আছে</string>
     <string name="error_server_down">Server টো সংযোগ সীমাৰ বাহিৰত আছে</string>
     <string name="spot_dialog_message">অলপ সময় ৰ\'ব…</string>
@@ -85,7 +90,7 @@
     <string name="label_month">মাহ:</string>
     <string name="label_done">হৈ গ\'ল</string>
     <string name="label_cancel">এ বাদ দিয়ক আৰু।</string>
-    <string name="label_no_transaction_history_found">"কোনো transaction পোৱা নগ'ল। "</string>
+    <string name="label_no_transaction_history_found">কোনো Transaction পোৱা নগ\'ল।</string>
     <string name="jan">জানু</string>
     <string name="mar">মাৰ্চ</string>
     <string name="apr">এপ্ৰিল</string>
@@ -98,7 +103,7 @@
     <string name="nov">নভে</string>
     <string name="dec">ডিচে</string>
     <string name="feb">ফেব্ৰু</string>
-    <string name="label_no_transaction">কোনো  নতুন transaction পোৱা নগ\'ল</string>
+    <string name="label_no_transaction">কোনো  নতুন Transaction পোৱা নগ\'ল</string>
     <string name="label_help">e-GRAS ৰ ব্য়ৱহাৰ</string>
     <string name="annual">বাৰ্ষিক</string>
     <string name="half">ছমহীয়া</string>
@@ -119,29 +124,37 @@
     <string name="label_download_challan">চালান Download কৰক</string>
     <string name="label_downloading_file">চালান Download হৈ আছে…</string>
     <string name="label_egras_info">e-GRAS ৰ সহায়ত আপুনি সহজে চালান জমা দিব পাৰে তথা সকলো লেনদেনৰ বিৱৰণ চাব পাৰে।</string>
-    <string name="label_egras_serach_challan">আপুনি ইতিমধ্যে কটা চালানৰ অনুসন্ধান পাৰে তথা download ও কৰিব পাৰে, ইচ্ছা কৰিলে।</string>
-    <string name="label_email_changed">Email update হ\'ল</string>
-    <string name="label_file_downloaded">File download হ\'ল</string>
-    <string name="label_generate_echallan">online চালান কটাটো সহজ হৈ পৰিল। Payment Screen লৈ যাওক, আৱশ্যকীয় তথ্য়সমুহৰ যোগান ধৰক আৰু Submit Button ত Click কৰক। হৈ গ\'ল।</string>
+    <string name="label_egras_serach_challan">আপুনি ইতিমধ্যে কটা চালানৰ অনুসন্ধান পাৰে তথা Download ও কৰিব পাৰে, ইচ্ছা কৰিলে।</string>
+    <string name="label_email_changed">ই-মেইল Update হ\'ল</string>
+    <string name="label_file_downloaded">File Download হ\'ল</string>
+    <string name="label_generate_echallan">Online চালান কটাটো সহজ হৈ পৰিল। Payment Screen লৈ যাওক, আৱশ্যকীয় তথ্য়সমুহৰ যোগান ধৰক আৰু Submit Button ত Click কৰক। হৈ গ\'ল।</string>
     <string name="label_learn_how">জানক কেনেদৰে</string>
-    <string name="label_name_changed">ব্যৱহাৰকাৰীৰ নাম update হ\'ল</string>
+    <string name="label_name_changed">ব্যৱহাৰকাৰীৰ নাম Update হ\'ল</string>
     <string name="label_network_error">Network Error! আপুনি Interner ত Connect হৈ আছেনে চাওকচোন বাৰু… </string>
     <string name="label_no_log">কোনো কার্য বিৱৰণ পোৱা নগ\'ল</string>
     <string name="label_notification">চালান Download হ\'ল</string>
-    <string name="label_password_changed">Password update হ\'ল</string>
-    <string name="label_ph_changed">Phone number update হ\'ল</string>
-    <string name="label_recent_transactions">শেহতীয়া লেনদেন</string>
-    <string name="label_review_trans">আৰু, সকলো লেনদেনৰ তথ্য় বিশদ ভাবে জানিবলৈ Transaction History Screen লৈ যাওক।</string>
+    <string name="label_password_changed">পাছৱৰ্দ Update হ\'ল</string>
+    <string name="label_ph_changed">ফোন নম্বৰ Update হ\'ল</string>
+    <string name="label_recent_transactions">শেহতীয়া লেনদেনসমুহ</string>
+    <string name="label_review_trans">শেষত, সকলো লেনদেনৰ তথ্য় বিশদ ভাবে জানিবলৈ Transaction History Screen লৈ যাওক।</string>
     <string name="label_search_challans_here">চালানৰ অনুসন্ধান কৰক…</string>
-    <string name="label_see_more">আৰু চাওক…</string>
+    <string name="label_see_more">আৰু চাওক</string>
     <string name="label_write_file_error">External Storage পোৱা নগ\'ল</string>
     <string name="transaction_history_empty">লেনদেনৰ তথ্য় পোৱা নগ\'ল</string>
-    <string name="password_error">অনুগ্ৰহ কৰি বৈধ Password দিয়ক</string>
+    <string name="password_error">অনুগ্ৰহ কৰি বৈধ পাছৱৰ্দ দিয়ক</string>
     <string name="label_zero_transaction">লেনদেনৰ তথ্য় পোৱা নগ\'ল</string>
     <string name="message_offline">আপুনি এতিয়া Offline আছে</string>
     <string name="ob_generate_challan">ই-চালান কাটক</string>
     <string name="ob_review_transaction">লেনদেনৰ তথ্য় পৰীক্ষা কৰক</string>
     <string name="ob_search_challan">চালানৰ অনুসন্ধান কৰক</string>
     <string name="ob_welcome_msg">e-GRAS Mobile লৈ স্বাগতম</string>
-    <string name="passowrd_helper">Password টো অন্ততঃ ৬ টা আখৰযুক্ত, বর্ণ আৰু সংখ্যাৰ সংমিশ্রণ হ\'ব লাগিব</string>
+    <string name="passowrd_helper">পাছৱৰ্দটো অন্ততঃ ৬ টা আখৰযুক্ত, বর্ণ আৰু সংখ্যাৰ সংমিশ্রণ হ\'ব লাগিব</string>
+    <string name="error_phone">অনুগ্রহ কৰি বৈধ ফোন নম্বৰ দিয়ক</string>
+    <string name="error_pwds_not_match">পাছৱৰ্দ দুটা একে হ\'ব লাগিব</string>
+    <string name="error_email">অনুগ্রহ কৰি বৈধ ই-মেইল দিয়ক</string>
+    <string name="error_dates">অনুগ্রহ কৰি বৈধ তাৰিখ দিয়ক</string>
+    <string name="error_invalid_data">অনুগ্রহ কৰি বৈধ তথ্য় দিয়ক</string>
+    <string name="error_spinner">অনুগ্রহ কৰি বিকল্প নির্বাচন কৰক</string>
+    <string name="error_total_amount">সৰ্বমুঠ পৰিমাণ শূন্য়তকৈ ডাঙৰ হ\'ব লাগিব</string>
+    <string name="label_error">ভুল</string>
 </resources>

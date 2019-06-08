@@ -7,6 +7,7 @@ import com.androidnetworking.AndroidNetworking;
 
 public class MyApplication extends Application {
 
+//    NIC Server
 //    public static final String BASE_URL = "http://10.177.15.95/api";
 //    public static final String HOST_NAME = "10.177.15.95";
 

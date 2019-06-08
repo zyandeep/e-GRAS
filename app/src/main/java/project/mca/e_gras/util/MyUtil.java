@@ -558,5 +558,4 @@ public class MyUtil {
             updateLog(context, uri, idToken, id);
         }
     }
-
 }

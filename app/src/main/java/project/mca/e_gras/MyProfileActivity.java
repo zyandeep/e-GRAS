@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -20,6 +21,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import project.mca.e_gras.util.MyUtil;
 
@@ -88,19 +90,26 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
     public void updatePassword(View view) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String pwd = password.getEditText().getText().toString().trim();
         String c_pwd = confPassword.getEditText().getText().toString().trim();
 
-        if (pwd.isEmpty() || c_pwd.isEmpty() || !pwd.equals(c_pwd)) {
+        if (!validatePassword(pwd)) {
+            password.setErrorEnabled(true);
+            password.setError(getString(R.string.password_error));
+            return;
+        }
+
+        // check if both passwords are the same
+        if (!pwd.equals(c_pwd)) {
             confPassword.setErrorEnabled(true);
-            confPassword.setError(getString(R.string.password_error));
+            confPassword.setError(getString(R.string.error_pwds_not_match));
             return;
         }
 
         MyUtil.showSpotDialog(MyProfileActivity.this);
 
         // update password
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         user.updatePassword(pwd)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -108,17 +117,44 @@ public class MyProfileActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             MyUtil.closeSpotDialog();
 
+                            password.setErrorEnabled(false);
                             confPassword.setErrorEnabled(false);
+
+                            // clear the passwords
+                            password.getEditText().setText("");
+                            confPassword.getEditText().setText("");
 
                             informUser(getString(R.string.label_password_changed));
                         } else {
-                            //inspect Firebase Auth Exception and alert user accordingly with localised message
-
-                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
+                            displayErrorMessage(task.getException());
                         }
                     }
                 });
 
+    }
+
+
+    private boolean validatePassword(String password) {
+        /* ^\p{Alpha}{6,}$
+         * ^\d{6,}$
+         *  ^\s{6,}$
+         *  ^\p{Punct}{6,}$
+         * */
+
+        return password.length() >= 6 &&
+                !Pattern.matches("^\\p{Alpha}{6,}$", password) &&
+                !Pattern.matches("^\\d{6,}$", password) &&
+                !Pattern.matches("^\\s{6,}$", password) &&
+                !Pattern.matches("^\\p{Punct}{6,}$", password);
+    }
+
+
+    private void displayErrorMessage(Exception exception) {
+        if (exception instanceof FirebaseNetworkException) {
+            MyUtil.showBottomDialog(this, getString(R.string.label_network_error));
+        } else {
+            MyUtil.showBottomDialog(this, exception.getMessage());
+        }
     }
 
 
@@ -128,21 +164,29 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
     public void updateUserEmail(View view) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String email = this.email.getEditText().getText().toString();
+        //^[\w.+-]+@\w+\.\w+$
+        String mail = this.email.getEditText().getText().toString().trim();
+
+        if (!Pattern.matches("^[\\w.+-]+@\\w+\\.\\w+$", mail)) {
+            email.setErrorEnabled(true);
+            email.setError(getString(R.string.error_email));
+            return;
+        }
 
         MyUtil.showSpotDialog(this);
 
         // update email
-        user.updateEmail(email)
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.updateEmail(mail)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             MyUtil.closeSpotDialog();
+                            email.setErrorEnabled(false);
                             informUser(getString(R.string.label_email_changed));
                         } else {
-                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
+                            displayErrorMessage(task.getException());
                         }
                     }
                 });
@@ -150,17 +194,24 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
     public void updateUserPhone(View view) {
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //^(\+91)?\d{10}$
 
         String phoneNumber = this.phone.getEditText().getText().toString().trim();
+
+        if (!Pattern.matches("^(\\+91)?\\d{10}$", phoneNumber)) {
+            phone.setErrorEnabled(true);
+            phone.setError(getString(R.string.error_phone));
+            return;
+        }
+
         if (!phoneNumber.startsWith("+91")) {
             phoneNumber = "+91" + phoneNumber;
         }
 
         MyUtil.showSpotDialog(this);
 
-
         // authenticate the new phone number
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 60,                 // Timeout duration
@@ -179,11 +230,11 @@ public class MyProfileActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             MyUtil.closeSpotDialog();
+                                            phone.setErrorEnabled(false);
                                             informUser(getString(R.string.label_ph_changed));
                                         }
                                         else {
-                                            // handle FirebaseAuth Exception
-                                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
+                                            displayErrorMessage(task.getException());
                                         }
                                     }
                                 });
@@ -192,18 +243,17 @@ public class MyProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
-                        // handle FirebaseAuth Exception
-                        MyUtil.showBottomDialog(MyProfileActivity.this, e.getMessage());
+                        displayErrorMessage(e);
                     }
                 });
     }
 
 
     public void updateUserName(View view) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = displayName.getEditText().getText().toString();
+        //^[a-zA-Z]\w*$
+        String name = displayName.getEditText().getText().toString().trim();
 
-        if (name.isEmpty()) {
+        if (!Pattern.matches("^[a-zA-Z][\\w ]*$", name)) {
             displayName.setErrorEnabled(true);
             displayName.setError(getString(R.string.error_user_name));
             return;
@@ -212,6 +262,7 @@ public class MyProfileActivity extends AppCompatActivity {
         MyUtil.showSpotDialog(this);
 
         // update display name
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build();
@@ -224,8 +275,7 @@ public class MyProfileActivity extends AppCompatActivity {
                             displayName.setErrorEnabled(false);
                             informUser(getString(R.string.label_name_changed));
                         } else {
-                            // handle FirebaseAuth Exception
-                            MyUtil.showBottomDialog(MyProfileActivity.this, task.getException().getMessage());
+                            displayErrorMessage(task.getException());
                         }
                     }
                 });
