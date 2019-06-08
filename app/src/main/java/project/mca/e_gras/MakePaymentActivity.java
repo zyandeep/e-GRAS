@@ -130,6 +130,11 @@ public class MakePaymentActivity extends AppCompatActivity {
     private Map<String, Object> parametersMap;
     private BroadcastReceiver myReceiver;
 
+
+    // to mark the completion of a stage
+    boolean[] stagesCompleted = new boolean[3];
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -972,23 +977,57 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .show();
     }
 
+
+    private boolean completeAllStages() {
+        // if any array item is false, then return false
+        for (boolean item : stagesCompleted) {
+            if (!item) {
+
+                new BubbleShowCaseBuilder(this)
+                        .title(getString(R.string.label_attention))
+                        .description(getString(R.string.error_incomplete_stage))
+                        .targetView(stateProgressBar)
+                        .backgroundColorResourceId(R.color.colorAccent)
+                        .textColorResourceId(R.color.white)
+                        .imageResourceId(R.drawable.ic_warn)
+                        .show();
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     private void showFrom(int curState, int nextState) {
 
         // hide the form associates with "curState"
         switch (curState) {
             case 1:
                 // validation required
-                validateStageOne();
+
+                if (!validateStageOne()) {
+                    return;
+                } else if (nextState == 4 && !completeAllStages()) {
+                    return;
+                }
 
                 departmentDetailsForm.setVisibility(View.GONE);
 
                 break;
 
             case 2:
-                // check Total Amount
-                validateStageTwo();
 
-                schemeDetailsForm.setVisibility(View.GONE);
+                if (curState > nextState) {
+                    schemeDetailsForm.setVisibility(View.GONE);
+                } else if (!validateStageTwo()) {
+                    return;
+                } else if (nextState == 4 && !completeAllStages()) {
+                    return;
+                } else {
+                    schemeDetailsForm.setVisibility(View.GONE);
+                }
 
                 // if the user clicks "NEXT", then only
                 // store scheme details
@@ -1001,12 +1040,16 @@ public class MakePaymentActivity extends AppCompatActivity {
 
             case 3:
                 // validation required
-                Log.d(TAG, "showFrom: " + validateStageThree());
+                if (curState > nextState) {
+                    payerDetailsForm.setVisibility(View.GONE);
+                } else if (!validateStageThree()) {
+                    return;
+                } else if (nextState == 4 && !completeAllStages()) {
+                    return;
+                } else {
+                    payerDetailsForm.setVisibility(View.GONE);
+                }
 
-                payerDetailsForm.setVisibility(View.GONE);
-
-                // if the user clicks "NEXT", OR when the user wants to go forward, then only
-                // validate the inputs and
                 // save the values
                 savePayerDetails();
 
@@ -1170,10 +1213,15 @@ public class MakePaymentActivity extends AppCompatActivity {
         // if any array item is false, then return false
         for (boolean item : isOk) {
             if (!item) {
+                // mark the stage incomplete
+                stagesCompleted[2] = false;
+
                 return false;
             }
         }
 
+        // mark stage three complete
+        stagesCompleted[2] = true;
         return true;
     }
 
@@ -1190,8 +1238,13 @@ public class MakePaymentActivity extends AppCompatActivity {
                     .imageResourceId(R.drawable.ic_warn)
                     .show();
 
+            // mark the stage incomplete
+            stagesCompleted[1] = false;
+
             return false;
         } else {
+            // mark stage two completed
+            stagesCompleted[1] = true;
             return true;
         }
     }
@@ -1325,13 +1378,19 @@ public class MakePaymentActivity extends AppCompatActivity {
         }
 
 
+
         // if any array item is false, then return false
         for (boolean item : isOk) {
             if (!item) {
+                // mark the stage incomplete
+                stagesCompleted[0] = false;
+
                 return false;
             }
         }
 
+        // mark stage one completed
+        stagesCompleted[0] = true;
         return true;
     }
 

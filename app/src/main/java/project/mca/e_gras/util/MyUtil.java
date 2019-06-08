@@ -54,8 +54,11 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -331,6 +334,33 @@ public class MyUtil {
     }
 
 
+    // this method gets called from within the webview itself
+    public static void downloadChallan(final Context context, final String token, final String query) {
+
+        // Check for WRITE_EXTERNAL_STORAGE permission
+        Dexter.withActivity((AppCompatActivity) context)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        // execute AsyncTask
+                        new DownloadFileTask(context, token, -1)
+                                .execute("https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf", query);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Log.d(TAG, "Permission Denied");
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+    }
+
+
     private static void downloadFile(final Context context, final String token, final String tag, final int id) {
         // log data in backend database
 
@@ -397,39 +427,6 @@ public class MyUtil {
         }
     }
 
-    private static void updateLog(final Context context, final Uri uri, final String idToken, int id) {
-
-        AndroidNetworking.post(BASE_URL + "/update-challan")
-                .addHeaders("Authorization", "Bearer " + idToken)
-                .addBodyParameter("id", String.valueOf(id))             // the row id
-                .addBodyParameter("data", uri.toString())
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Log.d(TAG, "update: " + response);
-
-                        try {
-                            if (response.getBoolean("success")) {
-                                MyUtil.closeFileDialog();
-
-                                // show a notification
-                                if (uri != null) {
-                                    MyUtil.showNotification(context, uri);
-                                }
-                            }
-                        } catch (JSONException e) {
-                        }
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        MyUtil.displayErrorMessage(context, error);
-                    }
-                });
-    }
 
     public static void verifyPayment(final Context context, final String token, final String tag, final int id) {
         if (!AndroidNetworking.isRequestRunning(tag)) {
@@ -479,6 +476,7 @@ public class MyUtil {
         }
     }
 
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     /// ASYNCTASK TO DOWNLOAD THE FILE
     private static class DownloadFileTask extends AsyncTask<String, Void, Uri> {
@@ -486,6 +484,10 @@ public class MyUtil {
         private String idToken;
         private int id;
         private Context context;
+
+        //
+        private String reqParams;
+
 
         public DownloadFileTask(Context context, String idToken, int id) {
             this.idToken = idToken;
@@ -504,6 +506,8 @@ public class MyUtil {
             InputStream is = null;
             OutputStream os = null;
             HttpURLConnection conn = null;
+
+            this.reqParams = strings[1];
 
             try {
                 URL url = new URL(strings[0]);
@@ -554,8 +558,100 @@ public class MyUtil {
 
         @Override
         protected void onPostExecute(Uri uri) {
-            // update log data in the database
-            updateLog(context, uri, idToken, id);
+            if (id == -1) {
+                // insert a new entry into egras_log about challan download
+                insertLog(uri);
+            } else {
+                // update log data in the database
+                updateLog(uri);
+            }
+        }
+
+
+        private void updateLog(final Uri uri) {
+            AndroidNetworking.post(BASE_URL + "/update-challan")
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .addBodyParameter("id", String.valueOf(id))             // the row id
+                    .addBodyParameter("data", uri.toString())
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                if (response.getBoolean("success")) {
+                                    MyUtil.closeFileDialog();
+
+                                    // show a notification
+                                    if (uri != null) {
+                                        MyUtil.showNotification(context, uri);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            MyUtil.displayErrorMessage(context, error);
+                        }
+                    });
+        }
+
+
+        private void insertLog(final Uri uri) {
+            // extract req_param and dept_id first
+
+            Log.d(TAG, "uri: " + uri);
+            Log.d(TAG, "params: " + this.reqParams);
+
+            String[] data = this.reqParams.split("&");
+            Log.d(TAG, Arrays.toString(data));
+
+            String dept_id = data[0].split("=")[1];
+            Log.d(TAG, dept_id);
+
+            Map<String, String> params = new HashMap<>();
+
+            for (String item : data) {
+                String[] temp = item.split("=");
+
+                params.put(temp[0], temp[1]);
+            }
+
+            JSONObject obj = new JSONObject(params);
+            Log.d(TAG, obj.toString());
+
+            AndroidNetworking.post(BASE_URL + "/insert-challan")
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .addBodyParameter("dept_id", dept_id)
+                    .addBodyParameter("req_param", obj.toString())
+                    .addBodyParameter("res_param", uri.toString())
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                if (response.getBoolean("success")) {
+                                    MyUtil.closeFileDialog();
+
+                                    // show a notification
+                                    if (uri != null) {
+                                        MyUtil.showNotification(context, uri);
+                                    }
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            MyUtil.displayErrorMessage(context, error);
+                        }
+                    });
         }
     }
 }

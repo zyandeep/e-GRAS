@@ -11,8 +11,16 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import java.nio.charset.StandardCharsets;
 
@@ -61,7 +69,9 @@ public class PaymentGatewayActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                if (request.getUrl().toString().equals("http://transaction_activity/")) {
+                String url = request.getUrl().toString();
+
+                if (url.equals("http://transaction_activity/")) {
 
                     // finish this activity and go to Transaction list activity
                     Intent intent = new Intent(PaymentGatewayActivity.this, TransactionListActivity.class);
@@ -69,7 +79,18 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                     finish();
 
                     return true;
+                } else if (url.contains("http://download_challan/?")) {
+                    // extract the POST params and then
+                    // download the respective challan
+
+                    Log.d(TAG, "shouldOverrideUrlLoading: " + true);
+
+                    String params = url.split("\\?")[1];
+                    getJWTToken(params);
+
+                    return true;
                 }
+
 
                 // let my WebView load the page
                 return false;
@@ -97,6 +118,36 @@ public class PaymentGatewayActivity extends AppCompatActivity {
             webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
+        }
+    }
+
+
+    private void getJWTToken(final String query) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+
+            MyUtil.showSpotDialog(this);
+
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+
+                                MyUtil.closeSpotDialog();
+
+                                MyUtil.downloadChallan(PaymentGatewayActivity.this, idToken, query);
+                            } else {
+                                // Handle error -> task.getException();
+                                Exception ex = task.getException();
+
+                                if (ex instanceof FirebaseNetworkException) {
+                                    MyUtil.showBottomDialog(PaymentGatewayActivity.this, getString(R.string.label_network_error));
+                                }
+                            }
+                        }
+                    });
         }
     }
 }

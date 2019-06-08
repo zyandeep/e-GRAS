@@ -247,5 +247,6 @@
     <string name="error_total_amount">Total Amount must be greater than zero</string>
     <string name="label_error">Error!</string>
     <string name="error_invalid_data">Please, provide valid data</string>
+    <string name="error_incomplete_stage">Complete all the stages first</string>
 
 </resources>

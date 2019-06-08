@@ -69,7 +69,7 @@
     <string name="label_select_to_date">তাৰিখ নিৰ্বাচন কৰক *</string>
     <string name="label_select_year">বছৰ নিৰ্বাচন কৰক *</string>
     <string name="label_tax_id">বিভাগীয় Tax ID *</string>
-    <string name="label_total_amount">সৰ্বমুঠ পৰিমান</string>
+    <string name="label_total_amount">সৰ্বমুঠ পৰিমাণ</string>
     <string name="label_scheme_details">আচনিৰ তথ্য়</string>
     <string name="label_payer_details">জমাকাৰীৰ তথ্য়</string>
     <string name="label_verify_data">তথ্য় পৰীক্ষা কৰক</string>
@@ -157,4 +157,5 @@
     <string name="error_spinner">অনুগ্রহ কৰি বিকল্প নির্বাচন কৰক</string>
     <string name="error_total_amount">সৰ্বমুঠ পৰিমাণ শূন্য়তকৈ ডাঙৰ হ\'ব লাগিব</string>
     <string name="label_error">ভুল</string>
+    <string name="error_incomplete_stage">প্ৰথমে সকলো পৰ্যায় সৰ্ম্পূণ কৰি লওক</string>
 </resources>
