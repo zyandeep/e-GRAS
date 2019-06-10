@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:visibility="visible"
+        android:layout_gravity="top"
+        android:visibility="invisible"
         app:cardElevation="8dp">
 
         <LinearLayout
@@ -61,12 +62,48 @@
     </androidx.cardview.widget.CardView>
 
 
+    <!-- No-Internet View -->
+    <LinearLayout
+        android:id="@+id/no_internet_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/no_internet_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_no_internet" />
+
+        <TextView
+            android:id="@+id/no_internet_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_reload"
+            android:onClick="reloadData"
+            android:padding="8dp"
+            android:text="@string/error_no_internet"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/about_item_text_color" />
+
+    </LinearLayout>
+
+
     <!-- Department Details Card View -->
     <androidx.cardview.widget.CardView
         android:id="@+id/dept_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:cardElevation="8dp">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

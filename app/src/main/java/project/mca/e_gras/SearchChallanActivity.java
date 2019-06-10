@@ -161,8 +161,6 @@ public class SearchChallanActivity extends AppCompatActivity {
                                 if (ex instanceof FirebaseNetworkException) {
                                     MyUtil.showBottomDialog(SearchChallanActivity.this, getString(R.string.label_network_error));
                                 }
-                                // to find the type of firebase exception
-                                //Log.d(TAG, "firebase: " + ((FirebaseAuthException)ex).getErrorCode());
                             }
                         }
                     });

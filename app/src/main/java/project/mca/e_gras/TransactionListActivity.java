@@ -30,6 +30,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -359,7 +360,10 @@ public class TransactionListActivity extends AppCompatActivity {
 
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
-                                MyUtil.showBottomDialog(TransactionListActivity.this, ex.getMessage());
+
+                                if (ex instanceof FirebaseNetworkException) {
+                                    MyUtil.showBottomDialog(TransactionListActivity.this, getString(R.string.label_network_error));
+                                }
                             }
                         }
                     });

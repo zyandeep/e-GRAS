@@ -35,6 +35,7 @@ import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -99,14 +100,18 @@ public class MakePaymentActivity extends AppCompatActivity {
     TextView headerTextView;
 
     ViewGroup datePickerPanel;
+
     // all the five form layouts
+    ViewGroup noInternet;
+    ViewGroup header;
     ViewGroup departmentDetailsForm;
     ViewGroup schemeDetailsForm;
     ViewGroup payerDetailsForm;
-    //ViewGroup paymentDetailsForm;
     ViewGroup viewSummaryForm;
     ViewGroup emptyState;
     ViewGroup schemeListData;
+
+
     RecyclerView schemeRecyclerView;
     SchemeAdapter schemeAdapter;
     //GSon reference
@@ -210,7 +215,11 @@ public class MakePaymentActivity extends AppCompatActivity {
         fromDateTextInput = findViewById(R.id.from_date_text_input);
         toDateTextInput = findViewById(R.id.to_date_text_input);
 
+
+        noInternet = findViewById(R.id.no_internet_view);
+
         // form header textView
+        header = findViewById(R.id.header_card_view);
         headerTextView = findViewById(R.id.header_textView);
 
         // form viewGroups
@@ -661,7 +670,10 @@ public class MakePaymentActivity extends AppCompatActivity {
                             } else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
-                                MyUtil.showBottomDialog(MakePaymentActivity.this, ex.getMessage());
+
+                                if (ex instanceof FirebaseNetworkException) {
+                                    MyUtil.showBottomDialog(MakePaymentActivity.this, getString(R.string.label_network_error));
+                                }
                             }
                         }
                     });
@@ -923,7 +935,6 @@ public class MakePaymentActivity extends AppCompatActivity {
         // check for server reachability
         MyUtil.checkServerReachable(MakePaymentActivity.this, TAG_DEPT_NAMES);
 
-
         AndroidNetworking.get(BASE_URL + "/departments")
                 .addHeaders("Authorization", "Bearer " + idToken)
                 .setPriority(Priority.MEDIUM)
@@ -964,6 +975,11 @@ public class MakePaymentActivity extends AppCompatActivity {
             DeptSpinnerAdapter adapter = new DeptSpinnerAdapter(this, deptModelList);
             deptSpinner.setAdapter(adapter);
         }
+
+        // hide the no_internet_view and show the header and deptForm
+        noInternet.setVisibility(View.GONE);
+        header.setVisibility(View.VISIBLE);
+        departmentDetailsForm.setVisibility(View.VISIBLE);
 
         // Now, highlight the * mark
         // add the bubble showcase
@@ -1121,7 +1137,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             deptTextID.setErrorEnabled(false);
         }
 
-        if (!Pattern.matches("^[a-zA-Z][\\w ]*$", payerName.getEditText().getText().toString().trim())) {
+        if (!Pattern.matches("^[a-zA-Z][\\w .]*$", payerName.getEditText().getText().toString().trim())) {
             isOk[1] = false;
             payerName.setErrorEnabled(true);
             payerName.setError(getString(R.string.error_invalid_data));
@@ -1152,7 +1168,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         }
 
 
-        if (!Pattern.matches("[\\w ]*", blockNo.getEditText().getText().toString().trim())) {
+        if (!Pattern.matches("^([a-zA-Z +0-9~%.,:_\\-@&()]*)$", blockNo.getEditText().getText().toString().trim())) {
             isOk[3] = false;
             blockNo.setErrorEnabled(true);
             blockNo.setError(getString(R.string.error_invalid_data));
@@ -1161,7 +1177,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             blockNo.setErrorEnabled(false);
         }
 
-        if (!Pattern.matches("[\\w ]*", locality.getEditText().getText().toString().trim())) {
+        if (!Pattern.matches("^([a-zA-Z +0-9~%.,:_\\-@&()]*)$", locality.getEditText().getText().toString().trim())) {
             isOk[4] = false;
             locality.setErrorEnabled(true);
             locality.setError(getString(R.string.error_invalid_data));
@@ -1170,7 +1186,7 @@ public class MakePaymentActivity extends AppCompatActivity {
             locality.setErrorEnabled(false);
         }
 
-        if (!Pattern.matches("[\\w ]*", area.getEditText().getText().toString().trim())) {
+        if (!Pattern.matches("^([a-zA-Z +0-9~%.,:_\\-@&()]*)$", area.getEditText().getText().toString().trim())) {
             isOk[5] = false;
             area.setErrorEnabled(true);
             area.setError(getString(R.string.error_invalid_data));
@@ -1180,7 +1196,7 @@ public class MakePaymentActivity extends AppCompatActivity {
         }
 
 
-        if (!Pattern.matches("(\\d{6}|[ ]?)", pinNo.getEditText().getText().toString().trim())) {
+        if (!Pattern.matches("^$|^([1-9])([0-9]){5}$", pinNo.getEditText().getText().toString().trim())) {
             isOk[6] = false;
             pinNo.setErrorEnabled(true);
             pinNo.setError(getString(R.string.error_invalid_data));
@@ -1575,6 +1591,11 @@ public class MakePaymentActivity extends AppCompatActivity {
     // submit form data to backend
     public void doSubmit(View view) {
         getJWTToken(TAG_GENERATE_CHALLAN);
+    }
+
+
+    public void reloadData(View view) {
+        getJWTToken(TAG_DEPT_NAMES);
     }
 
 

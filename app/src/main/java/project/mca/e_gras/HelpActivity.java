@@ -1,7 +1,6 @@
 package project.mca.e_gras;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -33,18 +32,13 @@ public class HelpActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.help_web_view);
 
+        // show the spot dialog
+        MyUtil.showSpotDialog(this);
+
         // configure settings
         webView.setWebChromeClient(new WebChromeClient());          // So that any pop-ups/alerts get displayed
 
         webView.setWebViewClient(new WebViewClient() {              // to show and hide progress dialogSheet
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-
-                // Display the progress dialogSheet
-                MyUtil.showSpotDialog(HelpActivity.this);
-            }
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -70,7 +64,7 @@ public class HelpActivity extends AppCompatActivity {
         webView.getSettings().setDisplayZoomControls(false); // disable the default zoom controls on the page
 
         // load the help page
-        webView.loadUrl("https://developer.mozilla.org/en-US/docs/Learn");
+        webView.loadUrl("http://" + MyApplication.HOST_NAME + "/user_manual/index.html");
     }
 
     @Override

@@ -160,7 +160,10 @@ public class MyUtil {
                 if (!isOK) {
                     // server unreachable
                     // cancel network request
-                    AndroidNetworking.cancel(tag);
+                    if (tag != null) {
+                        AndroidNetworking.cancel(tag);
+                    }
+
                     closeSpotDialog();
                     showBottomDialog(context, context.getString(R.string.error_server_down));
                 }
