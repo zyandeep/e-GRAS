@@ -9,13 +9,14 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import project.mca.e_gras.util.MyUtil;
 
 public class HelpActivity extends AppCompatActivity {
 
     WebView webView;
-
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,23 @@ public class HelpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_help);
         setTitle(R.string.label_help);
 
-
         webView = findViewById(R.id.help_web_view);
+
+        refreshLayout = findViewById(R.id.swip_web_container);
+        refreshLayout.setColorSchemeResources(R.color.colorAccent);         // Configure the refreshing colors
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if (MyUtil.isNetworkAvailable(getApplicationContext())) {
+                    webView.reload();
+                } else {
+                    // No network
+                    // stop the animation
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+        });
 
         // show the spot dialog
         MyUtil.showSpotDialog(this);
@@ -44,6 +60,11 @@ public class HelpActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
 
                 MyUtil.closeSpotDialog();
+
+                if (refreshLayout.isRefreshing()) {
+                    // stop the animation
+                    refreshLayout.setRefreshing(false);
+                }
             }
         });
 
