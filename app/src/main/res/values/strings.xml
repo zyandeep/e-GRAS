@@ -117,7 +117,7 @@
     <string name="label_grn_no">GRN NO</string>
     <string name="label_sheme_code">Sheme Code</string>
     <string name="label_sheme_name">Sheme Name</string>
-    <string name="label_amount">Amount</string>
+    <string name="label_amount">Total Amount</string>
     <string name="label_office_location">Office Location</string>
     <string name="label_mode_of_payment">Mode of Payment Selected</string>
     <string name="label_status">Status</string>
