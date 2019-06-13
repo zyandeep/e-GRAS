@@ -156,7 +156,6 @@
     <string name="error_invalid_data">অনুগ্রহ কৰি বৈধ তথ্য় দিয়ক</string>
     <string name="error_spinner">অনুগ্রহ কৰি বিকল্প নির্বাচন কৰক</string>
     <string name="error_total_amount">সৰ্বমুঠ পৰিমাণ শূন্য়তকৈ ডাঙৰ হ\'ব লাগিব</string>
-    <string name="label_error">ভুল</string>
     <string name="error_incomplete_stage">প্ৰথমে সকলো পৰ্যায় সৰ্ম্পূণ কৰি লওক</string>
-    <string name="error_no_internet">Internet নাই, আকৌ চেষ্টা কৰক...</string>
+    <string name="error_no_internet">Internet নাই, আকৌ চেষ্টা কৰক…</string>
 </resources>

@@ -987,7 +987,7 @@ public class MakePaymentActivity extends AppCompatActivity {
                 .title(getString(R.string.label_attention))
                 .description(getString(R.string.label_field_mandatory))
                 .targetView(deptSpinner)
-                .backgroundColorResourceId(R.color.colorPrimary)
+                .backgroundColorResourceId(R.color.colorAccent)
                 .textColorResourceId(R.color.white)
                 .imageResourceId(R.drawable.ic_warn)
                 .show();
@@ -1246,10 +1246,10 @@ public class MakePaymentActivity extends AppCompatActivity {
         if (schemeAdapter.getTotalAmount() <= 0.00f) {
 
             new BubbleShowCaseBuilder(this)
-                    .title(getString(R.string.label_error))
+                    .title(getString(R.string.label_attention))
                     .description(getString(R.string.error_total_amount))
                     .targetView(totalAmountTextView)
-                    .backgroundColorResourceId(R.color.colorError)
+                    .backgroundColorResourceId(R.color.colorAccent)
                     .textColorResourceId(R.color.white)
                     .imageResourceId(R.drawable.ic_warn)
                     .show();
