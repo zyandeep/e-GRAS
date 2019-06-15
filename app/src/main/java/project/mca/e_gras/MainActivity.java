@@ -142,8 +142,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // create an empty transaction model list
-        List<TransactionModel> modelList = new ArrayList<>();
-        adapter = new RecentTransactionAdapter(modelList, this);
+        adapter = new RecentTransactionAdapter(new ArrayList<TransactionModel>(), this);
         recyclerView.setAdapter(adapter);
 
         gson = new GsonBuilder()

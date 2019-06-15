@@ -11,18 +11,39 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import project.mca.e_gras.R;
 import project.mca.e_gras.TransactionDetailsActivity;
+import project.mca.e_gras.model.SchemeModel;
 import project.mca.e_gras.model.TransactionModel;
 import project.mca.e_gras.util.MyUtil;
+
+import static project.mca.e_gras.MyApplication.BASE_URL;
 
 public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String TAG = "MY-APP";
+    private static final String TAG_SCHEMES = "get_schemes";
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     List<TransactionModel> modelList;
@@ -101,6 +122,112 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
+    private void getJWTToken(final TransactionModel model) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+
+                                getSchemes(idToken, model);
+                            } else {
+                                // Handle error -> task.getException();
+                                Exception ex = task.getException();
+
+                                if (ex instanceof FirebaseNetworkException) {
+                                    MyUtil.showBottomDialog(context,
+                                            context.getString(R.string.label_network_error));
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void getSchemes(String idToken, final TransactionModel model) {
+
+        if (!AndroidNetworking.isRequestRunning(TAG_SCHEMES)) {
+            // show spot dialog
+            MyUtil.showSpotDialog(context);
+
+            // check for server reachability
+            MyUtil.checkServerReachable(context, TAG_SCHEMES);
+
+            AndroidNetworking.get(BASE_URL + "/offices/{office_code}/schemes")
+                    .addPathParameter("office_code", model.getOffice_code())
+                    .addHeaders("Authorization", "Bearer " + idToken)
+                    .setPriority(Priority.HIGH)
+                    .setTag(TAG_SCHEMES)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                if (response.getBoolean("success")) {
+                                    // if success is true
+
+                                    // converting jsonArray of into ArrayList
+                                    Type type = new TypeToken<ArrayList<SchemeModel>>() {
+                                    }.getType();
+
+                                    List<SchemeModel> list = new Gson().fromJson(String.valueOf(response.getJSONArray("result")), type);
+
+                                    // now filter only those HOAs the office has paid tax for
+                                    JSONObject obj = new JSONObject(model.getReq_params());
+                                    String hoa;
+                                    int amount;
+
+                                    for (int i = 1; i <= 9; i++) {
+                                        if (obj.has("HOA" + i)) {
+                                            hoa = obj.getString("HOA" + i);
+                                            amount = obj.getInt("AMOUNT" + i);
+
+                                            // now look for the hoa in the list
+                                            for (SchemeModel m : list) {
+                                                if (m.getHoa().equals(hoa)) {
+                                                    m.setAmount(amount);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    /// remove models with amount 0
+                                    for (Iterator<SchemeModel> iterator = list.iterator(); iterator.hasNext(); ) {
+                                        if (iterator.next().getAmount() == 0) {
+                                            iterator.remove();
+                                        }
+                                    }
+
+                                    // flashing a model to JSON
+                                    String jsonModel = new Gson().toJson(model);
+                                    String jsonScheme = new Gson().toJson(list);
+
+                                    MyUtil.closeSpotDialog();
+
+                                    // Now, go to transaction details screen
+                                    // start Details Activity
+                                    Intent intent = new Intent(context, TransactionDetailsActivity.class);
+                                    intent.putExtra("data", jsonModel);
+                                    intent.putExtra("schemes", jsonScheme);
+                                    context.startActivity(intent);
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+                            // Networking error
+                            MyUtil.displayErrorMessage(context, anError);
+                        }
+                    });
+        }
+    }
+
     // View Holder to hold non-empty item view
     private class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -124,13 +251,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     if (position != RecyclerView.NO_POSITION) {
                         TransactionModel model = modelList.get(position);
 
-                        // flashing a model to JSON
-                        String json = new Gson().toJson(model);
-
-                        // start Details Activity
-                        Intent intent = new Intent(context, TransactionDetailsActivity.class);
-                        intent.putExtra("data", json);
-                        context.startActivity(intent);
+                        // get the schemes for that particular office
+                        getJWTToken(model);
                     }
                 }
             });

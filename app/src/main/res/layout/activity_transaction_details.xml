@@ -5,15 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="project.mca.e_gras.util.MyUtil"/>
+
+        <import type="project.mca.e_gras.util.MyUtil" />
 
         <import type="android.view.View" />
-        <variable name="model" type="project.mca.e_gras.model.TransactionModel"/>
+
+        <variable
+            name="model"
+            type="project.mca.e_gras.model.TransactionModel" />
     </data>
 
-    <FrameLayout
+    <ScrollView
+        android:id="@+id/tran_details_card_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".TransactionDetailsActivity">
 
         <androidx.cardview.widget.CardView
@@ -102,12 +108,13 @@
                     android:layout_height="1dp"
                     android:background="@color/about_separator_color" />
 
+
                 <TextView
                     android:id="@+id/textView_t_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="@string/label_amount"
+                    android:text="@string/label_total_amount"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/about_item_text_color" />
 
@@ -119,6 +126,39 @@
                     android:text="@{MyUtil.formatCurrency(model.amount)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/about_text_color" />
+
+                <View
+                    android:id="@+id/divider12"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/about_separator_color" />
+
+                <!-- List of Schemes selected for payment -->
+                <LinearLayout
+                    android:id="@+id/scheme_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableEnd="@drawable/ic_more"
+                        android:text="@string/label_scheme_selected"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/about_item_text_color" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/schemes_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
 
                 <View
                     android:id="@+id/divider3"
@@ -180,10 +220,13 @@
                     style="@style/FirebaseUI.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text='@{model.status.equals("Y") ? @string/label_download_challan : @string/label_payment_verification}'
                     android:visibility='@{(model.status.equals("Y") || model.status.equals("P")) ? View.VISIBLE : View.GONE}' />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-    </FrameLayout>
+
+    </ScrollView>
+
 </layout>

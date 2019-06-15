@@ -77,7 +77,7 @@
     <string name="label_field_mandatory">* দিয়া তথ্য় সমুহ যোগান ধৰাৰ আৱশ্য়ক</string>
     <string name="label_challan_date">চালানৰ তাৰিখ</string>
     <string name="label_grn_no">GRN নম্বৰ</string>
-    <string name="label_amount">সৰ্বমুঠ পৰিমান</string>
+    <string name="label_amount">পৰিমান</string>
     <string name="label_sheme_code">আচনিৰ Code</string>
     <string name="label_sheme_name">আচনিৰ নাম</string>
     <string name="label_mode_of_payment">পেমেন্টৰ ধৰণ</string>
@@ -158,4 +158,5 @@
     <string name="error_total_amount">সৰ্বমুঠ পৰিমাণ শূন্য়তকৈ ডাঙৰ হ\'ব লাগিব</string>
     <string name="error_incomplete_stage">প্ৰথমে সকলো পৰ্যায় সৰ্ম্পূণ কৰি লওক</string>
     <string name="error_no_internet">Internet নাই, আকৌ চেষ্টা কৰক…</string>
+    <string name="label_scheme_selected">নিৰ্বাচিত আচনি</string>
 </resources>

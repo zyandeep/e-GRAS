@@ -1149,12 +1149,7 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         String pan = panNo.getEditText().getText().toString().trim();
         if (pan.length() > 0) {
-            if (pan.length() != 10 ||
-                    Pattern.matches("\\p{Alpha}{10}", pan) ||
-                    Pattern.matches("\\p{Digit}{10}", pan) ||
-                    !Pattern.matches("\\p{Alnum}{10}", pan)
-            ) {
-
+            if (!Pattern.matches("^(\\p{Alpha}{5})(\\d{4})(\\p{Alpha}{1})$", pan)) {
                 isOk[2] = false;
                 panNo.setErrorEnabled(true);
                 panNo.setError(getString(R.string.error_invalid_data));
@@ -1531,8 +1526,6 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         try {
             jsonObject = new JSONObject(json);
-
-            Log.d(TAG, "submitData: " + jsonObject.toString(4));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -25,8 +25,30 @@ public class TransactionModel {
     @SerializedName("MOP")
     private String mop;
 
+    @SerializedName("OFFICE_CODE")
+    private String office_code;
+
+    @SerializedName("REQUESTPARAMETERS")
+    private String req_params;
+
 
     public TransactionModel() {
+    }
+
+    public String getOffice_code() {
+        return office_code;
+    }
+
+    public void setOffice_code(String office_code) {
+        this.office_code = office_code;
+    }
+
+    public String getReq_params() {
+        return req_params;
+    }
+
+    public void setReq_params(String req_params) {
+        this.req_params = req_params;
     }
 
     public int getId() {
@@ -96,6 +118,8 @@ public class TransactionModel {
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
                 ", mop='" + mop + '\'' +
+                ", office_code='" + office_code + '\'' +
+                ", req_params='" + req_params + '\'' +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ public class SchemeModel {
     @SerializedName("SCHEME_NAME")
     private String name;
 
-    private int amount;
+    private int amount = 0;
 
     public SchemeModel() {
     }

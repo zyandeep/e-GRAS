@@ -79,6 +79,8 @@
             android:text="@string/label_learn_how" />
     </LinearLayout>
 
+
+    <!-- Recent transaction list -->
     <LinearLayout
         android:id="@+id/tran_linearLayout"
         android:layout_width="0dp"
