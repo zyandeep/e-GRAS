@@ -431,6 +431,7 @@ public class MyUtil {
     }
 
 
+    // this will get invoked form transaction details screen
     public static void verifyPayment(final Context context, final String token, final String tag, final int id) {
         if (!AndroidNetworking.isRequestRunning(tag)) {
 
@@ -562,7 +563,7 @@ public class MyUtil {
         @Override
         protected void onPostExecute(Uri uri) {
             if (id == -1) {
-                // insert a new entry into egras_log about challan download
+                // insert a new entry into egras_log for challan download
                 insertLog(uri);
             } else {
                 // update log data in the database
@@ -603,11 +604,9 @@ public class MyUtil {
         }
 
 
+        // for downloading a challan from the webView
         private void insertLog(final Uri uri) {
             // extract req_param and dept_id first
-
-            Log.d(TAG, "uri: " + uri);
-            Log.d(TAG, "params: " + this.reqParams);
 
             String[] data = this.reqParams.split("&");
             Log.d(TAG, Arrays.toString(data));

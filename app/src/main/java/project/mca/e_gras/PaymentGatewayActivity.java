@@ -1,6 +1,5 @@
 package project.mca.e_gras;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
@@ -22,13 +25,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import project.mca.e_gras.util.MyUtil;
+
+import static project.mca.e_gras.MyApplication.BASE_URL;
 
 public class PaymentGatewayActivity extends AppCompatActivity {
 
     private static final String TAG = "MY-APP";
+    private static final int DOWNLOAD = 1;
+    private static final int VERIFY = 2;
+
+    private WebView webView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +60,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra("url");
         String data = getIntent().getStringExtra("bundle");
 
-
-        WebView webView = findViewById(R.id.my_web_view);
+        webView = findViewById(R.id.my_web_view);
 
         // configure settings
         webView.setWebChromeClient(new WebChromeClient());          // So that any pop-ups/alerts get displayed
@@ -71,22 +85,21 @@ public class PaymentGatewayActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
 
-                if (url.equals("http://transaction_activity/")) {
+                if (url.contains("http://verify_transaction/?")) {
+                    // extract the POST params and then
+                    // reload web view to verify transaction
 
-                    // finish this activity and go to Transaction list activity
-                    Intent intent = new Intent(PaymentGatewayActivity.this, TransactionListActivity.class);
-                    startActivity(intent);
-                    finish();
+                    String params = url.split("\\?")[1];
+                    getJWTToken(params, VERIFY);
 
                     return true;
+
                 } else if (url.contains("http://download_challan/?")) {
                     // extract the POST params and then
                     // download the respective challan
 
-                    Log.d(TAG, "shouldOverrideUrlLoading: " + true);
-
                     String params = url.split("\\?")[1];
-                    getJWTToken(params);
+                    getJWTToken(params, DOWNLOAD);
 
                     return true;
                 }
@@ -122,7 +135,7 @@ public class PaymentGatewayActivity extends AppCompatActivity {
     }
 
 
-    private void getJWTToken(final String query) {
+    private void getJWTToken(final String query, final int tag) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
@@ -135,9 +148,12 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
 
-                                MyUtil.closeSpotDialog();
-
-                                MyUtil.downloadChallan(PaymentGatewayActivity.this, idToken, query);
+                                if (tag == DOWNLOAD) {
+                                    MyUtil.closeSpotDialog();
+                                    MyUtil.downloadChallan(PaymentGatewayActivity.this, idToken, query);
+                                } else {
+                                    insertLog(query, idToken);
+                                }
                             } else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
@@ -149,5 +165,61 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+
+    // for verifying payments from the webView
+    private void insertLog(final String reqParams, String idToken) {
+
+        // first write a log and then go for verifying the transaction
+
+        String[] data = reqParams.split("&");
+        String dept_id = data[0].split("=")[1];             // dept_id
+
+        Map<String, String> params = new HashMap<>();
+
+        for (String item : data) {
+            String[] temp = item.split("=");
+
+            params.put(temp[0], temp[1]);
+        }
+
+        JSONObject obj = new JSONObject(params);                // requestparameters
+
+        Log.d(TAG, obj.toString());
+
+        AndroidNetworking.post(BASE_URL + "/verify-payment")
+                .addHeaders("Authorization", "Bearer " + idToken)
+                .addBodyParameter("dept_id", dept_id)
+                .addBodyParameter("req_param", obj.toString())
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            if (response.getBoolean("success")) {
+                                MyUtil.closeFileDialog();
+
+                                // reload the webview
+                                // post data to the URL
+                                try {
+                                    webView.postUrl("http://103.8.248.139/challan/models/frmgetgrn.php",
+                                            reqParams.getBytes(StandardCharsets.UTF_8));
+                                } catch (Exception e) {
+                                    Log.d(TAG, e.getMessage());
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        MyUtil.displayErrorMessage(PaymentGatewayActivity.this, error);
+                    }
+                });
     }
 }
