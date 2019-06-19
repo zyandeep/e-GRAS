@@ -76,7 +76,7 @@ public class TransactionModel {
     }
 
     public String getGrn_no() {
-        return grn_no;
+        return grn_no.trim();
     }
 
     public void setGrn_no(String grn_no) {

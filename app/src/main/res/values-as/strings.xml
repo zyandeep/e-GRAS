@@ -159,4 +159,5 @@
     <string name="error_incomplete_stage">প্ৰথমে সকলো পৰ্যায় সৰ্ম্পূণ কৰি লওক</string>
     <string name="error_no_internet">Internet নাই, আকৌ চেষ্টা কৰক…</string>
     <string name="label_scheme_selected">নিৰ্বাচিত আচনি</string>
+    <string name="no_challan">চালান পোৱা ন\'গ\'ল!</string>
 </resources>

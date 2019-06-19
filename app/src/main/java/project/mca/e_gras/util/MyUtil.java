@@ -313,7 +313,7 @@ public class MyUtil {
     }
 
 
-    public static void downloadChallan(final Context context, final String token, final String tag, final int id) {
+    public static void downloadChallan(final Context context, final String token, final String tag, final int id, final String grnNo) {
 
         // Check for WRITE_EXTERNAL_STORAGE permission
         Dexter.withActivity((AppCompatActivity) context)
@@ -321,7 +321,7 @@ public class MyUtil {
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        downloadFile(context, token, tag, id);
+                        downloadFile(context, token, tag, id, grnNo);
                     }
 
                     @Override
@@ -364,7 +364,7 @@ public class MyUtil {
     }
 
 
-    private static void downloadFile(final Context context, final String token, final String tag, final int id) {
+    private static void downloadFile(final Context context, final String token, final String tag, final int id, final String grnNo) {
         // log data in backend database
 
         if (!AndroidNetworking.isRequestRunning(tag)) {
@@ -397,7 +397,9 @@ public class MyUtil {
                                     // row id; primary key
                                     int rowId = response.getInt("id");
 
-                                    new DownloadFileTask(context, token, rowId).execute("https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf", data);
+                                    new DownloadFileTask(context, token, rowId)
+                                            .execute("http://" + HOST_NAME + "/egras_app/temp.php?grn=" + grnNo, data);
+
                                 }
                             } catch (JSONException e) {
                             }
@@ -520,6 +522,9 @@ public class MyUtil {
                 conn.setConnectTimeout(15000);
                 conn.setDoInput(true);
 
+                Log.d(TAG, "url: " + url.toString());
+
+                // to actually download challans from egras api
                /* conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
@@ -535,10 +540,12 @@ public class MyUtil {
                 conn.connect();
 
                 if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
-                    // input stream to read file
-                    is = conn.getInputStream();
+                    if (conn.getContentLength() > 0) {
+                        //input stream to read file
+                        is = conn.getInputStream();
 
-                    return MyUtil.createFile(context, is);
+                        return MyUtil.createFile(context, is);
+                    }
                 }
             } catch (Exception e) {
                 MyUtil.showBottomDialog(context, e.getMessage());
@@ -562,12 +569,17 @@ public class MyUtil {
 
         @Override
         protected void onPostExecute(Uri uri) {
-            if (id == -1) {
-                // insert a new entry into egras_log for challan download
-                insertLog(uri);
+            if (uri != null) {
+                if (id == -1) {
+                    // insert a new entry into egras_log for challan download
+                    insertLog(uri);
+                } else {
+                    // update log data in the database
+                    updateLog(uri);
+                }
             } else {
-                // update log data in the database
-                updateLog(uri);
+                MyUtil.closeFileDialog();
+                MyUtil.showBottomDialog(context, context.getString(R.string.no_challan));
             }
         }
 

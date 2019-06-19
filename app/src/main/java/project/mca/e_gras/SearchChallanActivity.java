@@ -144,7 +144,8 @@ public class SearchChallanActivity extends AppCompatActivity {
                                         MyUtil.downloadChallan(SearchChallanActivity.this,
                                                 idToken,
                                                 TAG_DOWNLOAD_CHALLAN,
-                                                model.getId());
+                                                model.getId(),
+                                                model.getGrn_no());
                                         break;
 
                                     case TAG_VERIFY_PAYMENT:

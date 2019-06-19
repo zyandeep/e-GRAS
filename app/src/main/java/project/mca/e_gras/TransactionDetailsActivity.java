@@ -109,7 +109,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                                         MyUtil.downloadChallan(TransactionDetailsActivity.this,
                                                 idToken,
                                                 TAG_DOWNLOAD_CHALLAN,
-                                                model.getId());
+                                                model.getId(),
+                                                model.getGrn_no());
 
                                         break;
 
