@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tran_item_cardView"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_margin="6dp"
     app:cardElevation="8dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/activity_item_textview"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/label_challan_date"
@@ -25,12 +25,12 @@
 
         <TextView
             android:id="@+id/date_item_textview"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            tools:text="12/JAN/2019"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/about_text_color" />
+            android:textColor="@color/about_text_color"
+            tools:text="12/JAN/2019" />
 
         <View
             android:id="@+id/divider4"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/grn_item_textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/label_grn_no"
@@ -49,12 +49,12 @@
 
         <TextView
             android:id="@+id/office_item_textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            tools:text="ADFS456WERTYSDF4"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#FF6F00" />
+            android:textColor="#FF6F00"
+            tools:text="ADFS456WERTYSDF4" />
 
         <View
             android:id="@+id/divider5"
@@ -64,7 +64,7 @@
 
         <TextView
             android:id="@+id/textView_t_12"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/label_amount"
@@ -73,12 +73,12 @@
 
         <TextView
             android:id="@+id/amount_details_textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
-            tools:text="12.00"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/about_text_color" />
+            android:textColor="@color/about_text_color"
+            tools:text="12.00" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
