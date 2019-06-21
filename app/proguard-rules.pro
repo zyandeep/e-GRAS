@@ -21,6 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 # For spot dialog
-#-keep class dmax.dialog.** {
-#    *;
-#}
+-keep class dmax.dialog.** {
+    *;
+}
