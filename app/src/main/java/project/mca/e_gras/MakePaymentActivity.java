@@ -1526,6 +1526,9 @@ public class MakePaymentActivity extends AppCompatActivity {
 
         try {
             jsonObject = new JSONObject(json);
+
+            Log.d(TAG, "submitData: " + jsonObject.toString(4));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

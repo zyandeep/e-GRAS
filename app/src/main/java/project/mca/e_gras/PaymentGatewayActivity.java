@@ -128,6 +128,10 @@ public class PaymentGatewayActivity extends AppCompatActivity {
 
         // post data to the URL
         try {
+            // check whether e-GRAS server reachable
+
+
+
             webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());

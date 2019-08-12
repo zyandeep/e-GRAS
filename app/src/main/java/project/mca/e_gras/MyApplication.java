@@ -12,7 +12,7 @@ public class MyApplication extends Application {
 //    public static final String HOST_NAME = "10.177.15.95";
 
     // Home server
-    public static final String BASE_URL = "http://192.168.43.211/api";
+    public static final String BASE_URL = "http://192.168.43.211/my-projects/my-slim-app/public/api";
     public static final String HOST_NAME = "192.168.43.211";
 
     @Override

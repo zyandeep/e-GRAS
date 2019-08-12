@@ -397,6 +397,7 @@ public class MyUtil {
                                     // row id; primary key
                                     int rowId = response.getInt("id");
 
+                                    // downloading file from my backend
                                     new DownloadFileTask(context, token, rowId)
                                             .execute("http://" + HOST_NAME + "/egras_app/temp.php?grn=" + grnNo, data);
 
