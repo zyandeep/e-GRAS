@@ -14,6 +14,7 @@ public class MyApplication extends Application {
     // Home server
     public static final String BASE_URL = "http://192.168.43.211/my-projects/my-slim-app/public/api";
     public static final String HOST_NAME = "192.168.43.211";
+    public static final String eGRAS_SERVER = "103.8.248.139";
 
     @Override
     public void onCreate() {

@@ -2,6 +2,7 @@ package project.mca.e_gras.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +134,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 String idToken = task.getResult().getToken();
 
                                 getSchemes(idToken, model);
-                            } else {
+                            }
+                            else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
 
@@ -213,6 +215,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                     Intent intent = new Intent(context, TransactionDetailsActivity.class);
                                     intent.putExtra("data", jsonModel);
                                     intent.putExtra("schemes", jsonScheme);
+
+                                    Log.d(TAG, jsonScheme + "\n" + jsonModel);
+
                                     context.startActivity(intent);
                                 }
                             } catch (JSONException e) {

@@ -52,6 +52,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -68,6 +69,7 @@ import project.mca.e_gras.R;
 
 import static project.mca.e_gras.MyApplication.BASE_URL;
 import static project.mca.e_gras.MyApplication.HOST_NAME;
+import static project.mca.e_gras.MyApplication.eGRAS_SERVER;
 
 public class MyUtil {
 
@@ -164,6 +166,47 @@ public class MyUtil {
                         AndroidNetworking.cancel(tag);
                     }
 
+                    closeSpotDialog();
+                    showBottomDialog(context, context.getString(R.string.error_server_down));
+                }
+            }
+        }.execute();
+    }
+
+
+    /// check whether a server is reachable(With Webview)
+    public static void checkServerReachable(final Context context, final WebView webView, final String ip) {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                boolean exists = false;
+
+                try {
+                    SocketAddress sockaddr = new InetSocketAddress(ip, 80);
+                    // Create an unbound socket
+                    Socket sock = new Socket();
+
+                    // This method will block no more than timeoutMs.
+                    // If the timeout occurs, SocketTimeoutException is thrown.
+                    int timeoutMs = 2000;   // 2 seconds
+                    sock.connect(sockaddr, timeoutMs);
+                    exists = true;
+
+                    sock.close();
+                } catch (IOException e) {
+                }
+
+                return exists;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean isOK) {
+                super.onPostExecute(isOK);
+
+                if(!isOK){
+                    // server unreachable
+                    webView.stopLoading();
                     closeSpotDialog();
                     showBottomDialog(context, context.getString(R.string.error_server_down));
                 }

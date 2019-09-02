@@ -72,6 +72,10 @@ public class PaymentGatewayActivity extends AppCompatActivity {
 
                 // Display the progress dialogSheet
                 MyUtil.showSpotDialog(PaymentGatewayActivity.this);
+
+                // check whether the server is reachable
+                MyUtil.checkServerReachable(PaymentGatewayActivity.this, webView, MyApplication.eGRAS_SERVER);
+
             }
 
             @Override
@@ -129,10 +133,8 @@ public class PaymentGatewayActivity extends AppCompatActivity {
         // post data to the URL
         try {
             // check whether e-GRAS server reachable
-
-
-
             webView.postUrl(url, data.getBytes(StandardCharsets.UTF_8));
+
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
@@ -155,10 +157,12 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                                 if (tag == DOWNLOAD) {
                                     MyUtil.closeSpotDialog();
                                     MyUtil.downloadChallan(PaymentGatewayActivity.this, idToken, query);
-                                } else {
+                                }
+                                else {
                                     insertLog(query, idToken);
                                 }
-                            } else {
+                            }
+                            else {
                                 // Handle error -> task.getException();
                                 Exception ex = task.getException();
 
@@ -211,7 +215,8 @@ public class PaymentGatewayActivity extends AppCompatActivity {
                                 try {
                                     webView.postUrl("http://103.8.248.139/challan/models/frmgetgrn.php",
                                             reqParams.getBytes(StandardCharsets.UTF_8));
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     Log.d(TAG, e.getMessage());
                                 }
 
