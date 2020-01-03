@@ -1,4 +1,4 @@
-# bSafe
+# e-GRAS Mobile
 This is an Android front-end application designed to interact with e-GRAS,
 which is a government's electronic payment gateway for online tax payments and
 challan generation. Besides, the application lets users review their transaction
